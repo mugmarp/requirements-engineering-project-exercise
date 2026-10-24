@@ -1,0 +1,81 @@
+{
+  "title": "PROJECT DELIVERABLES GUIDE",
+  "meta": [
+    "Course: SWE2102 Requirements Engineering",
+    "Group: K",
+    "Client Site: Deniz Construction Limited, Ishanyu Bushenyi Road, Mbarara",
+    "Project: Deniz Construction Management System (DCMS)",
+    "Repository: https://github.com/mugmarp/requirements-engineering-project-exercise"
+  ],
+  "blocks": [
+    { "type": "h1", "text": "PROJECT DELIVERABLES GUIDE" },
+    { "type": "para", "text": "This guide maps the original 10-document roadmap to the actual deliverables produced in this repository. Documents 3 through 8 from the original roadmap have been consolidated into a single Master Document per the updated roadmap (turn 99)." },
+
+    { "type": "h1", "text": "DELIVERABLE STATUS SUMMARY" },
+    { "type": "table", "header": ["#", "Original Roadmap Document", "Our Deliverable", "Phase", "Status", "File"],
+      "rows": [
+        ["1", "Stakeholder Register & Power/Interest Matrix", "Document 1: Elicitation & Stakeholder Analysis (Section 2.1)", "1", "Complete", "DOC-01-Elicitation-and-Stakeholder-Analysis.docx"],
+        ["2", "Elicitation Report & Field Visit Log", "Document 1: Elicitation & Stakeholder Analysis (Sections 3-5)", "1", "Complete", "DOC-01-Elicitation-and-Stakeholder-Analysis.docx"],
+        ["3", "Software Requirements Specification (SRS)", "Master Document: Part 1 (Sections 1-4)", "2-3", "Complete", "MASTER-Requirements-Specification-Traceability-Management.docx"],
+        ["4", "Requirements Traceability Matrix (RTM)", "Master Document: Part 2", "2-3", "Complete", "MASTER-Requirements-Specification-Traceability-Management.docx"],
+        ["5", "Validation & Verification (V&V) Plan", "Master Document: Part 3", "4", "Complete", "MASTER-Requirements-Specification-Traceability-Management.docx"],
+        ["6", "Requirements Management Plan", "Master Document: Part 4", "5", "Complete", "MASTER-Requirements-Specification-Traceability-Management.docx"],
+        ["7", "Conceptual Data Model (ER Diagram) & Data Dictionary", "Master Document: Part 5, Section 1", "DB", "Complete", "MASTER-Requirements-Specification-Traceability-Management.docx"],
+        ["8", "Physical Database Design Document (SQL Logic)", "Master Document: Part 5, Sections 2-4", "DB", "Complete", "MASTER-Requirements-Specification-Traceability-Management.docx"],
+        ["9", "Grand Project Presentation Deck", "Not yet created", "Final", "Pending", ""],
+        ["10", "User Manual / Standard Operating Procedure (SOP)", "Not yet created", "Final", "Pending", ""]
+      ] },
+
+    { "type": "h1", "text": "CONSOLIDATION NOTE" },
+    { "type": "para", "text": "Per the corrected roadmap (turn 99), Documents 3 through 8 were consolidated into a single Master Document to avoid fragmentation and ensure strict traceability between requirements, traceability matrix, validation, management, and database design. This master document is the single source of truth for Phases 2 through 5 and the SWE1205 database deliverable." },
+
+    { "type": "h1", "text": "ARCHITECTURE" },
+    { "type": "para", "text": "The system follows a Dual Phase architecture established from ground observations:" },
+    { "type": "bullets", "items": [
+      "Phase 1 (Day): Real Time Point of Sale - processes individual sales, calculates VAT, updates inventory, prints physical receipts for customers as trucks load.",
+      "Phase 2 (Evening): End of Day Reconciliation Engine - balances multi channel payment drawers (Cash, Mobile Money, Bank Deposit), logs operational expenses, computes cash variances (deficit/surplus), generates daily summary report for the Business Owner."
+    ] },
+
+    { "type": "h1", "text": "KEY CORRECTIONS FROM ORIGINAL ROADMAP" },
+    { "type": "table", "header": ["Original Assumption", "Corrected Reality", "Source"],
+      "rows": [
+        ["End of Day batch only system", "Dual Phase: Real Time POS by day + Evening Reconciliation", "Turns 86-91"],
+        ["Credit/Debtors module needed", "Excluded: strict no credit policy", "Turn 41, 97"],
+        ["Real time remote dashboard for Owner", "Excluded: Owner visits daily; async dashboard only", "Turns 41, 87, 91"],
+        ["Sept 15 presentation deadline", "Removed: date passed; Grand Presentation is end of semester", "Turn 25, 95"],
+        ["Concept Note as source", "Discarded: ground truth overrides", "Turn 41, 84"],
+        ["Phase 1 includes system design", "Corrected: Phase 1 is As Is only; design in SRS", "Turn 93"]
+      ] },
+
+    { "type": "h1", "text": "FILES IN REPOSITORY" },
+    { "type": "table", "header": ["File", "Description"],
+      "rows": [
+        ["DOC-01-Elicitation-and-Stakeholder-Analysis.docx", "Document 1: Phase 1 strict (As Is, gaps, synthesis)"],
+        ["MASTER-Requirements-Specification-Traceability-Management.docx", "Master: SRS + RTM + V&V + Management + DB Design"],
+        ["CONTEXT.md", "Full 100-turn fact base with dual phase design"],
+        ["specs/spec_doc01.json", "Document 1 source spec"],
+        ["specs/spec_master.json", "Master document source spec"],
+        ["scripts/build_docx.py", "DOCX builder (Times New Roman 12pt, 1.15 spacing)"],
+        ["scripts/make_spec_doc01.py", "Spec generator with explicit filler cuts"],
+        ["README.md", "Project overview"],
+        ["context/Group-ALLOCATIONS_1_requirements_engineering.pdf", "Course allocation sheet"]
+      ] },
+
+    { "type": "h1", "text": "REMAINING WORK" },
+    { "type": "table", "header": ["Document", "Description", "Priority"],
+      "rows": [
+        ["9. Grand Project Presentation Deck", "Slide deck for end of semester Grand Presentation covering ground truth problem, elicitation challenges, synthesized solution, database schema, system demo", "High"],
+        ["10. User Manual / SOP", "Visual, icon driven guide for Sales Manager covering daily sales entry and end of day reconciliation", "High"]
+      ] },
+
+    { "type": "h1", "text": "FORMAT STANDARD" },
+    { "type": "para", "text": "All documents follow a fixed format standard enforced by scripts/build_docx.py:" },
+    { "type": "bullets", "items": [
+      "Font: Times New Roman, 12 pt, black",
+      "Line spacing: 1.15 (multiple)",
+      "Bold: Headings, table headers, lead in phrases only",
+      "Punctuation: Plain ASCII only (no semicolons, no quotes, no hyphens, no em dashes)",
+      "Page: A4, 25.4 mm margins"
+    ] }
+  ]
+}
