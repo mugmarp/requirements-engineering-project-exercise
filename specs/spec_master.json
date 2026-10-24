@@ -1,5 +1,5 @@
 {
-  "title": "MASTER REQUIREMENTS DOCUMENT: SPECIFICATION, TRACEABILITY, AND MANAGEMENT",
+  "title": "SPECIFICATION, TRACEABILITY, AND MANAGEMENT",
   "meta": [
     "Course: SWE2102 Requirements Engineering",
     "Group: K",
@@ -10,9 +10,9 @@
     { "type": "h1", "text": "PART 1: SOFTWARE REQUIREMENTS SPECIFICATION" },
     { "type": "h1", "text": "1. INTRODUCTION" },
     { "type": "h2", "text": "1.1 Purpose" },
-    { "type": "para", "text": "This document specifies the functional and non functional requirements for the Deniz Construction Management System (DCMS). It serves as the definitive blueprint for the subsequent SWE1205 Database Programming implementation and the final Grand Presentation." },
+    { "type": "para", "text": "This document specifies the functional and non functional requirements for the Deniz Construction Management System (DCMS). It serves as the blueprint for the SWE1205 Database Programming implementation and the final Grand Presentation." },
     { "type": "h2", "text": "1.2 Scope" },
-    { "type": "para", "text": "The DCMS is designed as a Dual Phase Operations Management System. During the day, it functions as a Real Time Point of Sale to process individual sales, calculate VAT, update inventory, and print physical receipts for customers. In the evening, it functions as an End of Day Reconciliation Engine, allowing the Sales Manager to balance multi channel payment drawers, log operational expenses, compute cash variances, and generate a final daily summary report for the Business Owner." },
+    { "type": "para", "text": "The DCMS is a Dual Phase Operations Management System. During the day, it functions as a Real Time Point of Sale to process individual sales, calculate VAT, update inventory, and print physical receipts for customers. In the evening, it functions as an End of Day Reconciliation Engine, allowing the Sales Manager to balance multi channel payment drawers, log operational expenses, compute cash variances, and generate a final daily summary report for the Business Owner." },
     { "type": "h2", "text": "1.3 Explicitly Excluded Features" },
     { "type": "para", "text": "Based on verified ground observations, the following features are strictly excluded to prevent scope creep." },
     { "type": "bullets", "items": [
@@ -35,9 +35,9 @@
       "The system must support multi channel payment tracking (Cash, Mobile Money, Bank Deposit) with strict separation of drawer balances.",
       "All financial data must be backed up automatically to a secure cloud destination each evening after reconciliation."
     ] },
-    { "type": "h2", "text": "2.2 Assumptions and Dependencies" },
+    { "type": "h2", "text": "2.3 Assumptions and Dependencies" },
     { "type": "bullets", "items": [
-      "The current Ugandan VAT rate of 18 percent is assumed to remain stable. The rate will be stored in a configurable System Settings table rather than hardcoded.",
+      "The current VAT rate of 18 percent is assumed to remain stable. The rate will be stored in a configurable System Settings table rather than hardcoded.",
       "The Sales Manager possesses basic digital literacy to operate a mouse, keyboard, and web browser.",
       "The site has intermittent internet connectivity sufficient for an evening cloud backup.",
       "The single office laptop meets the minimum hardware requirements to run a local database server and application."
@@ -59,7 +59,7 @@
     { "type": "h2", "text": "3.3 Module C: Attendance and Daily Payroll" },
     { "type": "para", "runs": [ { "text": "REQ-FUN-ATT-01 (Worker Attendance Logging). ", "bold": true }, { "text": "The system shall allow the Sales Manager to log a worker as Present for a given date using a simplified interface with large visual icons. A unique Worker ID and Date combination shall be enforced to prevent duplicate daily entries." } ] },
     { "type": "para", "runs": [ { "text": "REQ-FUN-ATT-02 (Daily Payroll Eligibility). ", "bold": true }, { "text": "The system shall utilize a database query joining the Workers and Attendance tables to generate the daily payroll eligibility list, including only workers with a verified Present status for that date." } ] },
-    { "type": "h2", "text": "3.4 Module C: URA Compliance and Reporting" },
+    { "type": "h2", "text": "3.4 Module D: URA Compliance and Reporting" },
     { "type": "para", "runs": [ { "text": "REQ-FUN-TAX-01 (URA Summary Report). ", "bold": true }, { "text": "The system shall generate a URA Compliance Summary Report displaying Total Gross Sales and Total Calculated VAT (18 percent) for the selected period, formatted for direct transcription into the URA online portal." } ] },
     { "type": "h2", "text": "3.5 Module D: Data Backup and Recovery" },
     { "type": "para", "runs": [ { "text": "REQ-FUN-BAK-01 (Automated Nightly Backup). ", "bold": true }, { "text": "The system shall execute an encrypted database backup to a secure cloud destination each evening after the reconciliation session is closed, ensuring disaster recovery for the single laptop." } ] },
@@ -146,12 +146,12 @@
         ["System_Settings", "Setting_Key", "Setting_Value", "Independent (VAT_Rate, etc.)"]
       ] },
     { "type": "h2", "text": "2. Stored Procedures" },
-    { "type": "para", "text": "CalculateVAT(Subtotal DECIMAL) RETURNS DECIMAL: Returns Subtotal * (SELECT Setting_Value FROM System_Settings WHERE Setting_Key = 'VAT_RATE'). The VAT rate is stored in System_Settings, not hardcoded." },
+    { "type": "para", "text": "CalculateVAT(Subtotal DECIMAL) RETURNS DECIMAL: Returns Subtotal * (SELECT Setting_Value FROM System_Settings WHERE Setting_Key = VAT_RATE). The VAT rate is stored in System_Settings, not hardcoded." },
     { "type": "para", "text": "CloseDay() RETURNS Daily_Reconciliation_Record: Computes Expected_Cash per REQ-FUN-REC-03, creates the Daily_Reconciliation record, and marks the day as closed. Requires Actual_Cash input and mandatory Explanation if Variance != 0." },
     { "type": "h2", "text": "3. Triggers" },
     { "type": "para", "text": "AFTER INSERT ON Sales FOR EACH ROW: UPDATE Inventory SET Current_Stock = Current_Stock - NEW.Quantity WHERE Product_ID = NEW.Product_ID. IF Current_Stock <= Reorder_Level THEN INSERT INTO Inventory_Alerts." },
     { "type": "para", "text": "AFTER INSERT ON Sales FOR EACH ROW: UPDATE Virtual_Drawers SET Current_Balance = Current_Balance + NEW.Total WHERE Drawer_Type = NEW.Payment_Method." },
-    { "type": "para", "text": "AFTER INSERT ON Operational_Expenses FOR EACH ROW: UPDATE Virtual_Drawers SET Current_Balance = Current_Balance - NEW.Amount WHERE Drawer_Type = 'Cash'." },
+    { "type": "para", "text": "AFTER INSERT ON Operational_Expenses FOR EACH ROW: UPDATE Virtual_Drawers SET Current_Balance = Current_Balance - NEW.Amount WHERE Drawer_Type = Cash." },
     { "type": "h2", "text": "4. Views" },
     { "type": "para", "text": "Daily_Sales_Summary: Aggregates Sales by Payment_Method for a given date. Used for the Daily Summary Report." },
     { "type": "para", "text": "URA_Summary: Aggregates Sales by date range with 18 percent VAT calculation. Formatted for URA portal transcription." },

@@ -23,7 +23,7 @@
         ["Secretary", "Named in initial project scoping to handle tax records and data entry.", "Medium", "High", "Keep Informed. Status: gap. Never met. Ground observation confirms the Sales Manager currently performs all data entry."],
         ["Site Workers", "Produce blocks and pavers. Paid daily in cash. No formal legal contracts.", "Low", "Low", "Monitor. Status: gap. No chance to speak to them."],
         ["URA (External)", "Uganda Revenue Authority. Dictates tax compliance, VAT and receipting standards.", "High", "Low", "Keep Satisfied. External regulator. No direct engagement but dictates compliance rules."],
-        ["Customers and Builders", "Purchase blocks and pavers. Pay upfront. Transport their own goods by truck.", "Low", "Medium", "Keep Informed. The system must eventually ensure quick processing to minimize their loading delays."]
+        ["Customers and Builders", "Purchase blocks and pavers. Pay upfront. Transport their own goods by truck.", "Low", "Medium", "Keep Informed. The system must eventually ensure quick processing to minimize loading delays."]
       ]
     },
 
@@ -68,7 +68,7 @@
     },
 
     { "type": "h1", "text": "4. CHALLENGES IN ELICITATION AND DOCUMENTED LIMITATIONS" },
-    { "type": "para", "text": "As Group K, we faced the following empirical challenges, which are now locked as documented limitations for the project." },
+    { "type": "para", "text": "As Group K, we faced the following empirical challenges, which are now locked as limitations for the project." },
     {
       "type": "numbered",
       "items": [
