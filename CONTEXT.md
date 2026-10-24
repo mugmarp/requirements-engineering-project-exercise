@@ -12,7 +12,7 @@ Status: **single source of truth** for the RE project. Every line is tagged.
 
 Everything lives in `/home/vm/MUST/REQUIREMENTS/`
 
-- `qwen_deniz_conversation.md` — the full 46-turn Qwen share export (124 KB), verbatim
+- `qwen_deniz_conversation.md` — the full 92-turn Qwen share export (verbatim)
 - `context/Group-ALLOCATIONS_1_requirements_engineering.pdf` — the class allocation sheet
 - `context/DENIZconceptDOC.pdf` — **not present on this machine.** See §9.
 
@@ -49,7 +49,7 @@ Everything lives in `/home/vm/MUST/REQUIREMENTS/`
 **[FACT]** Sector: construction materials SME — produces/sells concrete blocks, pavers
 **[FACT]** Size: **small** — "the business seems small", "not yet a large business"
 **[FACT]** Contact numbers recorded: **0749858413** and **0791069287**
-**[SYNTH]** "Deniz Construction Management System (DCMS)" was the working project name. Qwen proposed renaming to **DPSS — Deniz Point-of-Sale & Site Operations System**. *Not yet confirmed by you.*
+**[SYNTH]** "Deniz Construction Management System (DCMS)" was the working project name. Qwen proposed renaming to **DPSS — Deniz Point-of-Sale & Site Operations System**. *Not confirmed; project stays DCMS.*
 **[SYNTH]** Product mix: solid blocks, hollow blocks, compound pavers. Sold by piece, pallet, or truckload.
 
 ---
@@ -59,10 +59,10 @@ Everything lives in `/home/vm/MUST/REQUIREMENTS/`
 | Stakeholder | Evidence | Notes |
 |---|---|---|
 | **Owner** (business owner) | [FACT] "the business owner checks every day" | High power, high interest. [GAP] Never interviewed — no direct statement of his needs |
-| **Sales Manager** | [FACT] interviewed once; "she" | The gatekeeper. Also supervisor, cashier, payroll, records. See §5 |
-| **Secretary** | [FACT] named in the original concept note | [GAP] **Never met.** No interview, no data |
+| **Sales Manager** | [FACT] interviewed once; "she" | The absolute center of operations: supervisor, cashier, payroll, records, tax filing. [FACT] Interviewed. Acts as the gatekeeper. |
+| **Secretary** | [FACT] named in the original concept note | [GAP] **Never met.** Ground observation confirms the Sales Manager currently performs all data entry and reconciliation. Role retained in schema for future scaling only. |
 | **Site workers / Foreman** | [FACT] exist | [GAP] **No chance to talk to them** — a stated, unresolvable gap |
-| **Customers** | [FACT] "clients would mostly be the ones to transport the purchased products" | Buyers of blocks |
+| **Customers / Builders** | [FACT] "clients would mostly be the ones to transport the purchased products" | Buyers of blocks. Pay upfront. Transport own goods by truck. |
 | **URA** (Uganda Revenue Authority) | [FACT] "she processes the taxes online" | External regulator; no direct engagement |
 | **IT support / maintainer** | [SYNTH] | Not yet identified |
 
@@ -77,7 +77,7 @@ Everything lives in `/home/vm/MUST/REQUIREMENTS/`
 | Observation | Status |
 |---|---|
 | Attendance | Workers **do not take any attendance**. All attendance relies on the Sales Manager's side |
-| Sales Manager's role | **Supervisor**, and "acting as every territory" — she absorbs most roles |
+| Sales Manager's role | **Supervisor**, "acting as every territory" — she absorbs most roles |
 | Org maturity | "not yet a large business" |
 | Backup | **No cloud backup** |
 | Payments | **Mobile Money**, **clients depositing into the business bank account**, and **cash** |
@@ -91,11 +91,13 @@ Everything lives in `/home/vm/MUST/REQUIREMENTS/`
 | Owner behaviour | **Checks every day** → therefore **no remote transfer of business data** |
 | Worker contracts | **No legal contract** — "just as many in Uganda or Africa at large" |
 | PC | Business has a **PC on site for record keeping**; Sales Manager "mainly uses the PC to process deficit" |
-| PC usage timing | **[FACT]** "the laptop was on even when being used" |
+| PC usage timing | **[FACT]** "the laptop was on even when being used" — **during the day it is on and receipts are printed** |
 | Truck loading | **[FACT]** "we saw trucks loading in somewhat bulk" — counting method **not identified** |
 | Cash storage | **[GAP]** "we could not identify that" |
 | Owner's first question | **[FACT]** "i do not think first thing to ask is money, but still we could not identify that" |
 | Receipt fields | **[GAP]** "we could not get what field are on the Receipts" |
+| Laptop interaction | **[FACT]** "we have seen her interacting with the PC before we could enter into her office again some time" — she interacts with the PC during the day, prints receipts |
+| Receipt printing | **[FACT]** Physical receipts are printed for customers as trucks load |
 
 **[FACT] You cannot go back.** "we can not go back to get any more info, and they do not will to give any more info"
 **[FACT] You cannot change the project.** "we can not change the the project because we picked it already"
@@ -112,22 +114,21 @@ Everything lives in `/home/vm/MUST/REQUIREMENTS/`
 - She **"processes deficit"** on the PC — i.e. she manually computes cash shortages
 - There is **no cloud backup**
 - She raised **"insecurity"** but would not specify
+- She **prints physical receipts** for customers at the time of sale during the day
+- She uses the PC during the day for transactions, and in the evening for reconciliation/deficit processing
 
-**[SYNTH] Qwen's consolidated problem statement:**
+**[SYNTH] Qwen's consolidated problem statement (superseded by corrected dual-phase design):**
 > Operational Bottlenecking and Cash-Handling Vulnerability due to the Sales Manager acting as a single point of failure for supervision, sales, and cash disbursement, combined with informal labor practices and physical cash security risks.
 
 Sub-problems: the "Super-Manager" bottleneck; cash insecurity & till deficits; informal labour with daily cash payouts from memory; manual tax & multi-channel payment reconciliation.
 
-**[SYNTH] Qwen's proposed solution shape (DPSS):**
-1. **POS with multi-channel payment tracking** — force a payment method per sale
-2. **End-of-Day Till Reconciliation** — enter actual cash + MoMo, system computes deficit/surplus
-3. **URA Data Export** — a "Daily URA Summary" (gross sales, 18% VAT, exempt) to read off-screen
-4. **Informal Labour "Daily Ticket"** — sign-in/out; daily wage logged as an operational expense
+**[SYNTH] CORRECTED SYSTEM DESIGN — Dual-Phase (turns 87, 89, 91):**
+The system is a **Real-Time Point of Sale (POS) and Operations Management System** featuring a **dedicated End-of-Day Reconciliation Module**.
 
-**Reasonable conclusions Qwen drew that are *not* facts:**
-- Owner visits daily ⇒ **no remote dashboard needed**
-- No credit ⇒ **no debtors/credit module**
-- *These are logical inferences from your facts, but you have not confirmed them.*
+- **Phase 1 (Day): Real-Time Transactional Processing** — When a truck arrives, the Sales Manager opens the system, enters quantity, selects payment method (Cash, Mobile Money, Bank), system instantly calculates 18% VAT, deducts stock via trigger, prints physical receipt for client.
+- **Phase 2 (Evening): End-of-Day Reconciliation & Deficit Resolution** — She opens the Reconciliation Module; system shows Expected Cash = sum of Cash sales; she logs Operational Expenses (petty cash); system deducts from Cash Virtual Drawer; she enters Actual Cash in hand; system computes Variance (Deficit/Surplus); generates Daily Summary Report for Owner.
+
+This is **not** an "End-of-Day Transactional Auto-Calculation Engine" — that was an incorrect assumption corrected in turns 86-91. It is a **Real-Time POS + End-of-Day Reconciliation Module**.
 
 ---
 
@@ -212,9 +213,11 @@ Sub-problems: the "Super-Manager" bottleneck; cash insecurity & till deficits; i
 5. **[FACT] Workers were never spoken to.** ⇒ attendance UX requirements rest on synthesis alone.
 6. **[FACT] The Secretary was never spoken to.** ⇒ tax/URA requirements rest on synthesis alone.
 7. **[FACT] No cloud backup exists today.** ⇒ backup is a genuine gap, not a nicety.
-8. **[FACT] System is not a real-time POS.** PC used in the evening before the owner arrives.
-9. **[FACT] Three payment channels:** cash, Mobile Money, bank deposit.
-10. **[FACT] URA filing is online** but the calculation method was never observed.
+8. **[FACT] Three payment channels:** cash, Mobile Money, bank deposit.
+9. **[FACT] URA filing is online** but the calculation method was never observed.
+10. **[FACT] Physical receipts printed at time of sale during the day.** System must support real-time POS receipt printing.
+11. **[FACT] Evening reconciliation exists.** Sales Manager uses PC in evening for deficit processing and daily summary.
+12. **[FACT] Sales Manager is the absolute center of operations.** Supervisor, cashier, payroll, records, tax filing. She is the gatekeeper.
 
 ---
 
@@ -223,23 +226,24 @@ Sub-problems: the "Super-Manager" bottleneck; cash insecurity & till deficits; i
 | # | Item | Why it matters |
 |---|---|---|
 | 1 | **`DENIZconceptDOC.pdf` is not on this machine** | Turn 13 references it; Qwen built Phase 1/2 partly on it. Every "from the Concept Note" claim is unverifiable here |
-| 2 | **Is DCMS or DPSS the project name?** | Qwen proposed renaming; you never answered |
+| 2 | **Project name is DCMS** | Qwen proposed renaming to DPSS; you never confirmed. Project stays DCMS. |
 | 3 | **Grand presentation date** | Unknown. Qwen keeps saying Sept 15, which has passed |
 | 4 | **Requirement ID collisions** | Blocks traceability matrix |
 | 5 | **No metric provenance** | 500/5min/3s/18%/4GB all invented — must be labelled as assumptions |
 | 6 | **Two stale Qwen errors** | (a) EFRIS mentioned without evidence; (b) "Sept 15" repeated after it passed |
 | 7 | **Secretary + workers data voids** | Largest elicitation gaps; must be declared as documented limitations |
 | 8 | **SWE1205 database scope** | Is the deliverable an SRS, a schema, or a working app? Not stated |
+| 9 | **Dual-phase system not yet reflected in requirement IDs** | Current IDs still reflect end-of-day batch design; need new IDs for real-time POS + evening reconciliation |
 
 ---
 
 ## 10. What is proven vs assumed
 
 **Proven (from you, directly):**
-The site visit happened; the Sales Manager is the single point of failure; no attendance; no cloud backup; three payment channels; no credit; tax filed online; receipts exist with a printer; workers and Secretary never spoken to; no second visit possible; project cannot change; owner checks daily; site has cameras; clients self-transport; workers have no contracts.
+The site visit happened; the Sales Manager is the single point of failure; no attendance; no cloud backup; three payment channels; no credit; tax filed online; receipts exist with a printer; workers and Secretary never spoken to; no second visit possible; project cannot change; owner checks daily; site has cameras; clients self-transport; workers have no contracts; laptop is on during the day and prints receipts; she processes deficits in the evening; she interacts with PC during the day.
 
 **Assumed (Qwen's synthesis, needs your sign-off):**
-System is an end-of-day reconciliation tool rather than a live POS; no remote dashboard; petty cash explains the deficits; cash kept in a locked drawer; owner asks about physical output first; VAT is 18%; specific hardware specs; specific performance targets; product unit-of-measure conventions; the rename to DPSS.
+Petty cash explains the deficits; cash kept in a locked drawer; owner asks about physical output first; VAT is 18%; specific hardware specs; specific performance targets; product unit-of-measure conventions; the rename to DPSS (rejected).
 
 **Unknown (cannot be closed):**
 Receipt field layout; URA calculation method; how truckloads are counted; where cash is kept; who the IT maintainer is; the owner's actual first question; the Secretary's workflow; the workers' attendance reality.
@@ -253,3 +257,34 @@ Receipt field layout; URA calculation method; how truckloads are counted; where 
 - [GAP] items are written into the SRS as **explicit limitations**, not filled with plausible detail.
 - Qwen's stale references (Sept 15, EFRIS) are treated as noise unless you confirm them.
 - Where the concept note conflicted with the ground truth, **the ground truth wins**.
+- **Internal working files (CONTEXT.md, concept note, chat history) are never referenced in final deliverables.** The lecturer sees only "The Site Visit," "Ground Observations," and "Stakeholder Interviews."
+
+---
+
+## 12. Corrected Document 1 status
+
+Document 1 has been corrected to match the dual-phase reality (turns 89, 91). Key changes from the version committed at `4ab797c`:
+
+- System is **Real-Time POS + End-of-Day Reconciliation Module** (not "End-of-Day Transactional Auto-Calculation Engine")
+- Section 5 restructured to 5.1 Dual-Phase Workflow, 5.2 Deficit/Petty Cash, 5.3 Receipts/Inventory, 5.4 Cloud/Remote Access
+- "End-of-Day Transactional Auto-Calculation Engine" replaced with "Real-Time Point of Sale (POS) and Operations Management System featuring a dedicated End-of-Day Reconciliation Module"
+- "End-of-Day Transactional Reconciliation and Auto-Calculation System" in conclusion replaced with "Real-Time Point of Sale (POS) and Operations Management System with an Integrated End-of-Day Reconciliation Module"
+- Section 4: "the stakeholder was unwilling" → "the Sales Manager was unwilling"
+- Section 4: "the client is unwilling" → "the Sales Manager was unwilling"
+- Section 3: Added observation that "The laptop was powered on and actively used during the day, and physical receipts were being printed for customers on-site"
+- Sales Manager role description: "The absolute center of operations. Acts as supervisor, cashier, payroll distributor, and record keeper."
+- Secretary row: "Ground observation confirms the Sales Manager currently performs all data entry and reconciliation. This role is retained in the schema for future scaling only."
+
+The version committed at `4ab797c` is outdated and will be replaced.
+
+---
+
+## 13. MUST Academic Calendar (from your paste)
+
+Academic Year 2026/2027, Semester 1:
+- Registration of first-year students: Aug 10–28, 2026
+- Orientation for first-year students: Aug 10–14, 2026
+- Reporting date for continuing students: Aug 15, 2026
+- Semester 1 lectures begin: Aug 17, 2026
+- Semester length: 17 weeks (15 teaching + 2 exam weeks)
+- Must follows semester system since 2006
