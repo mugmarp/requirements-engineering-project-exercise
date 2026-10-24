@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Generated chat transcripts and scratch exports
+qwen_deniz_conversation.md
+NewiNFO/
+
+# Editor and OS noise
+.DS_Store
+*.swp
+*~
+.vscode/
+.idea/
+
+# Hermes runtime
+.hermes/
