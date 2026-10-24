@@ -1,323 +1,108 @@
 {
-  "title": "DOCUMENT 1: REQUIREMENTS ELICITATION & STAKEHOLDER ANALYSIS",
+  "title": "DOCUMENT 1: REQUIREMENTS ELICITATION AND STAKEHOLDER ANALYSIS",
   "meta": [
-    "Course: SWE2102 - Requirements Engineering | Group: K",
-    "Client Site: Deniz Construction Limited, Ishanyu-Bushenyi Road, Mbarara",
+    "Course: SWE2102 Requirements Engineering",
+    "Group: K",
+    "Client Site: Deniz Construction Limited, Ishanyu Bushenyi Road, Mbarara",
     "Project: Deniz Construction Management System (DCMS)"
   ],
   "blocks": [
-    {
-      "type": "h1",
-      "text": "1. INTRODUCTION"
-    },
-    {
-      "type": "para",
-      "text": "This document outlines the Requirements Elicitation and Stakeholder Analysis conducted for the Deniz Construction Management System (DCMS). It details the empirical data gathered during our single site visit, the challenges faced during data collection, and how the system design was adapted to fit the operational reality of the business. Because follow-up visits were not possible and the stakeholder was unwilling to provide further information, this document also establishes the baseline for how unresolvable information gaps are handled through documented assumptions based on the Ugandan SME context."
-    },
-    {
-      "type": "h1",
-      "text": "2. STAKEHOLDER ANALYSIS"
-    },
-    {
-      "type": "para",
-      "text": "The organizational structure at the site is highly flattened. The traditional corporate hierarchy does not apply; instead, roles are heavily concentrated. We mapped the stakeholders using a Power/Interest grid to determine our engagement strategy and identify critical data gaps."
-    },
-    {
-      "type": "h2",
-      "text": "2.1 Stakeholder Identification & Power/Interest Mapping"
-    },
+    { "type": "h1", "text": "1. INTRODUCTION" },
+    { "type": "para", "text": "This document outlines the Requirements Elicitation and Stakeholder Analysis conducted for the Deniz Construction Management System (DCMS). It details the empirical data gathered during our single site visit, the challenges faced during data collection, and the current As Is operational reality of the business. Because follow up visits were not possible and the primary stakeholder was unwilling to provide further information, this document also establishes the baseline for how unresolvable information gaps are handled through documented business assumptions based on the Ugandan SME context." },
+
+    { "type": "h1", "text": "2. STAKEHOLDER ANALYSIS" },
+    { "type": "para", "text": "The organizational structure at the site is highly flattened. Roles are heavily concentrated, so the traditional corporate hierarchy does not apply. We mapped stakeholders on a Power and Interest grid to determine our engagement strategy and identify critical data gaps." },
+
+    { "type": "h2", "text": "2.1 Stakeholder Identification and Power Interest Mapping" },
     {
       "type": "table",
-      "header": [
-        "Stakeholder",
-        "Role in Current Operations",
-        "Power",
-        "Interest",
-        "Engagement Strategy & Data Status"
-      ],
+      "header": ["Stakeholder", "Role in Current Operations", "Power", "Interest", "Engagement Strategy and Status"],
       "rows": [
-        [
-          "Business Owner",
-          "Strategic oversight; conducts daily physical site visits to review operations and cash.",
-          "High",
-          "High",
-          "Manage Closely: Status: [GAP] - Not available for interview. System must prioritize the specific operational metrics he reviews during his daily evening visits."
-        ],
-        [
-          "Sales Manager",
-          "The \"Super-Manager\": supervises workers, handles cash, processes daily deficits, logs sales, and files URA taxes.",
-          "High",
-          "High",
-          "Manage Closely: Status: [FACT] - Interviewed. Acts as the gatekeeper. System must reduce her end-of-day workload to ensure adoption."
-        ],
-        [
-          "Secretary",
-          "Expected to handle tax records and data entry.",
-          "Medium",
-          "High",
-          "Keep Informed: Status: [GAP] - Never met. No interview data. System will assign these permissions to the Sales Manager by default; the Secretary role is retained in the database schema purely for future organizational scaling."
-        ],
-        [
-          "Site Workers",
-          "Produce blocks/pavers. Paid daily in cash. Operate without formal legal contracts.",
-          "Low",
-          "Low",
-          "Monitor: Status: [GAP] - Could not speak to them. System only requires a simplified interface for the Manager to log them as \"Present\"."
-        ],
-        [
-          "URA (External)",
-          "Uganda Revenue Authority. Dictates tax compliance, VAT, and receipting standards.",
-          "High",
-          "Low",
-          "Keep Satisfied: System must ensure financial outputs are compliant with URA audit expectations to prevent penalties."
-        ],
-        [
-          "Clients/Builders",
-          "Purchase blocks/pavers. Pay upfront. Transport their own goods via trucks.",
-          "Low",
-          "Medium",
-          "Keep Informed: System must generate clear receipts and ensure quick processing to minimize loading delays."
-        ]
+        ["Business Owner", "Strategic oversight. Visits the site daily to review operations and cash.", "High", "High", "Manage Closely. Status: gap. Never interviewed. The system must eventually prioritize the metrics he reviews during his daily evening visits."],
+        ["Sales Manager", "The absolute center of operations. Acts as supervisor, cashier, payroll distributor, and record keeper.", "High", "High", "Manage Closely. Status: fact. Interviewed. Acts as the gatekeeper."],
+        ["Secretary", "Named in initial project scoping to handle tax records and data entry.", "Medium", "High", "Keep Informed. Status: gap. Never met. Ground observation confirms the Sales Manager currently performs all data entry."],
+        ["Site Workers", "Produce blocks and pavers. Paid daily in cash. No formal legal contracts.", "Low", "Low", "Monitor. Status: gap. No chance to speak to them."],
+        ["URA (External)", "Uganda Revenue Authority. Dictates tax compliance, VAT and receipting standards.", "High", "Low", "Keep Satisfied. External regulator. No direct engagement but dictates compliance rules."],
+        ["Customers and Builders", "Purchase blocks and pavers. Pay upfront. Transport their own goods by truck.", "Low", "Medium", "Keep Informed. The system must eventually ensure quick processing to minimize their loading delays."]
       ]
     },
-    {
-      "type": "h2",
-      "text": "2.2 Common Pitfalls & Engagement Techniques"
-    },
+
+    { "type": "h2", "text": "2.2 Common Pitfalls and Engagement Techniques" },
     {
       "type": "para",
       "runs": [
-        {
-          "text": "Pitfall Identified (The Gatekeeper Effect): ",
-          "bold": true
-        },
-        {
-          "text": "Because the Sales Manager handles almost all operations, she acts as a gatekeeper. She was initially hesitant to share deep financial workflows (e.g., exact tax calculations, cash storage)."
-        }
+        { "text": "Pitfall Identified: The Gatekeeper Effect. ", "bold": true },
+        { "text": "Because the Sales Manager handles almost all operations, she acts as a gatekeeper. She was hesitant to share deep financial workflows, for example, the exact tax calculations and the cash storage arrangements." }
       ]
     },
     {
       "type": "para",
       "runs": [
-        {
-          "text": "Mitigation Technique: ",
-          "bold": true
-        },
-        {
-          "text": "We used Observation over direct interrogation for sensitive topics. By observing the physical environment (e.g., noting the presence of CCTV cameras, the printer, and the laptop usage timing), we inferred security and workflow requirements without making her defensive."
-        }
+        { "text": "Mitigation Technique. ", "bold": true },
+        { "text": "We used observation over direct interrogation for sensitive topics. By observing the physical environment, for example, the CCTV cameras, the printer, and the laptop usage timing, we inferred security and workflow realities without making her defensive." }
       ]
     },
-    {
-      "type": "h1",
-      "text": "3. ELICITATION TECHNIQUES USED"
-    },
-    {
-      "type": "para",
-      "text": "Given the single site visit, Group K used the following techniques:"
-    },
-    {
-      "type": "para",
-      "runs": [
-        {
-          "text": "1. Direct Observation (Environmental Scan):",
-          "bold": true
-        }
-      ]
-    },
+
+    { "type": "h1", "text": "3. ELICITATION TECHNIQUES AND FIELD REALITIES (THE AS IS STATE)" },
+    { "type": "para", "text": "Given the single site visit, Group K used Direct Observation and Semi Structured Interviews. The following facts represent the current operational reality of the business." },
+
+    { "type": "para", "runs": [ { "text": "1. Direct Observation (Environmental Scan)", "bold": true } ] },
     {
       "type": "bullets",
       "items": [
-        "Noted that clients transport their own products using trucks, meaning the system does not need a \"Delivery/Logistics\" module, but rather a \"Loading/Dispatch\" confirmation.",
-        "Observed the physical presence of a laptop, a printer, and CCTV cameras, indicating a baseline awareness of security and digital record-keeping.",
-        "Observed that trucks load in bulk, though the exact counting method (per piece, per pallet) was not explicitly visible."
+        "Workflow and Hardware: The laptop was powered on and actively used during the day. A printer is on site, and physical receipts were being printed for customers as trucks loaded.",
+        "Logistics: Customers transport their own products by truck. Trucks load in bulk, but the exact counting method (per piece or per pallet) was not visible.",
+        "Security: The site has CCTV cameras, indicating a baseline awareness of physical security and cash handling risks."
       ]
     },
-    {
-      "type": "para",
-      "runs": [
-        {
-          "text": "2. Semi-Structured Interview:",
-          "bold": true
-        }
-      ]
-    },
+    { "type": "para", "runs": [ { "text": "2. Semi Structured Interview (Sales Manager)", "bold": true } ] },
     {
       "type": "bullets",
       "items": [
-        "Conducted a face-to-face interview with the Sales Manager to understand the high-level workflow, payment methods (Cash, Mobile Money, Bank), and primary pain points (specifically \"insecurity\" and \"processing deficits\")."
+        "Payment Channels: The business accepts Cash, Mobile Money, and direct Bank Deposits.",
+        "Credit Policy: The business never gives credit; all payments must be made upfront.",
+        "Tax Compliance: The Sales Manager processes taxes online via the URA portal, but the exact manual calculation method was not disclosed.",
+        "Pain Points: The Sales Manager explicitly raised insecurity regarding cash handling and stated she uses the PC to process deficits (cash shortages) manually.",
+        "Labor: There is no formal attendance system. Attendance relies entirely on the Sales Manager memory, and workers are paid daily in cash without legal contracts."
       ]
     },
-    {
-      "type": "h1",
-      "text": "4. CHALLENGES IN ELICITATION"
-    },
-    {
-      "type": "para",
-      "text": "As Group K, we faced the following empirical challenges, which are now locked as documented limitations for the project:"
-    },
+
+    { "type": "h1", "text": "4. CHALLENGES IN ELICITATION AND DOCUMENTED LIMITATIONS" },
+    { "type": "para", "text": "As Group K, we faced the following empirical challenges, which are now locked as documented limitations for the project." },
     {
       "type": "numbered",
       "items": [
-        "Stakeholder Hesitance & Information Withholding: The Sales Manager was reluctant to disclose the exact fields on their physical receipts, the specific methodology for calculating URA taxes, and the physical cash-handling/storage protocols.",
-        "Inaccessibility of Secondary Stakeholders: The Business Owner was not available for a formal interview, and the Site Workers and Secretary could not be approached directly. (Note: These are unresolvable gaps; their requirements will be handled via standard industry assumptions).",
-        "Incomplete Workflow Visibility: While we knew the laptop is used to \"process deficits,\" we could not observe the exact mathematical formula or physical cash reconciliation process.",
-        "No Follow-up Feasibility: The client is unwilling to provide more information, and returning to the site for secondary elicitation sessions is not possible. The project scope is locked."
+        "Stakeholder Hesitance and Information Withholding. The Sales Manager was reluctant to disclose the exact fields on the physical receipts, the method used to calculate URA taxes, and the physical cash storage protocols.",
+        "Inaccessibility of Secondary Stakeholders. The Business Owner was not available for interview, and the Site Workers and Secretary could not be approached directly.",
+        "Incomplete Workflow Visibility. We knew the laptop is used to process deficits, but we could not observe the exact formula or the physical cash reconciliation process.",
+        "No Follow up Feasibility. The Sales Manager was unwilling to provide further information, and a return visit to the site is not possible. The project scope is locked."
       ]
     },
-    {
-      "type": "h1",
-      "text": "5. OPERATIONAL DEDUCTIONS & SYSTEM DESIGN ADJUSTMENTS"
-    },
-    {
-      "type": "para",
-      "text": "Since we could not get explicit answers for every workflow, we deduced the system requirements based on our physical observations and the standard operational context of Ugandan construction SMEs. Where obvious, we applied standard industry baselines; where complex, we applied logical deductions."
-    },
-    {
-      "type": "para",
-      "runs": [
-        {
-          "text": "5.1. The \"Super-Manager\" Workflow & The Auto-Calculation Engine",
-          "bold": true
-        }
-      ]
-    },
-    {
-      "type": "para",
-      "text": "We observed that the laptop is primarily turned on and used right before the Business Owner arrives in the evening. The Sales Manager is clearly not typing into the computer while directing truck loading in the yard. However, if she only typed \"daily summary totals\" into the system, we would lose the ability to automatically calculate VAT per item, deduct specific blocks from inventory, or track exact drawer balances."
-    },
-    {
-      "type": "para",
-      "runs": [
-        {
-          "text": "Design Adjustment: ",
-          "bold": true
-        },
-        {
-          "text": "The system's workflow is shifted to the evening, but the data entry remains strictly transactional. The Sales Manager will log each individual sale and each operational expense from her paper receipts into the system at the end of the day. The system will then act as an Auto-Calculation Engine, automatically computing the VAT, updating inventory, tracking the separate payment channels, and instantly generating the final End-of-Day Reconciliation report."
-        }
-      ]
-    },
-    {
-      "type": "para",
-      "runs": [
-        {
-          "text": "5.2. Resolving the \"Deficit\" and Cash Insecurity Issue",
-          "bold": true
-        }
-      ]
-    },
-    {
-      "type": "para",
-      "text": "The Sales Manager explicitly mentioned using the PC to \"process deficits\" and cited \"insecurity\" regarding cash (aligning with the CCTV cameras we observed). In cash-heavy sites, end-of-day \"deficits\" (shortages) are rarely theft; they are almost always unrecorded petty cash expenses (e.g., buying lunch for the truck loaders, paying for a boda-boda errand) taken directly from the cash drawer."
-    },
-    {
-      "type": "para",
-      "runs": [
-        {
-          "text": "Design Adjustment: ",
-          "bold": true
-        },
-        {
-          "text": "The system must include an \"Operational Expense / Petty Cash Log\". The Sales Manager will log each individual cash-out. The system will automatically deduct these from the \"Cash Virtual Drawer,\" balancing the till and eliminating the \"deficit\" mystery for the owner."
-        }
-      ]
-    },
-    {
-      "type": "para",
-      "runs": [
-        {
-          "text": "5.3. Multi-Channel Payment Reconciliation",
-          "bold": true
-        }
-      ]
-    },
-    {
-      "type": "para",
-      "runs": [
-        {
-          "text": "Design Adjustment: ",
-          "bold": true
-        },
-        {
-          "text": "The system must strictly separate the three payment channels (Cash, Mobile Money, Bank Deposit). Every transactional entry must force the selection of a payment method. The End-of-Day Reconciliation report will calculate the expected balance for each specific channel independently, preventing the mixing of physical cash and digital money."
-        }
-      ]
-    },
-    {
-      "type": "para",
-      "runs": [
-        {
-          "text": "5.4. Standardizing Receipts and Inventory (Handling the Gaps)",
-          "bold": true
-        }
-      ]
-    },
-    {
-      "type": "para",
-      "text": "While we couldn't see the exact receipt fields or how the bulk blocks were counted, we applied standard industry baselines for the database design to close these gaps."
-    },
-    {
-      "type": "para",
-      "runs": [
-        {
-          "text": "Design Adjustment: ",
-          "bold": true
-        },
-        {
-          "text": "Receipts will include standard URA-compliant fields (Sequential ID, Date, Customer, Items, VAT, Payment Method). For inventory, since trucks load in bulk and clients self-transport, the database Unit_of_Measure field will be designed to be flexible (VARCHAR) to handle blocks sold by the piece/pallet and pavers by the square meter, without needing complex logistics modules."
-        }
-      ]
-    },
-    {
-      "type": "para",
-      "runs": [
-        {
-          "text": "5.5. Redefining Cloud Backup and Remote Access",
-          "bold": true
-        }
-      ]
-    },
-    {
-      "type": "para",
-      "text": "The owner visits the site every day and data is entered at the end of the day. Real-time syncing is unnecessary and would just waste the site's limited internet data."
-    },
-    {
-      "type": "para",
-      "runs": [
-        {
-          "text": "Design Adjustment: ",
-          "bold": true
-        },
-        {
-          "text": "We defined the cloud feature strictly as an Automated Nightly Backup (triggered in the evening after she finishes data entry) to solve the \"Data Vulnerability\" problem of relying on a single laptop. The remote portal for the owner is designed as an Asynchronous Dashboard for reviewing next-day finalized reports and long-term business trends, rather than a live monitoring tool."
-        }
-      ]
-    },
-    {
-      "type": "para",
-      "runs": [
-        {
-          "text": "5.6. Explicitly Excluded Features",
-          "bold": true
-        }
-      ]
-    },
-    {
-      "type": "para",
-      "text": "Based on the ground fact that the business \"never gives credit - all payments must be made,\" the system will not include a Credit/Debtors module, credit limits, or accounts receivable tracking. This prevents scope creep and aligns the software strictly with the business's actual financial policy."
-    },
-    {
-      "type": "h1",
-      "text": "6. CONCLUSION & TRANSITION"
-    },
-    {
-      "type": "para",
-      "text": "By combining our direct observations with logical deductions based on the local business context, Group K has navigated the elicitation challenges. The project is a context-aware End-of-Day Transactional Reconciliation and Auto-Calculation System. All unresolvable gaps (Secretary, Workers, Receipt Fields) have been documented and will be handled via standard assumptions in the subsequent phases."
-    },
-    {
-      "type": "para",
-      "text": "This provides the foundation for Phase 2, Requirements Analysis, where these deductions will be formalized into the Software Requirements Specification (SRS) and mapped to the relational database schema."
-    }
+
+    { "type": "h1", "text": "5. STRATEGIC BUSINESS SYNTHESIS (FILLING THE GAPS)" },
+    { "type": "para", "text": "Because we cannot return to the site to close the gaps identified in Section 4, we must apply strategic business synthesis. These are logical inferences drawn from our verified facts combined with the standard operational norms of Ugandan construction SMEs. They serve as the baseline assumptions for the subsequent Requirements Analysis phase." },
+
+    { "type": "para", "runs": [ { "text": "1. The Nature of Deficits and Cash Insecurity", "bold": true } ] },
+    { "type": "para", "text": "Fact: The Sales Manager processes deficits manually and cited insecurity (CCTV is present)." },
+    { "type": "para", "text": "Synthesis: In cash heavy Ugandan SMEs, end of day cash shortages are rarely malicious theft. They are almost always caused by unrecorded petty cash expenses (for example, buying lunch for truck loaders or paying for transport) taken directly from the cash drawer." },
+    { "type": "para", "text": "Assumption for Next Phases: The business requires a mechanism to log operational cash outs to reconcile the physical till against the receipt totals." },
+
+    { "type": "para", "runs": [ { "text": "2. The Dual Phase Operational Reality", "bold": true } ] },
+    { "type": "para", "text": "Fact: The laptop is on during the day, and physical receipts are printed for customers. However, the Sales Manager also heavily utilizes the PC right before the Business Owner arrives in the evening specifically to process cash deficits." },
+    { "type": "para", "text": "Synthesis: The Sales Manager cannot wait until the evening to log sales, because customers require printed receipts immediately upon loading. However, the evening PC usage indicates a distinct, heavy reconciliation burden at the end of the day." },
+    { "type": "para", "text": "Assumption for Next Phases: The future system must support real time transaction processing and receipt generation during the day, alongside a dedicated, heavy duty reconciliation workflow for the evening." },
+
+    { "type": "para", "runs": [ { "text": "3. Receipting and Inventory Baselines", "bold": true } ] },
+    { "type": "para", "text": "Fact: Physical receipts are printed on site, and trucks load in bulk. Exact receipt fields are unknown." },
+    { "type": "para", "text": "Synthesis: To satisfy URA compliance and basic business logic, receipts must contain standard fiscal fields (Sequential ID, Date, VAT, Payment Method). Because clients self transport and load in bulk, inventory tracking must accommodate flexible units of measure (pieces, pallets, or truckloads)." },
+
+    { "type": "para", "runs": [ { "text": "4. Cloud Backup and Remote Access", "bold": true } ] },
+    { "type": "para", "text": "Fact: The owner visits the site every day. No cloud backup currently exists." },
+    { "type": "para", "text": "Synthesis: Because the owner is physically present daily, a real time remote monitoring dashboard is operationally redundant. The critical need for cloud technology is strictly for disaster recovery (protecting the single laptop from data loss) and asynchronous historical review." },
+
+    { "type": "h1", "text": "6. CONCLUSION AND TRANSITION" },
+    { "type": "para", "text": "By combining direct observation with logical business synthesis, Group K has mapped the current As Is state of Deniz Construction Limited and documented all unresolvable elicitation challenges." },
+    { "type": "para", "text": "The project is grounded in the reality of a Super Manager bottleneck, multi channel cash handling vulnerabilities, and informal labor practices. All gaps (Secretary, Workers, Receipt Fields) are formally documented as limitations." },
+    { "type": "para", "text": "This provides the foundation for Phase 2: Requirements Analysis and Specification, where these business assumptions and facts will be translated into formal Software Requirements (SRS) and mapped to the relational database schema." }
   ]
 }
