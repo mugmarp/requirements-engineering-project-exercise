@@ -18,12 +18,12 @@
       "type": "table",
       "header": ["Stakeholder", "Role in Current Operations", "Power", "Interest", "Engagement Strategy and Status"],
       "rows": [
-        ["Business Owner", "Strategic oversight. Visits the site daily to review operations and cash.", "High", "High", "Manage Closely. Status: gap. Never interviewed. The system must eventually prioritize the metrics he reviews during his daily evening visits."],
-        ["Sales Manager", "The absolute center of operations. Acts as supervisor, cashier, payroll distributor, and record keeper.", "High", "High", "Manage Closely. Status: fact. Interviewed. Acts as the gatekeeper."],
-        ["Secretary", "Named in initial project scoping to handle tax records and data entry.", "Medium", "High", "Keep Informed. Status: gap. Never met. Ground observation confirms the Sales Manager currently performs all data entry."],
-        ["Site Workers", "Produce blocks and pavers. Paid daily in cash. No formal legal contracts.", "Low", "Low", "Monitor. Status: gap. No chance to speak to them."],
+        ["Business Owner", "Strategic oversight. Visits the site daily to review operations and cash.", "High", "High", "Manage Closely. Status: [GAP]. Never interviewed. The system must eventually prioritize the metrics he reviews during his daily evening visits."],
+        ["Sales Manager", "The absolute center of operations. Acts as supervisor, cashier, payroll distributor, and record keeper.", "High", "High", "Manage Closely. Status: [FACT]. Interviewed. Acts as the gatekeeper."],
+        ["Secretary", "Named in initial project scoping to handle tax records and data entry.", "Medium", "High", "Keep Informed. Status: [GAP]. Never met. Ground observation confirms the Sales Manager currently performs all data entry."],
+        ["Site Workers", "Produce blocks and pavers. Paid daily in cash. No formal legal contracts.", "Low", "Low", "Monitor. Status: [GAP]. No chance to speak to them."],
         ["URA (External)", "Uganda Revenue Authority. Dictates tax compliance, VAT and receipting standards.", "High", "Low", "Keep Satisfied. External regulator. No direct engagement but dictates compliance rules."],
-        ["Customers and Builders", "Purchase blocks and pavers. Pay upfront. Transport their own goods by truck.", "Low", "Medium", "Keep Informed. The system must eventually ensure quick processing to minimize loading delays."]
+        ["Customers and Builders", "Purchase blocks and pavers. Pay upfront. Transport their own goods by truck.", "Low", "Medium", "Keep Informed. The system must eventually ensure quick processing to minimize their loading delays."]
       ]
     },
 
@@ -79,7 +79,7 @@
       ]
     },
 
-    { "type": "h1", "text": "5. STRATEGIC BUSINESS SYNTHESIS (FILLING THE GAPS)" },
+    { "type": "h1", "text": "5. OPERATIONAL DEDUCTIONS AND SYSTEM SPECIFICATIONS" },
     { "type": "para", "text": "Because we cannot return to the site to close the gaps identified in Section 4, we must apply strategic business synthesis. These are logical inferences drawn from our verified facts combined with the standard operational norms of Ugandan construction SMEs. They serve as the baseline assumptions for the subsequent Requirements Analysis phase." },
 
     { "type": "para", "runs": [ { "text": "1. The Nature of Deficits and Cash Insecurity", "bold": true } ] },
@@ -96,13 +96,14 @@
     { "type": "para", "text": "Fact: Physical receipts are printed on site, and trucks load in bulk. Exact receipt fields are unknown." },
     { "type": "para", "text": "Synthesis: To satisfy URA compliance and basic business logic, receipts must contain standard fiscal fields (Sequential ID, Date, VAT, Payment Method). Because clients self transport and load in bulk, inventory tracking must accommodate flexible units of measure (pieces, pallets, or truckloads)." },
 
-    { "type": "para", "runs": [ { "text": "4. Cloud Backup and Remote Access", "bold": true } ] },
+    { "type": "para", "runs": [ { "text": "4. Cloud Backup and Remote Access Specification", "bold": true } ] },
     { "type": "para", "text": "Fact: The owner visits the site every day. No cloud backup currently exists." },
     { "type": "para", "text": "Synthesis: Because the owner is physically present daily, a real time remote monitoring dashboard is operationally redundant. The critical need for cloud technology is strictly for disaster recovery (protecting the single laptop from data loss) and asynchronous historical review." },
+    { "type": "para", "runs": [ { "text": "System Specification. ", "bold": true }, { "text": "The cloud feature is specified strictly as an Automated Nightly Backup, triggered in the evening after the final reconciliation is complete, to solve the Data Vulnerability problem of relying on a single laptop. The remote portal for the owner is an Asynchronous Dashboard for reviewing next day finalized reports and long term business trends, rather than a live monitoring tool." } ] },
 
     { "type": "h1", "text": "6. CONCLUSION AND TRANSITION" },
     { "type": "para", "text": "By combining direct observation with logical business synthesis, Group K has mapped the current As Is state of Deniz Construction Limited and documented all unresolvable elicitation challenges." },
-    { "type": "para", "text": "The project is grounded in the reality of a Super Manager bottleneck, multi channel cash handling vulnerabilities, and informal labor practices. All gaps (Secretary, Workers, Receipt Fields) are formally documented as limitations." },
+    { "type": "para", "text": "The project is defined as a Real Time Point of Sale and Operations Management System with an Integrated End of Day Reconciliation Module. All gaps (Secretary, Workers, Receipt Fields) are formally documented as limitations." },
     { "type": "para", "text": "This provides the foundation for Phase 2: Requirements Analysis and Specification, where these business assumptions and facts will be translated into formal Software Requirements (SRS) and mapped to the relational database schema." }
   ]
 }
