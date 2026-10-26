@@ -22,12 +22,12 @@
         ["6", "Requirements Management Plan", "Master Document: Part 4", "5", "Complete", "MASTER-Requirements-Specification-Traceability-Management.docx"],
         ["7", "Conceptual Data Model (ER Diagram) & Data Dictionary", "Master Document: Part 5, Section 1", "DB", "Complete", "MASTER-Requirements-Specification-Traceability-Management.docx"],
         ["8", "Physical Database Design Document (SQL Logic)", "Master Document: Part 5, Sections 2-4", "DB", "Complete", "MASTER-Requirements-Specification-Traceability-Management.docx"],
-        ["9", "Grand Project Presentation Deck", "Not yet created", "Final", "Pending", ""],
+        ["9", "Grand Project Presentation Deck", "Document 9: Grand Project Presentation Deck", "Final", "Complete", "DOC-09-Grand-Project-Presentation.pptx"],
         ["10", "User Manual / Standard Operating Procedure (SOP)", "Not yet created", "Final", "Pending", ""]
       ] },
 
     { "type": "h1", "text": "CONSOLIDATION NOTE" },
-    { "type": "para", "text": "Per the corrected roadmap (turn 99), Documents 3 through 8 were consolidated into a single Master Document to avoid fragmentation and ensure strict traceability between requirements, traceability matrix, validation, management, and database design. This master document is the single source of truth for Phases 2 through 5 and the SWE1205 database deliverable." },
+    { "type": "para", "text": "Per the corrected roadmap (turn 99), Documents 3 through 8 from the original roadmap have been consolidated into a single Master Document to avoid fragmentation and ensure strict traceability between requirements, traceability matrix, validation, management, and database design. This master document is the single source of truth for Phases 2 through 5 and the SWE1205 database deliverable." },
 
     { "type": "h1", "text": "ARCHITECTURE" },
     { "type": "para", "text": "The system follows a Dual Phase architecture established from ground observations:" },
@@ -52,10 +52,17 @@
       "rows": [
         ["DOC-01-Elicitation-and-Stakeholder-Analysis.docx", "Document 1: Phase 1 strict (As Is, gaps, synthesis)"],
         ["MASTER-Requirements-Specification-Traceability-Management.docx", "Master: SRS + RTM + V&V + Management + DB Design"],
+        ["DOC-09-Grand-Project-Presentation.pptx", "Document 9: Grand Project Presentation Deck (PPTX)"],
+        ["DOC-09-Grand-Project-Presentation-Deck.docx", "Document 9: Grand Project Presentation Deck (DOCX backup)"],
+        ["MASTER-Requirements-Specification-Traceability-Management.docx", "Master: SRS + RTM + V&V + Management + DB Design"],
+        ["PROJECT-DELIVERABLES-GUIDE.docx", "Project Deliverables Guide"],
         ["CONTEXT.md", "Full 100-turn fact base with dual phase design"],
         ["specs/spec_doc01.json", "Document 1 source spec"],
         ["specs/spec_master.json", "Master document source spec"],
+        ["specs/spec_guide.json", "This guide source spec"],
+        ["specs/spec_presentation_pptx.json", "Presentation deck source spec (PPTX)"],
         ["scripts/build_docx.py", "DOCX builder (Times New Roman 12pt, 1.15 spacing)"],
+        ["scripts/build_pptx.py", "PPTX builder (Arial 18pt, 1.15 spacing)"],
         ["scripts/make_spec_doc01.py", "Spec generator with explicit filler cuts"],
         ["README.md", "Project overview"],
         ["context/Group-ALLOCATIONS_1_requirements_engineering.pdf", "Course allocation sheet"]
@@ -64,18 +71,26 @@
     { "type": "h1", "text": "REMAINING WORK" },
     { "type": "table", "header": ["Document", "Description", "Priority"],
       "rows": [
-        ["9. Grand Project Presentation Deck", "Slide deck for end of semester Grand Presentation covering ground truth problem, elicitation challenges, synthesized solution, database schema, system demo", "High"],
         ["10. User Manual / SOP", "Visual, icon driven guide for Sales Manager covering daily sales entry and end of day reconciliation", "High"]
       ] },
 
     { "type": "h1", "text": "FORMAT STANDARD" },
-    { "type": "para", "text": "All documents follow a fixed format standard enforced by scripts/build_docx.py:" },
+    { "type": "para", "text": "All documents follow a fixed format standard enforced by scripts/build_docx.py and scripts/build_pptx.py:" },
+    { "type": "h2", "text": "Word documents (.docx)" },
     { "type": "bullets", "items": [
       "Font: Times New Roman, 12 pt, black",
       "Line spacing: 1.15 (multiple)",
       "Bold: Headings, table headers, lead in phrases only",
       "Punctuation: Plain ASCII only (no semicolons, no quotes, no hyphens, no em dashes)",
       "Page: A4, 25.4 mm margins"
+    ] },
+    { "type": "h2", "text": "PowerPoint presentations (.pptx)" },
+    { "type": "bullets", "items": [
+      "Font: Arial, 18 pt body, 20 pt subtitle, 32 pt title",
+      "Background: White (FFFFFF)",
+      "Colour: Black (000000)",
+      "Bold: Headings, table headers, lead in phrases only",
+      "Punctuation: Plain ASCII, no quotes, no semicolons, no hyphens, no em dashes"
     ] }
   ]
 }
