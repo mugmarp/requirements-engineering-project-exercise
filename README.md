@@ -13,47 +13,54 @@ of Requirements Engineering (Elicitation, Analysis, Specification, Validation
 and Management) to a real site, and feeds a downstream SWE1205 Database
 Programming build.
 
-The system being specified is an end of day transactional reconciliation tool.
-The Sales Manager at the site is simultaneously supervisor, cashier, paymaster
-and tax filer, so she is a single point of failure. She currently uses a single
-office PC in the evening to process cash deficits by hand. The system logs each
-individual sale and expense as she enters the day receipts, then automatically
-computes VAT, updates inventory, tracks the separate payment channels and
-produces the end of day reconciliation report.
+The system being specified is a Dual Phase Operations Management System.
+During the day, it functions as a Real Time Point of Sale to process individual
+sales, calculate VAT, update inventory, and print physical receipts. In the
+evening, it functions as an End of Day Reconciliation Engine, allowing the
+Sales Manager to balance multi channel payment drawers, log operational
+expenses, compute cash variances, and generate a daily summary report for the
+Business Owner.
 
 ## Repository layout
 
 ```
 CONTEXT.md                                          Verified fact base and assumptions register
 DOC-01-Elicitation-and-Stakeholder-Analysis.md     Document 1, markdown source
-specs/spec_doc01.json                              Document 1 content specification
-scripts/build_docx.py                              DOCX builder, project format standard
-scripts/make_spec_doc01.py                         Builds the spec from the base text
-OUTPUT/                                            Generated deliverables
-context/                                           Course input documents
+DOC-09-Grand-Project-Presentation-Deck.pptx        Document 9, presentation
+MASTER-Requirements-Specification-Traceability-Management.docx  Master: SRS + RTM + V&V + Management + DB
+PROJECT-DELIVERABLES-GUIDE.docx                    Deliverables guide
+specs/                                              JSON content specifications
+scripts/                                            Build toolchain
+OUTPUT/                                             Generated deliverables
+context/                                            Course input documents
 ```
 
 ## Document set
 
 | Document | Title | Status |
-| --- | --- | --- |
+|---|---|---|
 | 1 | Requirements Elicitation and Stakeholder Analysis | Complete |
-| 2 | Software Requirements Specification and Database Requirements | Planned |
-| 3 | Requirements Traceability Matrix | Planned |
-| 4 | Validation and Verification Plan | Planned |
-| 5 | Requirements Management Plan | Planned |
-| 6 | Conceptual Data Model and Data Dictionary | Planned |
-| 7 | Physical Database Design | Planned |
-| 8 | Grand Project Presentation Deck | Planned |
-| 9 | User Manual | Planned |
+| 2 | Specification, Traceability, and Management | Complete |
+| 9 | Grand Project Presentation Deck | Complete |
+| 10 | User Manual / SOP | Pending |
+| - | Project Deliverables Guide | Complete |
+
+Note: Documents 3 through 8 from the original roadmap (SRS, RTM, V&V Plan, Management Plan, ER Diagram, Physical DB Design) have been consolidated into the single Master Document (Document 2) per the corrected roadmap.
+
+## Architecture
+
+The system follows a Dual Phase architecture established from ground observations:
+
+- **Phase 1 (Day):** Real Time Point of Sale - processes individual sales, calculates VAT, updates inventory, prints physical receipts for customers as trucks load.
+- **Phase 2 (Evening):** End of Day Reconciliation Engine - balances multi channel payment drawers (Cash, Mobile Money, Bank Deposit), logs operational expenses, computes cash variances (deficit/surplus), generates daily summary report for the Business Owner.
 
 ## Format standard
 
-All documents are generated from JSON specs by `scripts/build_docx.py` and
-conform to one fixed standard.
+All documents are generated from JSON specs by `scripts/build_docx.py` and `scripts/build_pptx.py` and conform to fixed standards.
 
+### Word documents (.docx)
 | Property | Value |
-| --- | --- |
+|---|---|
 | Font | Times New Roman |
 | Size | 12 pt |
 | Colour | Black |
@@ -61,11 +68,29 @@ conform to one fixed standard.
 | Bold | Headings, table headers and lead in phrases only |
 | Punctuation | Plain ASCII, no quotes, semicolons, hyphens or dashes |
 
-To rebuild Document 1:
+### PowerPoint presentations (.pptx)
+| Property | Value |
+|---|---|
+| Font | Arial |
+| Size | 18 pt body, 20 pt subtitle, 32 pt title |
+| Colour | Black |
+| Background | White |
+| Bold | Headings, table headers, lead in phrases only |
 
+To rebuild Document 1:
 ```bash
 python3 scripts/make_spec_doc01.py
 python3 scripts/build_docx.py specs/spec_doc01.json OUTPUT/DOC-01-Elicitation-and-Stakeholder-Analysis.docx
+```
+
+To rebuild Master Document:
+```bash
+python3 scripts/build_docx.py specs/spec_master.json OUTPUT/MASTER-Requirements-Specification-Traceability-Management.docx
+```
+
+To rebuild Presentation Deck:
+```bash
+python3 scripts/build_pptx.py specs/spec_presentation_pptx.json OUTPUT/DOC-09-Grand-Project-Presentation-Deck.pptx
 ```
 
 ## Method note
