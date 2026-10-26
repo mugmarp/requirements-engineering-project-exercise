@@ -18,10 +18,10 @@
       "type": "table",
       "header": ["Stakeholder", "Role in Current Operations", "Power", "Interest", "Engagement Strategy and Status"],
       "rows": [
-        ["Business Owner", "Strategic oversight. Visits the site daily to review operations and cash.", "High", "High", "Manage Closely. Status: [GAP]. Never interviewed. The system must eventually prioritize the metrics he reviews during his daily evening visits."],
-        ["Sales Manager", "The absolute center of operations. Acts as supervisor, cashier, payroll distributor, and record keeper.", "High", "High", "Manage Closely. Status: [FACT]. Interviewed. Acts as the gatekeeper."],
-        ["Secretary", "Named in initial project scoping to handle tax records and data entry.", "Medium", "High", "Keep Informed. Status: [GAP]. Never met. Ground observation confirms the Sales Manager currently performs all data entry."],
-        ["Site Workers", "Produce blocks and pavers. Paid daily in cash. No formal legal contracts.", "Low", "Low", "Monitor. Status: [GAP]. No chance to speak to them."],
+        ["Business Owner", "Strategic oversight. Visits the site daily to review operations and cash.", "High", "High", "Manage Closely. Status: Gap. Never interviewed. The system must eventually prioritize the metrics he reviews during his daily evening visits."],
+        ["Sales Manager", "The absolute center of operations. Acts as supervisor, cashier, payroll distributor, and record keeper.", "High", "High", "Manage Closely. Status: Fact. Interviewed. Acts as the gatekeeper."],
+        ["Secretary", "Named in initial project scoping to handle tax records and data entry.", "Medium", "High", "Keep Informed. Status: Gap. Never met. Ground observation confirms the Sales Manager currently performs all data entry."],
+        ["Site Workers", "Produce blocks and pavers. Paid daily in cash. No formal legal contracts.", "Low", "Low", "Monitor. Status: Gap. No chance to speak to them."],
         ["URA (External)", "Uganda Revenue Authority. Dictates tax compliance, VAT and receipting standards.", "High", "Low", "Keep Satisfied. External regulator. No direct engagement but dictates compliance rules."],
         ["Customers and Builders", "Purchase blocks and pavers. Pay upfront. Transport their own goods by truck.", "Low", "Medium", "Keep Informed. The system must eventually ensure quick processing to minimize their loading delays."]
       ]
