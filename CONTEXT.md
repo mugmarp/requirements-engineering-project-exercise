@@ -48,7 +48,12 @@ Everything lives in `/home/vm/MUST/REQUIREMENTS/`
 **[FACT]** Location: **Ishanyu-Bushenyi Road, Mbarara**, Uganda
 **[FACT]** Sector: construction materials SME — produces/sells concrete blocks, pavers
 **[FACT]** Size: **small** — "the business seems small", "not yet a large business"
-**[FACT]** Contact numbers recorded: **0749858413** and **0791069287**
+**[FACT]** Contact numbers recorded: **0749858413**, **0791069287**, and **0700 640 242**
+**[FACT]** Product Catalogue (Concrete):
+- **Solid Blocks:** 4×8×16, 6×8×16, 8×8×16 inches
+- **Hollow Blocks:** 4×8×16, 6×8×16, 8×8×16 inches
+- **Pavers:** 60mm and 80mm thickness (Interlocking, Rectangular, Hexagonal)
+- **Kerbs:** Garden and Road kerbs
 **[SYNTH]** "Deniz Construction Management System (DCMS)" was the working project name. Qwen proposed renaming to **DPSS — Deniz Point-of-Sale & Site Operations System**. *Not confirmed; project stays DCMS.*
 **[SYNTH]** Product mix: solid blocks, hollow blocks, compound pavers. Sold by piece, pallet, or truckload.
 
