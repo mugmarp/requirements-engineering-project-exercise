@@ -31,8 +31,8 @@ MASTER-Requirements-Specification-Traceability-Management.docx  Master: SRS + RT
 PROJECT-DELIVERABLES-GUIDE.docx                    Deliverables guide
 specs/                                              JSON content specifications
 scripts/                                            Build toolchain
-OUTPUT/                                             Generated deliverables
-context/                                            Course input documents
+project_deliverables/                              Generated deliverables
+context/                                           Course input documents
 ```
 
 ## Document set
@@ -80,20 +80,23 @@ All documents are generated from JSON specs by `scripts/build_docx.py` and `scri
 To rebuild Document 1:
 ```bash
 python3 scripts/make_spec_doc01.py
-python3 scripts/build_docx.py specs/spec_doc01.json OUTPUT/DOC-01-Elicitation-and-Stakeholder-Analysis.docx
+python3 scripts/build_docx.py specs/spec_doc01.json project_deliverables/DOC-01-Elicitation-and-Stakeholder-Analysis.docx
 ```
 
 To rebuild Master Document:
 ```bash
-python3 scripts/build_docx.py specs/spec_master.json OUTPUT/MASTER-Requirements-Specification-Traceability-Management.docx
+python3 scripts/build_docx.py specs/spec_master.json project_deliverables/MASTER-Requirements-Specification-Traceability-Management.docx
 ```
 
 To rebuild Presentation Deck:
 ```bash
-python3 scripts/build_pptx.py specs/spec_presentation_pptx.json OUTPUT/DOC-09-Grand-Project-Presentation-Deck.pptx
+python3 scripts/build_pptx.py specs/spec_presentation_pptx.json project_deliverables/DOC-09-Grand-Project-Presentation.pptx
 ```
 
-## Method note
+To rebuild Project Deliverables Guide:
+```bash
+python3 scripts/build_docx.py specs/spec_guide.json project_deliverables/PROJECT-DELIVERABLES-GUIDE.docx
+```
 
 The repository distinguishes three kinds of statement throughout.
 

@@ -1,9 +1,34 @@
 # Python
 __pycache__/
-*.py[cod]
-*.egg-info/
+*.pyc
+*.pyo
+*.pyd
 .venv/
 venv/
+.env
+
+# Python build
+*.egg-info/
+dist/
+build/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Editor and OS
+.DS_Store
+*.swp
+*~
+.vscode/
+.idea/
+
+# Hermes runtime
+.hermes/
+
+# Generated deliverables (optional - if you want to regenerate)
+# project_deliverables/*.docx
+# project_deliverables/*.pptx
 
 # Generated chat transcripts and scratch exports
 qwen_deniz_conversation.md
