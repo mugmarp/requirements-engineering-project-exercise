@@ -43,15 +43,15 @@ The system being specified is a Dual Phase Operations Management System.
 ## Repository Layout
 
 ```
-CONTEXT.md                                          Verified fact base and assumptions register
-Phase1_Elicitation-and-Stakeholder-Analysis.docx   Phase 1 deliverable
+CURATED_DATA.md                                         Curated knowledge base (facts, synthesis, gaps, decisions)
+Phase1_Elicitation-and-Stakeholder-Analysis.docx       Phase 1 deliverable
 Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx  Phases 2-5 master deliverable
-Phase2-5_Project-Deliverables-Guide.docx           Deliverables guide
-PhaseFinal_Grand-Project-Presentation.pptx         Phase Final: presentation deck (PPTX)
-PhaseFinal_Grand-Project-Presentation-Backup.docx  Phase Final: presentation deck (DOCX backup)
-build/                                              Build pipeline (specs + scripts)
-project_deliverables/                               Generated deliverables
-context/                                            Course input documents + chat export
+Phase2-5_Project-Deliverables-Guide.docx               Deliverables guide
+PhaseFinal_Grand-Project-Presentation.pptx             Phase Final: presentation deck (PPTX)
+PhaseFinal_Grand-Project-Presentation-Backup.docx      Phase Final: presentation deck (DOCX backup)
+build/                                                 Build pipeline (specs + scripts)
+project_deliverables/                                  Generated deliverables
+reference_data/                                        Raw input documents + chat export
 ```
 
 ## Document Set
