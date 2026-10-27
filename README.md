@@ -7,7 +7,7 @@ Client case study: Deniz Construction Limited, Ishanyu-Bushenyi Road, Mbarara, U
 
 ## About Deniz Construction Limited
 
-Deniz Construction Limited is a small Ugandan construction materials SME located on Ishanyu-Bushenyi Road, Mbarara. The business produces and sells concrete blocks, pavers, and kerbs. Operations are run by a single Sales Manager who acts as supervisor, cashier, payroll distributor, record keeper, and tax filer. The Business Owner visits the site daily to review operations and cash.
+Deniz Construction Limited is a small Ugandan construction materials SME located on Ishanyu-Bushenyi Road, Mbarara. The business produces and sells concrete blocks, pavers and kerbs. Operations are highly centralised, a single Sales Manager acts as supervisor, cashier, payroll distributor, record keeper and tax filer. The Business Owner visits the site daily to review operations and cash.
 
 **Contact:** 0749858413, 0791069287, 0700 640 242
 
@@ -21,12 +21,12 @@ Deniz Construction Limited is a small Ugandan construction materials SME located
 | Kerbs | Garden and Road kerbs |
 
 **Key Operational Facts:**
-- Three payment channels: Cash, Mobile Money, Bank Deposit
+- Three payment channels: Cash, Mobile Money and Bank Deposit
 - Strict no credit policy — all payments upfront
 - Physical receipts printed on-site for customers during truck loading
 - URA tax filing done online (VAT 18%)
 - No cloud backup — records on single laptop plus physical receipts and books
-- Workers paid daily in cash, no formal contracts, initial attendance capture is Sales Manager's memory; payroll record keeping for verification likely exists but not observed
+- Workers paid daily in cash, no formal contracts, initial attendance capture is Sales Manager's memory, payroll record keeping for verification likely exists but not observed
 - Production area has block-making machinery (vibrators, moulds, mixers) observed on site
 - Site has CCTV cameras
 - Customers transport their own purchases by truck
@@ -108,7 +108,7 @@ All documents are generated from JSON specs by `build/scripts/build_docx.py` and
 | Colour | Black |
 | Line spacing | 1.15 |
 | Bold | Headings, table headers and lead in phrases only |
-| Punctuation | Plain ASCII, no quotes, semicolons, hyphens or dashes |
+| Punctuation | Plain ASCII only. No curly quotes, no semicolons, no colons mid-sentence, no Oxford commas (no comma before and). Hyphens and dashes only in compound words. Bullets and numbered lists may use standard punctuation. |
 | Page | A4, 25.4 mm margins |
 
 ### PowerPoint Presentations (.pptx)
@@ -120,7 +120,7 @@ All documents are generated from JSON specs by `build/scripts/build_docx.py` and
 | Colour | Black |
 | Background | White |
 | Bold | Headings, table headers, lead in phrases only |
-| Punctuation | Plain ASCII, no quotes, semicolons, hyphens or dashes |
+| Punctuation | Plain ASCII only. No curly quotes, no semicolons, no colons mid-sentence, no Oxford commas (no comma before and). Hyphens and dashes only in compound words. Bullets and numbered lists may use standard punctuation. |
 
 ## Build Commands
 
