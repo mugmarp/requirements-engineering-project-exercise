@@ -26,7 +26,7 @@ Deniz Construction Limited is a small Ugandan construction materials SME located
 - Physical receipts printed on-site for customers during truck loading
 - URA tax filing done online (VAT 18%)
 - No cloud backup — records on single laptop plus physical receipts and notebooks
-- Workers paid daily in cash, no formal contracts, attendance entirely from Sales Manager's memory
+- Workers paid daily in cash, no formal contracts, initial attendance capture is Sales Manager's memory; payroll record keeping for verification likely exists but not observed
 - Site has CCTV cameras
 - Customers transport their own purchases by truck
 
