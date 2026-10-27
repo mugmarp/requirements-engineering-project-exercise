@@ -44,16 +44,14 @@ The system being specified is a Dual Phase Operations Management System.
 
 ```
 CONTEXT.md                                          Verified fact base and assumptions register
-DOC-01-Elicitation-and-Stakeholder-Analysis.md     Document 1, markdown source
 Phase1_Elicitation-and-Stakeholder-Analysis.docx   Phase 1 deliverable
 Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx  Phases 2-5 master deliverable
 Phase2-5_Project-Deliverables-Guide.docx           Deliverables guide
 PhaseFinal_Grand-Project-Presentation.pptx         Phase Final: presentation deck (PPTX)
 PhaseFinal_Grand-Project-Presentation-Backup.docx  Phase Final: presentation deck (DOCX backup)
-specs/                                              JSON content specifications
-scripts/                                            Build toolchain
+build/                                              Build pipeline (specs + scripts)
 project_deliverables/                               Generated deliverables
-context/                                            Course input documents
+context/                                            Course input documents + chat export
 ```
 
 ## Document Set
@@ -99,7 +97,7 @@ The system follows a Dual Phase architecture established from ground observation
 
 ## Format Standard
 
-All documents are generated from JSON specs by `scripts/build_docx.py` and `scripts/build_pptx.py` and conform to fixed standards.
+All documents are generated from JSON specs by `build/scripts/build_docx.py` and `build/scripts/build_pptx.py` and conform to fixed standards.
 
 ### Word Documents (.docx)
 
@@ -128,23 +126,23 @@ All documents are generated from JSON specs by `scripts/build_docx.py` and `scri
 
 To rebuild Document 1:
 ```bash
-python3 scripts/make_spec_doc01.py
-python3 scripts/build_docx.py specs/spec_doc01.json project_deliverables/Phase1_Elicitation-and-Stakeholder-Analysis.docx
+python3 build/scripts/make_spec_doc01.py
+python3 build/scripts/build_docx.py build/specs/spec_doc01.json project_deliverables/Phase1_Elicitation-and-Stakeholder-Analysis.docx
 ```
 
 To rebuild Master Document (Phases 2-5):
 ```bash
-python3 scripts/build_docx.py specs/spec_master.json project_deliverables/Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx
+python3 build/scripts/build_docx.py build/specs/spec_master.json project_deliverables/Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx
 ```
 
 To rebuild Presentation Deck:
 ```bash
-python3 scripts/build_pptx.py specs/spec_presentation_pptx.json project_deliverables/PhaseFinal_Grand-Project-Presentation.pptx
+python3 build/scripts/build_pptx.py build/specs/spec_presentation_pptx.json project_deliverables/PhaseFinal_Grand-Project-Presentation.pptx
 ```
 
 To rebuild Project Deliverables Guide:
 ```bash
-python3 scripts/build_docx.py specs/spec_guide.json project_deliverables/Phase2-5_Project-Deliverables-Guide.docx
+python3 build/scripts/build_docx.py build/specs/spec_guide.json project_deliverables/Phase2-5_Project-Deliverables-Guide.docx
 ```
 
 ## Evidence Standard
