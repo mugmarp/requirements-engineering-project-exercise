@@ -31,7 +31,7 @@ __pycache__/
 # project_deliverables/*.pptx
 
 # Generated chat transcripts and scratch exports
-qwen_deniz_conversation.md
+# qwen_deniz_conversation.md
 NewiNFO/
 
 # Editor and OS noise
