@@ -95,7 +95,8 @@ Everything lives in `/home/vm/MUST/REQUIREMENTS/`
 | Transport | Clients transport their own purchases (the blocks etc.) |
 | Owner behaviour | **Checks every day** → therefore **no remote transfer of business data** |
 | Worker contracts | **No legal contract** — "just as many in Uganda or Africa at large" |
-| PC | Business has a **PC on site for record keeping**; Sales Manager "mainly uses the PC to process deficit" |
+|| PC | Business has a **PC on site for record keeping**; Sales Manager "mainly uses the PC to process deficit" |
+| Machinery | **[FACT]** Production area has block-making machinery (vibrators, moulds, mixers) observed on site |
 | PC usage timing | **[FACT]** "the laptop was on even when being used" — **during the day it is on and receipts are printed** |
 | Truck loading | **[FACT]** "we saw trucks loading in somewhat bulk" — counting method **not identified** |
 | Cash storage | **[GAP]** "we could not identify that" |
@@ -103,7 +104,7 @@ Everything lives in `/home/vm/MUST/REQUIREMENTS/`
 | Receipt fields | **[GAP]** "we could not get what field are on the Receipts" |
 | Laptop interaction | **[FACT]** "we have seen her interacting with the PC before we could enter into her office again some time" — she interacts with the PC during the day, prints receipts |
 | Receipt printing | **[FACT]** Physical receipts are printed for customers as trucks load |
-| Attendance | **[FACT]** Workers **do not take any attendance**. Initial attendance capture relies entirely on the Sales Manager's memory (mental list of who is present). **Payroll record keeping for verification** likely exists but was not observed — could be in notebook, on PC, or both. |
+| Attendance | **[FACT]** Workers **do not take any attendance**. Initial attendance capture relies entirely on the Sales Manager's memory (mental list of who is present). **Payroll record keeping for verification** likely exists but was not observed — could be in book, on PC, or both. |
 
 **[FACT] You cannot go back.** "we can not go back to get any more info, and they do not will to give any more info"
 **[FACT] You cannot change the project.** "we can not change the the project because we picked it already"
@@ -114,7 +115,7 @@ Everything lives in `/home/vm/MUST/REQUIREMENTS/`
 
 **[FACT] What was actually found — the reason the concept note is described as "basically dummy":**
 
-- Initial attendance capture is entirely the Sales Manager's memory (mental list of who is present). Payroll record keeping for verification likely exists but was not observed — could be in notebook, on PC, or both.
+- Initial attendance capture is entirely the Sales Manager's memory (mental list of who is present). Payroll record keeping for verification likely exists but was not observed — could be in book, on PC, or both.
 - The Sales Manager is simultaneously supervisor, cashier, and paymaster — "she's basically the only top management"
 - Cash + Mobile Money + bank deposit are three separate payment channels with **no reconciliation tool**
 - She **processes deficit** on the PC — i.e. she manually computes cash shortages
@@ -224,7 +225,7 @@ This is **not** an "End-of-Day Transactional Auto-Calculation Engine" — that w
 10. **[FACT] Physical receipts printed at time of sale during the day.** System must support real-time POS receipt printing.
 11. **[FACT] Evening reconciliation exists.** Sales Manager uses PC in evening for deficit processing and daily summary.
 12. **[FACT] Sales Manager is the absolute center of operations.** Supervisor, cashier, payroll, records, tax filing. She is the gatekeeper.
-13. **[FACT] No formal attendance capture system exists.** Initial attendance capture is entirely memory-based (Sales Manager's mental list of who is present). Payroll record keeping for verification likely exists but was not observed — could be in notebook, on PC, or both.
+13. **[FACT] No formal attendance capture system exists.** Initial attendance capture is entirely memory-based (Sales Manager's mental list of who is present). Payroll record keeping for verification likely exists but was not observed — could be in book, on PC, or both.
 
 ---
 
