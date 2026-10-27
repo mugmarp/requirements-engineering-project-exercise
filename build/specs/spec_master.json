@@ -7,157 +7,763 @@
     "Project: Deniz Construction Management System (DCMS)"
   ],
   "blocks": [
-    { "type": "h1", "text": "PART 1: SOFTWARE REQUIREMENTS SPECIFICATION" },
-    { "type": "h1", "text": "1. INTRODUCTION" },
-    { "type": "h2", "text": "1.1 Purpose" },
-    { "type": "para", "text": "This document specifies the functional and non functional requirements for the Deniz Construction Management System (DCMS). It serves as the blueprint for the SWE1205 Database Programming implementation and the final Grand Presentation." },
-    { "type": "h2", "text": "1.2 Scope" },
-    { "type": "para", "text": "The DCMS is a Dual Phase Operations Management System. During the day, it functions as a Real Time Point of Sale to process individual sales, calculate VAT, update inventory, and print physical receipts for customers. In the evening, it functions as an End of Day Reconciliation Engine, allowing the Sales Manager to balance multi channel payment drawers, log operational expenses, compute cash variances, and generate a final daily summary report for the Business Owner." },
-    { "type": "h2", "text": "1.3 Explicitly Excluded Features" },
-    { "type": "para", "text": "Based on verified ground observations, the following features are strictly excluded to prevent scope creep." },
-    { "type": "bullets", "items": [
-      "Credit and Debtors Module. The business operates on a strict no credit policy. All payments are made upfront.",
-      "Real Time Remote Monitoring Dashboard. The Business Owner visits the site daily. Remote access is limited to asynchronous historical review.",
-      "Complex Logistics and Delivery Tracking. Customers transport their own purchased goods by truck."
-    ] },
-    { "type": "h1", "text": "2. OVERALL DESCRIPTION" },
-    { "type": "h2", "text": "2.1 User Classes and Characteristics" },
-    { "type": "para", "runs": [ { "text": "Sales Manager (Primary User). ", "bold": true }, { "text": "Acts as supervisor, cashier, payroll distributor, and record keeper. Requires a system that reduces end of day reconciliation workload and automates receipt generation during the day." } ] },
-    { "type": "para", "runs": [ { "text": "Business Owner. ", "bold": true }, { "text": "Visits the site daily. Requires clear operational summaries followed by financial reconciliation and long term trend analysis." } ] },
-    { "type": "para", "runs": [ { "text": "Secretary. ", "bold": true }, { "text": "Status is a documented limitation. Never met and no interview data exists. System defaults all data entry permissions to the Sales Manager. This role is retained in the database schema purely for future organizational scaling." } ] },
-    { "type": "para", "runs": [ { "text": "Site Workers. ", "bold": true }, { "text": "Status is a documented limitation. Never spoken to. System requires only a simplified interface for the Sales Manager to log their daily attendance for payroll." } ] },
-    { "type": "para", "runs": [ { "text": "URA (External Regulator). ", "bold": true }, { "text": "Dictates tax compliance, VAT, and receipting standards. System must ensure financial outputs meet audit expectations." } ] },
-    { "type": "para", "runs": [ { "text": "Customers and Builders. ", "bold": true }, { "text": "Purchase blocks and pavers. Pay upfront. Transport their own goods by truck. Require quick receipt generation to minimize loading delays." } ] },
-    { "type": "h2", "text": "2.2 General Constraints" },
-    { "type": "bullets", "items": [
-      "The system must run on the existing single office laptop (assumed baseline standard office specification).",
-      "The system must operate in an offline first mode for real time receipting during the day and batch reconciliation in the evening.",
-      "The system must support multi channel payment tracking (Cash, Mobile Money, Bank Deposit) with strict separation of drawer balances.",
-      "All financial data must be backed up automatically to a secure cloud destination each evening after reconciliation."
-    ] },
-    { "type": "h2", "text": "2.3 Assumptions and Dependencies" },
-    { "type": "bullets", "items": [
-      "The current VAT rate of 18 percent is assumed to remain stable. The rate will be stored in a configurable System Settings table rather than hardcoded.",
-      "The Sales Manager possesses basic digital literacy to operate a mouse, keyboard, and web browser.",
-      "The site has intermittent internet connectivity sufficient for an evening cloud backup.",
-      "The single office laptop meets the minimum hardware requirements to run a local database server and application."
-    ] },
-    { "type": "h1", "text": "3. FUNCTIONAL REQUIREMENTS" },
-    { "type": "para", "text": "All requirements use a unified hierarchical ID scheme to ensure traceability. The format is REQ-FUN-<MODULE>-<NN> for functional requirements and REQ-NFR-<MODULE>-<NN> for non functional requirements." },
-    { "type": "h2", "text": "3.1 Module A: Real Time Transactional Sales and Receipting" },
-    { "type": "para", "runs": [ { "text": "REQ-FUN-SAL-01 (Transactional Sale Entry). ", "bold": true }, { "text": "The system shall allow the Sales Manager to log an individual sale by entering the product, quantity, unit price, and payment method (Cash, Mobile Money, Bank Deposit)." } ] },
-    { "type": "para", "runs": [ { "text": "REQ-FUN-SAL-02 (Automated VAT Calculation). ", "bold": true }, { "text": "Upon saving a sale, the system shall automatically calculate the 18 percent Value Added Tax on the subtotal using a database stored procedure and display the total amount." } ] },
-    { "type": "para", "runs": [ { "text": "REQ-FUN-SAL-03 (Sequential Receipt Generation). ", "bold": true }, { "text": "The system shall generate a unique, sequential Receipt ID for every transaction. If an error occurs, the system shall not allow hard deletion. Instead, the receipt shall be marked as voided with a mandatory reason to maintain an unbroken sequence for URA audit compliance." } ] },
-    { "type": "para", "runs": [ { "text": "REQ-FUN-SAL-04 (Physical Receipt Printing). ", "bold": true }, { "text": "Upon saving a sale, the system shall immediately format and send a physical receipt to the attached printer containing the sequential ID, date, customer name, product description, quantity, unit price, subtotal, VAT, total amount, and payment method." } ] },
-    { "type": "para", "runs": [ { "text": "REQ-FUN-SAL-05 (Inventory Deduction Trigger). ", "bold": true }, { "text": "An AFTER INSERT trigger on the Sales table shall automatically deduct the sold quantity from the Current Stock in the Inventory table for the corresponding product." } ] },
-    { "type": "h2", "text": "3.2 Module B: End of Day Reconciliation and Deficit Resolution" },
-    { "type": "para", "runs": [ { "text": "REQ-FUN-REC-01 (Multi Channel Drawer Balances). ", "bold": true }, { "text": "The system shall maintain three independent virtual drawer balances: Cash, Mobile Money, and Bank Deposit. Each sale shall increment the corresponding drawer balance based on its payment method." } ] },
-    { "type": "para", "runs": [ { "text": "REQ-FUN-REC-02 (Operational Expense Logging). ", "bold": true }, { "text": "The system shall provide an Operational Expense module allowing the Sales Manager to log individual cash out events (for example, loader lunch, transport fare) during the day or during the evening reconciliation session." } ] },
-    { "type": "para", "runs": [ { "text": "REQ-FUN-REC-03 (Expected Cash Computation). ", "bold": true }, { "text": "At the end of the day, the system shall calculate the Expected Cash Balance as the sum of all Cash sales minus the sum of all Operational Expenses logged against the Cash drawer." } ] },
-    { "type": "para", "runs": [ { "text": "REQ-FUN-REC-04 (Variance Reporting). ", "bold": true }, { "text": "The system shall prompt the Sales Manager to enter the Actual Physical Cash on hand. The system shall then compute the Variance (Deficit or Surplus) as Actual Cash minus Expected Cash. A mandatory text explanation shall be required before the day can be closed." } ] },
-    { "type": "para", "runs": [ { "text": "REQ-FUN-REC-05 (Daily Summary Report Generation). ", "bold": true }, { "text": "Upon closing the day, the system shall generate a Daily Summary Report displaying Operational Metrics (Total Trucks Dispatched, Total Blocks Sold, Total Workers Present) followed by Financial Summary (Total Sales by Payment Channel, Operational Expenses, Expected Cash, Actual Cash, Variance, Notes)." } ] },
-    { "type": "h2", "text": "3.3 Module C: Attendance and Daily Payroll" },
-    { "type": "para", "runs": [ { "text": "REQ-FUN-ATT-01 (Worker Attendance Logging). ", "bold": true }, { "text": "The system shall allow the Sales Manager to log a worker as Present for a given date using a simplified interface with large visual icons. A unique Worker ID and Date combination shall be enforced to prevent duplicate daily entries." } ] },
-    { "type": "para", "runs": [ { "text": "REQ-FUN-ATT-02 (Daily Payroll Eligibility). ", "bold": true }, { "text": "The system shall utilize a database query joining the Workers and Attendance tables to generate the daily payroll eligibility list, including only workers with a verified Present status for that date." } ] },
-    { "type": "h2", "text": "3.4 Module D: URA Compliance and Reporting" },
-    { "type": "para", "runs": [ { "text": "REQ-FUN-TAX-01 (URA Summary Report). ", "bold": true }, { "text": "The system shall generate a URA Compliance Summary Report displaying Total Gross Sales and Total Calculated VAT (18 percent) for the selected period, formatted for direct transcription into the URA online portal." } ] },
-    { "type": "h2", "text": "3.5 Module D: Data Backup and Recovery" },
-    { "type": "para", "runs": [ { "text": "REQ-FUN-BAK-01 (Automated Nightly Backup). ", "bold": true }, { "text": "The system shall execute an encrypted database backup to a secure cloud destination each evening after the reconciliation session is closed, ensuring disaster recovery for the single laptop." } ] },
-    { "type": "h1", "text": "4. NON FUNCTIONAL REQUIREMENTS" },
-    { "type": "h2", "text": "4.1 Performance and Reliability" },
-    { "type": "para", "runs": [ { "text": "REQ-NFR-PER-01 (Offline Resilience). ", "bold": true }, { "text": "The system shall support full real time transactional processing and receipt printing without an active internet connection. Data shall be persisted locally and the evening cloud backup shall queue and retry upon connectivity restoration." } ] },
-    { "type": "para", "runs": [ { "text": "REQ-NFR-PER-02 (Hardware Compatibility). ", "bold": true }, { "text": "The application shall be optimized to run efficiently on the existing office laptop. Report generation shall target completion within a reasonable time for the business context." } ] },
-    { "type": "h2", "text": "4.2 Security and Access Control" },
-    { "type": "para", "runs": [ { "text": "REQ-NFR-SEC-01 (Role Based Access Control). ", "bold": true }, { "text": "The system shall enforce strict RBAC at both the database and application layers. The Sales Manager role shall have INSERT/UPDATE on Sales, Attendance, and Expenses. The Owner role shall have SELECT on all tables and views including restricted views for Total Profit and Tax Liability. The Secretary role (future scaling) shall have restricted INSERT/SELECT permissions." } ] },
-    { "type": "para", "runs": [ { "text": "REQ-NFR-SEC-02 (Immutable Audit Trail). ", "bold": true }, { "text": "The system shall maintain an immutable Audit Log table recording the User ID, Timestamp, Action Type (for example, VOID SALE, LOG EXPENSE), and Previous Value for any modification to financial records." } ] },
-    { "type": "h2", "text": "4.3 Usability" },
-    { "type": "para", "runs": [ { "text": "REQ-NFR-USR-01 (Low Literacy Interface). ", "bold": true }, { "text": "The attendance and expense logging interfaces shall utilize high contrast visual icons and require minimal text input, ensuring usability for workers with varying literacy levels." } ] },
-    { "type": "h1", "text": "PART 2: REQUIREMENTS TRACEABILITY MATRIX" },
-    { "type": "para", "text": "The following matrix links each business problem observed during elicitation to the specific requirement that solves it, and the database artifact that implements it." },
-    { "type": "table", "header": ["Business Problem (Elicitation)", "Requirement ID", "Requirement Title", "Database Artifact (SWE1205)"],
+    {
+      "type": "h1",
+      "text": "PART 1: SOFTWARE REQUIREMENTS SPECIFICATION"
+    },
+    {
+      "type": "h1",
+      "text": "1. INTRODUCTION"
+    },
+    {
+      "type": "h2",
+      "text": "1.1 Purpose"
+    },
+    {
+      "type": "para",
+      "text": "This document specifies the functional and non functional requirements for the Deniz Construction Management System (DCMS). It serves as the blueprint for the SWE1205 Database Programming implementation and the final Grand Presentation."
+    },
+    {
+      "type": "h2",
+      "text": "1.2 Scope"
+    },
+    {
+      "type": "para",
+      "text": "The DCMS is a Dual Phase Operations Management System. During the day, it functions as a Real Time Point of Sale to process individual sales, calculate VAT, update inventory and print physical receipts for customers. In the evening, it functions as an End of Day Reconciliation Engine, allowing the Sales Manager to balance multi channel payment drawers, log operational expenses, compute cash variances and generate a final daily summary report for the Business Owner."
+    },
+    {
+      "type": "h2",
+      "text": "1.3 Explicitly Excluded Features"
+    },
+    {
+      "type": "para",
+      "text": "Based on verified ground observations, the following features are strictly excluded to prevent scope creep."
+    },
+    {
+      "type": "bullets",
+      "items": [
+        "Credit and Debtors Module. The business operates on a strict no credit policy. All payments are made upfront.",
+        "Real Time Remote Monitoring Dashboard. The Business Owner visits the site daily. Remote access is limited to asynchronous historical review.",
+        "Complex Logistics and Delivery Tracking. Customers transport their own purchased goods by truck."
+      ]
+    },
+    {
+      "type": "h1",
+      "text": "2. OVERALL DESCRIPTION"
+    },
+    {
+      "type": "h2",
+      "text": "2.1 User Classes and Characteristics"
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "Sales Manager (Primary User). ",
+          "bold": true
+        },
+        {
+          "text": "Acts as supervisor, cashier, payroll distributor and record keeper. Requires a system that reduces end of day reconciliation workload and automates receipt generation during the day."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "Business Owner. ",
+          "bold": true
+        },
+        {
+          "text": "Visits the site daily. Requires clear operational summaries followed by financial reconciliation and long term trend analysis."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "Secretary. ",
+          "bold": true
+        },
+        {
+          "text": "Status is a documented limitation. Never met and no interview data exists. System defaults all data entry permissions to the Sales Manager. This role is retained in the database schema purely for future organizational scaling."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "Site Workers. ",
+          "bold": true
+        },
+        {
+          "text": "Status is a documented limitation. Never spoken to. System requires only a simplified interface for the Sales Manager to log their daily attendance for payroll."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "URA (External Regulator). ",
+          "bold": true
+        },
+        {
+          "text": "Dictates tax compliance, VAT and receipting standards. System must ensure financial outputs meet audit expectations."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "Customers and Builders. ",
+          "bold": true
+        },
+        {
+          "text": "Purchase blocks and pavers. Pay upfront. Transport their own goods by truck. Require quick receipt generation to minimize loading delays."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "2.2 General Constraints"
+    },
+    {
+      "type": "bullets",
+      "items": [
+        "The system must run on the existing single office laptop (assumed baseline standard office specification).",
+        "The system must operate in an offline first mode for real time receipting during the day and batch reconciliation in the evening.",
+        "The system must support multi channel payment tracking (Cash, Mobile Money, Bank Deposit) with strict separation of drawer balances.",
+        "All financial data must be backed up automatically to a secure cloud destination each evening after reconciliation."
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "2.3 Assumptions and Dependencies"
+    },
+    {
+      "type": "bullets",
+      "items": [
+        "The current VAT rate of 18 percent is assumed to remain stable. The rate will be stored in a configurable System Settings table rather than hardcoded.",
+        "The Sales Manager possesses basic digital literacy to operate a mouse, keyboard and web browser.",
+        "The site has intermittent internet connectivity sufficient for an evening cloud backup.",
+        "The single office laptop meets the minimum hardware requirements to run a local database server and application."
+      ]
+    },
+    {
+      "type": "h1",
+      "text": "3. FUNCTIONAL REQUIREMENTS"
+    },
+    {
+      "type": "para",
+      "text": "All requirements use a unified hierarchical ID scheme to ensure traceability. The format is REQ-FUN-<MODULE>-<NN> for functional requirements and REQ-NFR-<MODULE>-<NN> for non functional requirements."
+    },
+    {
+      "type": "h2",
+      "text": "3.1 Module A: Real Time Transactional Sales and Receipting"
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "REQ-FUN-SAL-01 (Transactional Sale Entry). ",
+          "bold": true
+        },
+        {
+          "text": "The system shall allow the Sales Manager to log an individual sale by entering the product, quantity, unit price and payment method (Cash, Mobile Money, Bank Deposit)."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "REQ-FUN-SAL-02 (Automated VAT Calculation). ",
+          "bold": true
+        },
+        {
+          "text": "Upon saving a sale, the system shall automatically calculate the 18 percent Value Added Tax on the subtotal using a database stored procedure and display the total amount."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "REQ-FUN-SAL-03 (Sequential Receipt Generation). ",
+          "bold": true
+        },
+        {
+          "text": "The system shall generate a unique, sequential Receipt ID for every transaction. If an error occurs, the system shall not allow hard deletion. Instead, the receipt shall be marked as voided with a mandatory reason to maintain an unbroken sequence for URA audit compliance."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "REQ-FUN-SAL-04 (Physical Receipt Printing). ",
+          "bold": true
+        },
+        {
+          "text": "Upon saving a sale, the system shall immediately format and send a physical receipt to the attached printer containing the sequential ID, date, customer name, product description, quantity, unit price, subtotal, VAT, total amount and payment method."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "REQ-FUN-SAL-05 (Inventory Deduction Trigger). ",
+          "bold": true
+        },
+        {
+          "text": "An AFTER INSERT trigger on the Sales table shall automatically deduct the sold quantity from the Current Stock in the Inventory table for the corresponding product."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "3.2 Module B: End of Day Reconciliation and Deficit Resolution"
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "REQ-FUN-REC-01 (Multi Channel Drawer Balances). ",
+          "bold": true
+        },
+        {
+          "text": "The system shall maintain three independent virtual drawer balances: Cash, Mobile Money and Bank Deposit. Each sale shall increment the corresponding drawer balance based on its payment method."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "REQ-FUN-REC-02 (Operational Expense Logging). ",
+          "bold": true
+        },
+        {
+          "text": "The system shall provide an Operational Expense module allowing the Sales Manager to log individual cash out events (for example, loader lunch, transport fare) during the day or during the evening reconciliation session."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "REQ-FUN-REC-03 (Expected Cash Computation). ",
+          "bold": true
+        },
+        {
+          "text": "At the end of the day, the system shall calculate the Expected Cash Balance as the sum of all Cash sales minus the sum of all Operational Expenses logged against the Cash drawer."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "REQ-FUN-REC-04 (Variance Reporting). ",
+          "bold": true
+        },
+        {
+          "text": "The system shall prompt the Sales Manager to enter the Actual Physical Cash on hand. The system shall then compute the Variance (Deficit or Surplus) as Actual Cash minus Expected Cash. A mandatory text explanation shall be required before the day can be closed."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "REQ-FUN-REC-05 (Daily Summary Report Generation). ",
+          "bold": true
+        },
+        {
+          "text": "Upon closing the day, the system shall generate a Daily Summary Report displaying Operational Metrics (Total Trucks Dispatched, Total Blocks Sold, Total Workers Present) followed by Financial Summary (Total Sales by Payment Channel, Operational Expenses, Expected Cash, Actual Cash, Variance, Notes)."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "3.3 Module C: Attendance and Daily Payroll"
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "REQ-FUN-ATT-01 (Worker Attendance Logging). ",
+          "bold": true
+        },
+        {
+          "text": "The system shall allow the Sales Manager to log a worker as Present for a given date using a simplified interface with large visual icons. A unique Worker ID and Date combination shall be enforced to prevent duplicate daily entries."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "REQ-FUN-ATT-02 (Daily Payroll Eligibility). ",
+          "bold": true
+        },
+        {
+          "text": "The system shall utilize a database query joining the Workers and Attendance tables to generate the daily payroll eligibility list, including only workers with a verified Present status for that date."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "3.4 Module D: URA Compliance and Reporting"
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "REQ-FUN-TAX-01 (URA Summary Report). ",
+          "bold": true
+        },
+        {
+          "text": "The system shall generate a URA Compliance Summary Report displaying Total Gross Sales and Total Calculated VAT (18 percent) for the selected period, formatted for direct transcription into the URA online portal."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "3.5 Module D: Data Backup and Recovery"
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "REQ-FUN-BAK-01 (Automated Nightly Backup). ",
+          "bold": true
+        },
+        {
+          "text": "The system shall execute an encrypted database backup to a secure cloud destination each evening after the reconciliation session is closed, ensuring disaster recovery for the single laptop."
+        }
+      ]
+    },
+    {
+      "type": "h1",
+      "text": "4. NON FUNCTIONAL REQUIREMENTS"
+    },
+    {
+      "type": "h2",
+      "text": "4.1 Performance and Reliability"
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "REQ-NFR-PER-01 (Offline Resilience). ",
+          "bold": true
+        },
+        {
+          "text": "The system shall support full real time transactional processing and receipt printing without an active internet connection. Data shall be persisted locally and the evening cloud backup shall queue and retry upon connectivity restoration."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "REQ-NFR-PER-02 (Hardware Compatibility). ",
+          "bold": true
+        },
+        {
+          "text": "The application shall be optimized to run efficiently on the existing office laptop. Report generation shall target completion within a reasonable time for the business context."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "4.2 Security and Access Control"
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "REQ-NFR-SEC-01 (Role Based Access Control). ",
+          "bold": true
+        },
+        {
+          "text": "The system shall enforce strict RBAC at both the database and application layers. The Sales Manager role shall have INSERT/UPDATE on Sales, Attendance and Expenses. The Owner role shall have SELECT on all tables and views including restricted views for Total Profit and Tax Liability. The Secretary role (future scaling) shall have restricted INSERT/SELECT permissions."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "REQ-NFR-SEC-02 (Immutable Audit Trail). ",
+          "bold": true
+        },
+        {
+          "text": "The system shall maintain an immutable Audit Log table recording the User ID, Timestamp, Action Type (for example, VOID SALE, LOG EXPENSE) and Previous Value for any modification to financial records."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "4.3 Usability"
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "REQ-NFR-USR-01 (Low Literacy Interface). ",
+          "bold": true
+        },
+        {
+          "text": "The attendance and expense logging interfaces shall utilize high contrast visual icons and require minimal text input, ensuring usability for workers with varying literacy levels."
+        }
+      ]
+    },
+    {
+      "type": "h1",
+      "text": "PART 2: REQUIREMENTS TRACEABILITY MATRIX"
+    },
+    {
+      "type": "para",
+      "text": "The following matrix links each business problem observed during elicitation to the specific requirement that solves it and the database artifact that implements it."
+    },
+    {
+      "type": "table",
+      "header": [
+        "Business Problem (Elicitation)",
+        "Requirement ID",
+        "Requirement Title",
+        "Database Artifact (SWE1205)"
+      ],
       "rows": [
-        ["Cash deficits caused by unrecorded petty cash expenses", "REQ-FUN-REC-02", "Operational Expense Logging", "Operational_Expenses table linked to Daily_Sales"],
-        ["Cash deficits caused by unrecorded petty cash expenses", "REQ-FUN-REC-03", "Expected Cash Computation", "Daily_Reconciliation view computing Expected_Cash = SUM(Cash_Sales) - SUM(Operational_Expenses)"],
-        ["Unexplained till variances at end of day", "REQ-FUN-REC-04", "Variance Reporting with Mandatory Explanation", "Daily_Reconciliation table with Variance and Explanation columns"],
-        ["Mixing of Cash, Mobile Money, and Bank balances", "REQ-FUN-REC-01", "Multi Channel Drawer Balances", "Virtual_Drawers table (Cash, MoMo, Bank) updated per sale"],
-        ["Manual VAT calculation errors", "REQ-FUN-SAL-02", "Automated VAT Calculation", "CalculateVAT stored procedure (Subtotal * 0.18)"],
-        ["Broken URA receipt sequence due to deletions", "REQ-FUN-SAL-03", "Sequential Receipt Generation with Void Only", "Sales table with Status (Active, Voided) and Void_Reason columns"],
-        ["Real time receipt printing required during truck loading", "REQ-FUN-SAL-04", "Physical Receipt Printing", "Receipt generation trigger on Sales INSERT"],
-        ["Inventory not tracking sold blocks in real time", "REQ-FUN-SAL-05", "Inventory Deduction Trigger", "AFTER INSERT trigger on Sales updating Inventory.Current_Stock"],
-        ["No formal attendance; ghost worker risk", "REQ-FUN-ATT-01", "Worker Attendance Logging with Unique Daily Constraint", "Attendance table with PK (Worker_ID, Date)"],
-        ["Daily payroll based on memory", "REQ-FUN-ATT-02", "Daily Payroll Eligibility", "Payroll_Eligibility view joining Workers and Attendance"],
-        ["URA tax filing requires manual transcription", "REQ-FUN-TAX-01", "URA Summary Report", "URA_Summary view aggregating Sales with 18 percent VAT"],
-        ["Single laptop data vulnerability", "REQ-FUN-BAK-01", "Automated Nightly Backup", "Backup job scheduled after evening reconciliation"],
-        ["Sales Manager cannot see Owner financials", "REQ-NFR-SEC-01", "Role Based Access Control", "Database roles and restricted views"],
-        ["Financial record tampering risk", "REQ-NFR-SEC-02", "Immutable Audit Trail", "Audit_Log table with insert only semantics"],
-        ["Worker literacy varies", "REQ-NFR-USR-01", "Low Literacy Interface", "UI with icons and minimal text"],
-        ["Internet unavailable during day", "REQ-NFR-PER-01", "Offline Resilience", "Local database with queued sync"],
-        ["Laptop hardware limits", "REQ-NFR-PER-02", "Hardware Compatibility", "Optimized queries and indexing"]
-      ] },
-    { "type": "h1", "text": "PART 3: VALIDATION AND VERIFICATION PLAN" },
-    { "type": "h2", "text": "1. Validation (Are We Building the Right Product?)" },
-    { "type": "para", "text": "Validation confirms the requirements meet the actual business needs of Deniz Construction." },
-    { "type": "bullets", "items": [
-      "Walkthrough with Sales Manager: Review the Real Time Sale flow and End of Day Reconciliation flow against the observed As Is workflow. Confirm the Dual Phase model matches her mental model of daily operations.",
-      "Owner Review of Daily Summary Report: Present the generated Daily Summary Report mockup to the Business Owner. Confirm the Operational Metrics First structure (Trucks, Blocks, Workers) followed by Financial Summary matches what he reviews during his daily evening visits.",
-      "URA Compliance Check: Verify the URA Summary Report output format against a blank URA VAT form (obtained from the site or standard template). Confirm all required fields are present and VAT calculation matches the 18 percent standard.",
-      "Gap Closure Verification: For each documented gap (Secretary, Workers, Receipt Fields), verify that the stated assumption (for example, standard URA fiscal fields for receipts) is acceptable to the primary stakeholder (Sales Manager) during the walkthrough."
-    ] },
-    { "type": "h2", "text": "2. Verification (Are We Building the Product Right?)" },
-    { "type": "para", "text": "Verification confirms the implementation correctly implements the specified requirements." },
-    { "type": "bullets", "items": [
-      "Unit Test: CalculateVAT Stored Procedure. Input: Subtotal = 100,000. Expected Output: VAT = 18,000, Total = 118,000. Edge case: Subtotal = 0 returns VAT = 0.",
-      "Unit Test: Inventory Deduction Trigger. Insert a Sale record for Product X, Quantity = 5. Verify Inventory.Current_Stock for Product X decrements by 5. Edge case: Stock reaches zero does not go negative.",
-      "Unit Test: Sequential Receipt Void Logic. Insert Sale A (Active), Sale B (Active), Void Sale A with Reason. Verify Receipt IDs are sequential (1, 2), Sale A Status = Voided, Void_Reason populated, Sequence unbroken.",
-      "Unit Test: Multi Channel Drawer Isolation. Insert Cash Sale, MoMo Sale, Bank Sale. Verify Cash_Drawer increments only for Cash, MoMo_Drawer only for MoMo, Bank_Drawer only for Bank.",
-      "Unit Test: Expected Cash Computation. Cash Sales = 500,000. Operational Expenses (Cash) = 50,000. Expected Cash = 450,000. Verify calculation in Daily_Reconciliation view.",
-      "Unit Test: Variance Calculation. Actual Cash = 445,000. Expected Cash = 450,000. Variance = -5,000 (Deficit). Verify sign and mandatory explanation field enforcement.",
-      "Unit Test: Attendance Unique Daily Constraint. Attempt to insert duplicate (Worker_ID, Date). Verify database constraint rejection.",
-      "Unit Test: RBAC Enforcement. Attempt SELECT on Total_Profit view as Sales Manager role. Verify permission denied. Attempt same as Owner role. Verify permission granted.",
-      "Integration Test: End to End Daily Workflow. Simulate 10 sales across all payment channels, 3 expenses, 5 attendance logs. Run evening reconciliation. Verify Daily Summary Report matches manual calculation."
-    ] },
-    { "type": "h1", "text": "PART 4: REQUIREMENTS MANAGEMENT PLAN" },
-    { "type": "h2", "text": "1. Change Control Process" },
-    { "type": "para", "text": "Since the business is a small SME, the Change Control Board (CCB) consists of the Business Owner and Group K. No external approvals are required." },
-    { "type": "bullets", "items": [
-      "Change Request Submission: Any stakeholder may submit a change request describing the proposed change, the reason, and the expected impact.",
-      "Impact Analysis: Group K assesses the impact on the SRS, database schema, stored procedures, triggers, views, and UI. The analysis includes effort estimation and risk assessment.",
-      "Decision: The Business Owner approves, rejects, or defers the change. Approved changes are assigned a Change Request ID and scheduled.",
-      "Implementation: The change is implemented in the SRS, the database schema, and the application code. The Requirements Traceability Matrix is updated to reflect the new or modified requirement."
-    ] },
-    { "type": "h2", "text": "2. Version Control" },
-    { "type": "para", "text": "All requirements documents, database schemas, and source code are version controlled in the project Git repository (https://github.com/mugmarp/requirements-engineering-project-exercise). Each change to the SRS is committed with a message referencing the Change Request ID." },
-    { "type": "h2", "text": "3. Requirements Attributes" },
-    { "type": "para", "text": "Each requirement carries the following attributes: ID, Title, Type (Functional or Non Functional), Module, Priority (High, Medium, Low), Status (Proposed, Approved, Implemented, Verified), Source (Elicitation Fact, Business Assumption, Gap Synthesis), and Traceability Links." },
-    { "type": "h1", "text": "PART 5: DATABASE DESIGN SPECIFICATION (SWE1205)" },
-    { "type": "h2", "text": "1. Conceptual Data Model (ER Diagram Entities)" },
-    { "type": "para", "text": "The following entities form the normalized relational schema (Third Normal Form). The Products entity now reflects the actual Deniz Construction Limited product catalogue." },
-    { "type": "table", "header": ["Entity", "Primary Key", "Key Attributes", "Relationships"],
+        [
+          "Cash deficits caused by unrecorded petty cash expenses",
+          "REQ-FUN-REC-02",
+          "Operational Expense Logging",
+          "Operational_Expenses table linked to Daily_Sales"
+        ],
+        [
+          "Cash deficits caused by unrecorded petty cash expenses",
+          "REQ-FUN-REC-03",
+          "Expected Cash Computation",
+          "Daily_Reconciliation view computing Expected_Cash = SUM(Cash_Sales) - SUM(Operational_Expenses)"
+        ],
+        [
+          "Unexplained till variances at end of day",
+          "REQ-FUN-REC-04",
+          "Variance Reporting with Mandatory Explanation",
+          "Daily_Reconciliation table with Variance and Explanation columns"
+        ],
+        [
+          "Mixing of Cash, Mobile Money and Bank balances",
+          "REQ-FUN-REC-01",
+          "Multi Channel Drawer Balances",
+          "Virtual_Drawers table (Cash, MoMo, Bank) updated per sale"
+        ],
+        [
+          "Manual VAT calculation errors",
+          "REQ-FUN-SAL-02",
+          "Automated VAT Calculation",
+          "CalculateVAT stored procedure (Subtotal * 0.18)"
+        ],
+        [
+          "Broken URA receipt sequence due to deletions",
+          "REQ-FUN-SAL-03",
+          "Sequential Receipt Generation with Void Only",
+          "Sales table with Status (Active, Voided) and Void_Reason columns"
+        ],
+        [
+          "Real time receipt printing required during truck loading",
+          "REQ-FUN-SAL-04",
+          "Physical Receipt Printing",
+          "Receipt generation trigger on Sales INSERT"
+        ],
+        [
+          "Inventory not tracking sold blocks in real time",
+          "REQ-FUN-SAL-05",
+          "Inventory Deduction Trigger",
+          "AFTER INSERT trigger on Sales updating Inventory.Current_Stock"
+        ],
+        [
+          "No formal attendance; ghost worker risk",
+          "REQ-FUN-ATT-01",
+          "Worker Attendance Logging with Unique Daily Constraint",
+          "Attendance table with PK (Worker_ID, Date)"
+        ],
+        [
+          "Daily payroll based on memory",
+          "REQ-FUN-ATT-02",
+          "Daily Payroll Eligibility",
+          "Payroll_Eligibility view joining Workers and Attendance"
+        ],
+        [
+          "URA tax filing requires manual transcription",
+          "REQ-FUN-TAX-01",
+          "URA Summary Report",
+          "URA_Summary view aggregating Sales with 18 percent VAT"
+        ],
+        [
+          "Single laptop data vulnerability",
+          "REQ-FUN-BAK-01",
+          "Automated Nightly Backup",
+          "Backup job scheduled after evening reconciliation"
+        ],
+        [
+          "Sales Manager cannot see Owner financials",
+          "REQ-NFR-SEC-01",
+          "Role Based Access Control",
+          "Database roles and restricted views"
+        ],
+        [
+          "Financial record tampering risk",
+          "REQ-NFR-SEC-02",
+          "Immutable Audit Trail",
+          "Audit_Log table with insert only semantics"
+        ],
+        [
+          "Worker literacy varies",
+          "REQ-NFR-USR-01",
+          "Low Literacy Interface",
+          "UI with icons and minimal text"
+        ],
+        [
+          "Internet unavailable during day",
+          "REQ-NFR-PER-01",
+          "Offline Resilience",
+          "Local database with queued sync"
+        ],
+        [
+          "Laptop hardware limits",
+          "REQ-NFR-PER-02",
+          "Hardware Compatibility",
+          "Optimized queries and indexing"
+        ]
+      ]
+    },
+    {
+      "type": "h1",
+      "text": "PART 3: VALIDATION AND VERIFICATION PLAN"
+    },
+    {
+      "type": "h2",
+      "text": "1. Validation (Are We Building the Right Product?)"
+    },
+    {
+      "type": "para",
+      "text": "Validation confirms the requirements meet the actual business needs of Deniz Construction."
+    },
+    {
+      "type": "bullets",
+      "items": [
+        "Walkthrough with Sales Manager: Review the Real Time Sale flow and End of Day Reconciliation flow against the observed As Is workflow. Confirm the Dual Phase model matches her mental model of daily operations.",
+        "Owner Review of Daily Summary Report: Present the generated Daily Summary Report mockup to the Business Owner. Confirm the Operational Metrics First structure (Trucks, Blocks, Workers) followed by Financial Summary matches what he reviews during his daily evening visits.",
+        "URA Compliance Check: Verify the URA Summary Report output format against a blank URA VAT form (obtained from the site or standard template). Confirm all required fields are present and VAT calculation matches the 18 percent standard.",
+        "Gap Closure Verification: For each documented gap (Secretary, Workers, Receipt Fields), verify that the stated assumption (for example, standard URA fiscal fields for receipts) is acceptable to the primary stakeholder (Sales Manager) during the walkthrough."
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "2. Verification (Are We Building the Product Right?)"
+    },
+    {
+      "type": "para",
+      "text": "Verification confirms the implementation correctly implements the specified requirements."
+    },
+    {
+      "type": "bullets",
+      "items": [
+        "Unit Test: CalculateVAT Stored Procedure. Input: Subtotal = 100,000. Expected Output: VAT = 18,000, Total = 118,000. Edge case: Subtotal = 0 returns VAT = 0.",
+        "Unit Test: Inventory Deduction Trigger. Insert a Sale record for Product X, Quantity = 5. Verify Inventory.Current_Stock for Product X decrements by 5. Edge case: Stock reaches zero does not go negative.",
+        "Unit Test: Sequential Receipt Void Logic. Insert Sale A (Active), Sale B (Active), Void Sale A with Reason. Verify Receipt IDs are sequential (1, 2), Sale A Status = Voided, Void_Reason populated, Sequence unbroken.",
+        "Unit Test: Multi Channel Drawer Isolation. Insert Cash Sale, MoMo Sale, Bank Sale. Verify Cash_Drawer increments only for Cash, MoMo_Drawer only for MoMo, Bank_Drawer only for Bank.",
+        "Unit Test: Expected Cash Computation. Cash Sales = 500,000. Operational Expenses (Cash) = 50,000. Expected Cash = 450,000. Verify calculation in Daily_Reconciliation view.",
+        "Unit Test: Variance Calculation. Actual Cash = 445,000. Expected Cash = 450,000. Variance = -5,000 (Deficit). Verify sign and mandatory explanation field enforcement.",
+        "Unit Test: Attendance Unique Daily Constraint. Attempt to insert duplicate (Worker_ID, Date). Verify database constraint rejection.",
+        "Unit Test: RBAC Enforcement. Attempt SELECT on Total_Profit view as Sales Manager role. Verify permission denied. Attempt same as Owner role. Verify permission granted.",
+        "Integration Test: End to End Daily Workflow. Simulate 10 sales across all payment channels, 3 expenses, 5 attendance logs. Run evening reconciliation. Verify Daily Summary Report matches manual calculation."
+      ]
+    },
+    {
+      "type": "h1",
+      "text": "PART 4: REQUIREMENTS MANAGEMENT PLAN"
+    },
+    {
+      "type": "h2",
+      "text": "1. Change Control Process"
+    },
+    {
+      "type": "para",
+      "text": "Since the business is a small SME, the Change Control Board (CCB) consists of the Business Owner and Group K. No external approvals are required."
+    },
+    {
+      "type": "bullets",
+      "items": [
+        "Change Request Submission: Any stakeholder may submit a change request describing the proposed change, the reason and the expected impact.",
+        "Impact Analysis: Group K assesses the impact on the SRS, database schema, stored procedures, triggers, views and UI. The analysis includes effort estimation and risk assessment.",
+        "Decision: The Business Owner approves, rejects, or defers the change. Approved changes are assigned a Change Request ID and scheduled.",
+        "Implementation: The change is implemented in the SRS, the database schema and the application code. The Requirements Traceability Matrix is updated to reflect the new or modified requirement."
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "2. Version Control"
+    },
+    {
+      "type": "para",
+      "text": "All requirements documents, database schemas and source code are version controlled in the project Git repository (https://github.com/mugmarp/requirements-engineering-project-exercise). Each change to the SRS is committed with a message referencing the Change Request ID."
+    },
+    {
+      "type": "h2",
+      "text": "3. Requirements Attributes"
+    },
+    {
+      "type": "para",
+      "text": "Each requirement carries the following attributes: ID, Title, Type (Functional or Non Functional), Module, Priority (High, Medium, Low), Status (Proposed, Approved, Implemented, Verified), Source (Elicitation Fact, Business Assumption, Gap Synthesis) and Traceability Links."
+    },
+    {
+      "type": "h1",
+      "text": "PART 5: DATABASE DESIGN SPECIFICATION (SWE1205)"
+    },
+    {
+      "type": "h2",
+      "text": "1. Conceptual Data Model (ER Diagram Entities)"
+    },
+    {
+      "type": "para",
+      "text": "The following entities form the normalized relational schema (Third Normal Form). The Products entity now reflects the actual Deniz Construction Limited product catalogue."
+    },
+    {
+      "type": "table",
+      "header": [
+        "Entity",
+        "Primary Key",
+        "Key Attributes",
+        "Relationships"
+      ],
       "rows": [
-        ["Workers", "Worker_ID", "Name, Phone, Daily_Rate, Status", "1:N Attendance, 1:N Payroll"],
-        ["Attendance", "(Worker_ID, Date) composite", "Status (Present, Absent), Verified_By", "N:1 Workers"],
-        ["Products", "Product_ID", "Name, Category (Solid Block, Hollow Block, Paver, Kerb), Dimensions, Unit_Price, VAT_Rate, Unit_of_Measure (Pieces, Square Meters, Bundles), Current_Stock, Reorder_Level", "1:N Sales_Items"],
-        ["Sales", "Sale_ID", "Date_Time, Customer_Name, Subtotal, VAT, Total, Payment_Method, Status (Active, Voided), Void_Reason", "1:N Sales_Items, N:1 Virtual_Drawers"],
-        ["Sales_Items", "(Sale_ID, Product_ID) composite", "Quantity, Line_Total", "N:1 Sales, N:1 Products"],
-        ["Virtual_Drawers", "Drawer_Type (Cash, MoMo, Bank)", "Opening_Balance, Current_Balance", "1:N Sales"],
-        ["Operational_Expenses", "Expense_ID", "Date, Description, Amount, Drawer_Type (Cash), Logged_By", "N:1 Daily_Reconciliation"],
-        ["Daily_Reconciliation", "Reconciliation_Date", "Expected_Cash, Actual_Cash, Variance, Explanation, Closed_By", "1:1 Operational_Expenses (Cash)"],
-        ["Audit_Log", "Log_ID", "User_ID, Timestamp, Action_Type, Table_Name, Record_ID, Previous_Value", "N:1 Users"],
-        ["System_Settings", "Setting_Key", "Setting_Value", "Independent (VAT_Rate, etc.)"]
-      ] },
-    { "type": "h2", "text": "2. Stored Procedures" },
-    { "type": "para", "text": "CalculateVAT(Subtotal DECIMAL) RETURNS DECIMAL: Returns Subtotal * (SELECT Setting_Value FROM System_Settings WHERE Setting_Key = VAT_RATE). The VAT rate is stored in System_Settings, not hardcoded." },
-    { "type": "para", "text": "CloseDay() RETURNS Daily_Reconciliation_Record: Computes Expected_Cash per REQ-FUN-REC-03, creates the Daily_Reconciliation record, and marks the day as closed. Requires Actual_Cash input and mandatory Explanation if Variance != 0." },
-    { "type": "h2", "text": "3. Triggers" },
-    { "type": "para", "text": "AFTER INSERT ON Sales FOR EACH ROW: UPDATE Inventory SET Current_Stock = Current_Stock - NEW.Quantity WHERE Product_ID = NEW.Product_ID. IF Current_Stock <= Reorder_Level THEN INSERT INTO Inventory_Alerts." },
-    { "type": "para", "text": "AFTER INSERT ON Sales FOR EACH ROW: UPDATE Virtual_Drawers SET Current_Balance = Current_Balance + NEW.Total WHERE Drawer_Type = NEW.Payment_Method." },
-    { "type": "para", "text": "AFTER INSERT ON Operational_Expenses FOR EACH ROW: UPDATE Virtual_Drawers SET Current_Balance = Current_Balance - NEW.Amount WHERE Drawer_Type = Cash." },
-    { "type": "h2", "text": "4. Views" },
-    { "type": "para", "text": "Daily_Sales_Summary: Aggregates Sales by Payment_Method for a given date. Used for the Daily Summary Report." },
-    { "type": "para", "text": "URA_Summary: Aggregates Sales by date range with 18 percent VAT calculation. Formatted for URA portal transcription." },
-    { "type": "para", "text": "Payroll_Eligibility: Joins Workers and Attendance to list workers Present on a given date with their Daily_Rate." },
-    { "type": "para", "text": "Total_Profit (Owner Only): Restricted view computing Revenue minus Expenses per period. SELECT permission granted to Owner role only." },
-    { "type": "para", "text": "Tax_Liability (Owner Only): Restricted view computing total VAT collected per period. SELECT permission granted to Owner role only." },
-    { "type": "para", "text": "Daily_Reconciliation_Report: Combines Daily_Reconciliation, Virtual_Drawers, and Operational_Expenses for the final Owner report." }
+        [
+          "Workers",
+          "Worker_ID",
+          "Name, Phone, Daily_Rate, Status",
+          "1:N Attendance, 1:N Payroll"
+        ],
+        [
+          "Attendance",
+          "(Worker_ID, Date) composite",
+          "Status (Present, Absent), Verified_By",
+          "N:1 Workers"
+        ],
+        [
+          "Products",
+          "Product_ID",
+          "Name, Category (Solid Block, Hollow Block, Paver, Kerb), Dimensions, Unit_Price, VAT_Rate, Unit_of_Measure (Pieces, Square Meters, Bundles), Current_Stock, Reorder_Level",
+          "1:N Sales_Items"
+        ],
+        [
+          "Sales",
+          "Sale_ID",
+          "Date_Time, Customer_Name, Subtotal, VAT, Total, Payment_Method, Status (Active, Voided), Void_Reason",
+          "1:N Sales_Items, N:1 Virtual_Drawers"
+        ],
+        [
+          "Sales_Items",
+          "(Sale_ID, Product_ID) composite",
+          "Quantity, Line_Total",
+          "N:1 Sales, N:1 Products"
+        ],
+        [
+          "Virtual_Drawers",
+          "Drawer_Type (Cash, MoMo, Bank)",
+          "Opening_Balance, Current_Balance",
+          "1:N Sales"
+        ],
+        [
+          "Operational_Expenses",
+          "Expense_ID",
+          "Date, Description, Amount, Drawer_Type (Cash), Logged_By",
+          "N:1 Daily_Reconciliation"
+        ],
+        [
+          "Daily_Reconciliation",
+          "Reconciliation_Date",
+          "Expected_Cash, Actual_Cash, Variance, Explanation, Closed_By",
+          "1:1 Operational_Expenses (Cash)"
+        ],
+        [
+          "Audit_Log",
+          "Log_ID",
+          "User_ID, Timestamp, Action_Type, Table_Name, Record_ID, Previous_Value",
+          "N:1 Users"
+        ],
+        [
+          "System_Settings",
+          "Setting_Key",
+          "Setting_Value",
+          "Independent (VAT_Rate, etc.)"
+        ]
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "2. Stored Procedures"
+    },
+    {
+      "type": "para",
+      "text": "CalculateVAT(Subtotal DECIMAL) RETURNS DECIMAL: Returns Subtotal * (SELECT Setting_Value FROM System_Settings WHERE Setting_Key = VAT_RATE). The VAT rate is stored in System_Settings, not hardcoded."
+    },
+    {
+      "type": "para",
+      "text": "CloseDay() RETURNS Daily_Reconciliation_Record: Computes Expected_Cash per REQ-FUN-REC-03, creates the Daily_Reconciliation record and marks the day as closed. Requires Actual_Cash input and mandatory Explanation if Variance != 0."
+    },
+    {
+      "type": "h2",
+      "text": "3. Triggers"
+    },
+    {
+      "type": "para",
+      "text": "AFTER INSERT ON Sales FOR EACH ROW: UPDATE Inventory SET Current_Stock = Current_Stock - NEW.Quantity WHERE Product_ID = NEW.Product_ID. IF Current_Stock <= Reorder_Level THEN INSERT INTO Inventory_Alerts."
+    },
+    {
+      "type": "para",
+      "text": "AFTER INSERT ON Sales FOR EACH ROW: UPDATE Virtual_Drawers SET Current_Balance = Current_Balance + NEW.Total WHERE Drawer_Type = NEW.Payment_Method."
+    },
+    {
+      "type": "para",
+      "text": "AFTER INSERT ON Operational_Expenses FOR EACH ROW: UPDATE Virtual_Drawers SET Current_Balance = Current_Balance - NEW.Amount WHERE Drawer_Type = Cash."
+    },
+    {
+      "type": "h2",
+      "text": "4. Views"
+    },
+    {
+      "type": "para",
+      "text": "Daily_Sales_Summary: Aggregates Sales by Payment_Method for a given date. Used for the Daily Summary Report."
+    },
+    {
+      "type": "para",
+      "text": "URA_Summary: Aggregates Sales by date range with 18 percent VAT calculation. Formatted for URA portal transcription."
+    },
+    {
+      "type": "para",
+      "text": "Payroll_Eligibility: Joins Workers and Attendance to list workers Present on a given date with their Daily_Rate."
+    },
+    {
+      "type": "para",
+      "text": "Total_Profit (Owner Only): Restricted view computing Revenue minus Expenses per period. SELECT permission granted to Owner role only."
+    },
+    {
+      "type": "para",
+      "text": "Tax_Liability (Owner Only): Restricted view computing total VAT collected per period. SELECT permission granted to Owner role only."
+    },
+    {
+      "type": "para",
+      "text": "Daily_Reconciliation_Report: Combines Daily_Reconciliation, Virtual_Drawers and Operational_Expenses for the final Owner report."
+    }
   ]
 }
