@@ -8,7 +8,29 @@
   ],
   "blocks": [
     { "type": "h1", "text": "1. INTRODUCTION" },
-    { "type": "para", "text": "Because further follow-up visits were not feasible and the Sales Manager was unwilling to provide further information, this document establishes the baseline for how unresolvable information gaps are handled through documented business assumptions based on the Ugandan SME context." },
+    { "type": "h2", "text": "1.1 Purpose" },
+    { "type": "para", "text": "This document presents the Requirements Elicitation and Stakeholder Analysis conducted for the Deniz Construction Management System (DCMS). It records the empirical data gathered during our site visit, the elicitation techniques used, the challenges encountered, and the current As-Is operational reality of the business." },
+    { "type": "h2", "text": "1.2 Scope" },
+    { "type": "para", "text": "The analysis covers stakeholder identification, power-interest mapping, elicitation techniques applied, field observations, interview findings, documented limitations, and strategic business synthesis to inform the subsequent Requirements Analysis and Specification phase." },
+    { "type": "h2", "text": "1.3 Methodology" },
+    { "type": "para", "text": "Group K applied Direct Observation and Semi-Structured Interviews during a single site visit. Because further follow-up visits were not feasible and the Sales Manager was unwilling to provide further information, this document also establishes the baseline for how unresolvable information gaps are handled through documented business assumptions based on the Ugandan SME context." },
+    { "type": "h2", "text": "1.4 Definitions and Abbreviations" },
+    { "type": "bullets", "items": [
+      "As-Is: The current operational state of the business before system implementation",
+      "DCMS: Deniz Construction Management System",
+      "MoMo: Mobile Money",
+      "SME: Small and Medium Enterprise",
+      "SRS: Software Requirements Specification",
+      "URA: Uganda Revenue Authority"
+    ] },
+    { "type": "h2", "text": "1.5 References" },
+    { "type": "bullets", "items": [
+      "CURATED_DATA.md - Curated knowledge base (facts, synthesis, gaps, decisions)",
+      "IEEE Std 830-1998 - Recommended Practice for Software Requirements Specifications",
+      "SWE2102 Course Allocation - Group K, Requirements Engineering"
+    ] },
+    { "type": "h2", "text": "1.6 Document Overview" },
+    { "type": "para", "text": "Section 2 provides the Business Context. Section 3 states the Problem Statement. Section 4 covers Stakeholder Analysis. Section 5 details Elicitation Techniques and Field Realities. Section 6 documents Challenges and Limitations. Section 7 presents Strategic Business Synthesis. Section 8 concludes and transitions to the next phase." },
 
     { "type": "h1", "text": "2. BUSINESS CONTEXT" },
     { "type": "para", "text": "Deniz Construction Limited is a small construction materials business located on Ishanyu-Bushenyi Road, Mbarara, Uganda. The business produces and sells concrete blocks, pavers and kerbs. Operations are highly centralised, a single Sales Manager acts as supervisor, cashier, payroll distributor, record keeper and tax filer. The Business Owner visits the site daily to review operations and cash. The business operates on a strict no-credit policy with three payment channels: Cash, Mobile Money and Bank Deposit. Physical receipts are printed on-site for customers during truck loading. URA tax filing is done online. No cloud backup exists; records are kept on a single laptop and in physical books. Workers are paid daily in cash without formal contracts." },
@@ -23,18 +45,10 @@
       "Manual Reconciliation Burden: The Sales Manager uses the PC in the evening to process deficits and prepare summaries for the Owner — a heavy, error-prone manual workload."
     ] },
 
-    { "type": "h1", "text": "4. PROPOSED SYSTEM SOLUTION" },
-    { "type": "para", "text": "A Dual-Phase Operations Management System:" },
-    { "type": "bullets", "items": [
-      "Phase 1 (Day): Real-Time Point of Sale — processes individual sales, calculates VAT, updates inventory, prints physical receipts for customers as trucks load.",
-      "Phase 2 (Evening): End-of-Day Reconciliation Engine — balances multi-channel payment drawers (Cash, Mobile Money, Bank Deposit), logs operational expenses, computes cash variances (deficit/surplus), generates daily summary report for the Business Owner."
-    ] },
-    { "type": "para", "text": "The system runs on the existing laptop, operates offline-first during the day and performs an automated nightly cloud backup after evening reconciliation for disaster recovery." },
-
-    { "type": "h1", "text": "5. STAKEHOLDER ANALYSIS" },
+    { "type": "h1", "text": "4. STAKEHOLDER ANALYSIS" },
     { "type": "para", "text": "The organisational structure is highly flattened. Roles are heavily concentrated, so the traditional corporate hierarchy does not apply. We mapped stakeholders on a Power and Interest grid to determine engagement strategy and identify critical data gaps." },
 
-    { "type": "h2", "text": "5.1 Stakeholder Identification and Power Interest Mapping" },
+    { "type": "h2", "text": "4.1 Stakeholder Identification and Power Interest Mapping" },
     {
       "type": "table",
       "header": ["Stakeholder", "Role in Current Operations", "Power", "Interest", "Engagement Strategy and Status"],
@@ -48,7 +62,7 @@
       ]
     },
 
-    { "type": "h2", "text": "5.2 Common Pitfalls and Engagement Techniques" },
+    { "type": "h2", "text": "4.2 Common Pitfalls and Engagement Techniques" },
     {
       "type": "para",
       "runs": [
@@ -64,7 +78,7 @@
       ]
     },
 
-    { "type": "h1", "text": "6. ELICITATION TECHNIQUES AND FIELD REALITIES (THE AS-IS STATE)" },
+    { "type": "h1", "text": "5. ELICITATION TECHNIQUES AND FIELD REALITIES (THE AS-IS STATE)" },
     { "type": "para", "text": "Group K used Direct Observation and Semi-Structured Interviews. The following facts represent the current operational reality of the business." },
 
     { "type": "para", "runs": [ { "text": "1. Direct Observation (Environmental Scan)", "bold": true } ] },
@@ -89,7 +103,7 @@
       ]
     },
 
-    { "type": "h1", "text": "7. CHALLENGES IN ELICITATION AND DOCUMENTED LIMITATIONS" },
+    { "type": "h1", "text": "6. CHALLENGES IN ELICITATION AND DOCUMENTED LIMITATIONS" },
     { "type": "para", "text": "As Group K, we faced the following empirical challenges, which are documented as limitations for the project." },
     {
       "type": "numbered",
@@ -101,31 +115,32 @@
       ]
     },
 
-    { "type": "h1", "text": "8. STRATEGIC BUSINESS SYNTHESIS" },
-    { "type": "para", "text": "Because we cannot return to the site to close the gaps identified in Section 7, we apply strategic business synthesis. These are logical inferences drawn from verified facts combined with standard operational norms of Ugandan construction SMEs. They serve as baseline assumptions for the subsequent Requirements Analysis phase." },
+    { "type": "h1", "text": "7. STRATEGIC BUSINESS SYNTHESIS" },
+    { "type": "para", "text": "Because we cannot return to the site to close the gaps identified in Section 6, we apply strategic business synthesis. These are logical inferences drawn from verified facts combined with standard operational norms of Ugandan construction SMEs. They serve as baseline implications for the subsequent Requirements Analysis phase." },
 
     { "type": "para", "runs": [ { "text": "1. The Nature of Deficits and Cash Insecurity", "bold": true } ] },
     { "type": "para", "text": "Fact: The Sales Manager processes deficits manually and cited insecurity (CCTV is present)." },
     { "type": "para", "text": "Synthesis: In cash-heavy Ugandan SMEs, end-of-day cash shortages are rarely malicious theft. They are almost always caused by unrecorded petty cash expenses (for example, buying lunch for truck loaders or paying for transport) taken directly from the cash drawer." },
-    { "type": "para", "text": "Assumption for Next Phases: The business requires a mechanism to log operational cash-outs to reconcile the physical till against the receipt totals." },
+    { "type": "para", "text": "Implication for Requirements Analysis: The business requires a mechanism to log operational cash-outs to reconcile the physical till against the receipt totals." },
 
     { "type": "para", "runs": [ { "text": "2. The Dual-Phase Operational Reality", "bold": true } ] },
     { "type": "para", "text": "Fact: The laptop is on during the day and physical receipts are printed for customers. However, the Sales Manager also heavily utilises the PC right before the Business Owner arrives in the evening specifically to process cash deficits." },
     { "type": "para", "text": "Synthesis: The Sales Manager cannot wait until the evening to log sales, because customers require printed receipts immediately upon loading. However, the evening PC usage indicates a distinct, heavy reconciliation burden at the end of the day." },
-    { "type": "para", "text": "Assumption for Next Phases: The future system must support real-time transaction processing and receipt generation during the day, alongside a dedicated, heavy-duty reconciliation workflow for the evening." },
+    { "type": "para", "text": "Implication for Requirements Analysis: The future system must support real-time transaction processing and receipt generation during the day, alongside a dedicated, heavy-duty reconciliation workflow for the evening." },
 
     { "type": "para", "runs": [ { "text": "3. Receipting and Inventory Baselines", "bold": true } ] },
     { "type": "para", "text": "Fact: Physical receipts are printed on site and trucks load in bulk. Exact receipt fields are unknown." },
     { "type": "para", "text": "Synthesis: To satisfy URA compliance and basic business logic, receipts must contain standard fiscal fields (Sequential ID, Date, VAT, Payment Method). Because clients self-transport and load in bulk, inventory tracking must accommodate flexible units of measure (pieces, pallets, or truckloads)." },
+    { "type": "para", "text": "Implication for Requirements Analysis: The SRS must define flexible unit-of-measure handling and standard receipt fields for URA compliance." },
 
     { "type": "para", "runs": [ { "text": "4. Cloud Backup and Remote Access Specification", "bold": true } ] },
     { "type": "para", "text": "Fact: The Owner visits the site every day. No cloud backup currently exists." },
     { "type": "para", "text": "Synthesis: Because the Owner is physically present daily, a real-time remote monitoring dashboard is operationally redundant. The critical need for cloud technology is strictly for disaster recovery (protecting the single laptop from data loss) and asynchronous historical review." },
-    { "type": "para", "runs": [ { "text": "System Specification. ", "bold": true }, { "text": "The cloud feature is specified strictly as an Automated Nightly Backup, triggered in the evening after the final reconciliation is complete, to solve the Data Vulnerability problem of relying on a single laptop. The remote portal for the Owner is an Asynchronous Dashboard for reviewing next-day finalised reports and long-term business trends, rather than a live monitoring tool." } ] },
+    { "type": "para", "runs": [ { "text": "System Implication. ", "bold": true }, { "text": "The cloud feature is specified strictly as an Automated Nightly Backup, triggered in the evening after the final reconciliation is complete, to solve the Data Vulnerability problem of relying on a single laptop. The remote portal for the Owner is an Asynchronous Dashboard for reviewing next-day finalised reports and long-term business trends, rather than a live monitoring tool." } ] },
 
-    { "type": "h1", "text": "9. CONCLUSION AND TRANSITION" },
+    { "type": "h1", "text": "8. CONCLUSION AND TRANSITION" },
     { "type": "para", "text": "By combining direct observation with logical business synthesis, Group K has mapped the current As-Is state of Deniz Construction Limited and documented all unresolvable elicitation challenges." },
-    { "type": "para", "text": "The project is defined as a Real-Time Point of Sale and Operations Management System with an Integrated End-of-Day Reconciliation Module. All gaps (Secretary, Workers, Receipt Fields) are formally documented as limitations." },
-    { "type": "para", "text": "This provides the foundation for Phase 2: Requirements Analysis and Specification, where these business assumptions and facts will be translated into formal Software Requirements (SRS) and mapped to the relational database schema." }
+    { "type": "para", "text": "All gaps (Secretary, Workers, Receipt Fields, Cash Storage, Tax Calculation Method) are formally documented as limitations." },
+    { "type": "para", "text": "This elicitation and stakeholder analysis provides the input for Phase 2: Requirements Analysis and Specification, where the documented facts, synthesis, and implications will be translated into formal Software Requirements (SRS)." }
   ]
 }
