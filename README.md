@@ -153,6 +153,20 @@ The repository distinguishes three kinds of statement throughout.
 - **Synthesis:** A reasoned inference drawn from facts plus the documented operational norms of Ugandan construction SMEs, always labelled as such.
 - **Gap:** Something that could not be obtained at all. Unresolvable gaps are written up as documented limitations rather than filled with plausible detail, because the site could not be revisited and the project scope is fixed.
 
+## Requirements Engineering Methods
+
+The following table maps each RE phase to the techniques applied and the deliverable where they are documented.
+
+| Phase | Technique | Applied In |
+|---|---|---|
+| **Elicitation** | Direct Observation, Semi-Structured Interview, Environmental Scan | `Phase1_Elicitation-and-Stakeholder-Analysis.docx` — Sections 1.3, 5 |
+| **Analysis** | Power/Interest Stakeholder Mapping, Gap Analysis, Strategic Business Synthesis | `Phase1_Elicitation-and-Stakeholder-Analysis.docx` — Sections 4, 6, 7 |
+| **Specification** | IEEE 830 Structure, Hierarchical Requirement IDs (REQ-FUN/NFR-XXX-NN), Use Cases | `Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx` — Parts 1-2 |
+| **Traceability** | Requirements Traceability Matrix (Problem → Requirement → DB Artifact) | `Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx` — Part 2 |
+| **Validation** | Walkthroughs, URA Compliance Check, Gap Closure Verification | `Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx` — Part 3 |
+| **Verification** | Unit Tests (VAT, Inventory, Receipt, Drawer, Variance, Attendance, RBAC), Integration Test | `Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx` — Part 3 |
+| **Management** | Change Control Board (Owner + Group K), Version Control (Git), Requirements Attributes | `Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx` — Part 4 |
+
 ## Repository
 
 URL: https://github.com/mugmarp/requirements-engineering-project-exercise
