@@ -1,29 +1,21 @@
-# GRAND PROJECT PRESENTATION DECK
+# Grand Project Presentation
 
-**Course:** SWE2102 Requirements Engineering  
-**Group:** K  
-**Client Site:** Deniz Construction Limited, Ishanyu Bushenyi Road, Mbarara  
-**Project:** Deniz Construction Management System (DCMS)
+Group K · SWE2102 Requirements Engineering · 10 November 2026
 
----
+## 1. Deniz Construction Management System
 
-## Slide 1: Title Slide
+Deniz Construction Limited, Mbarara
 
-**Deniz Construction Management System**  
-Requirements Engineering and Database Design
+Group K, SWE2102 Requirements Engineering
 
-Group K  
-SWE2102 Requirements Engineering  
 Mbarara University of Science and Technology
 
----
+Speaker 1 | 30 seconds. Introduce the client, a construction materials business that produces blocks, pavers and kerbs. State that this is Group K’s requirements engineering project.
 
-## Slide 2: Group Members
-
-### Project Team
+## 2. Group Members
 
 | Name | Registration Number |
-|------|---------------------|
+|---|---|
 | JOAS TAREMWA | 2025/BSE/171/PS |
 | ASUMA KADDE KEVIN | 2025/BSE/045/PS |
 | SSEBUGWAWO HARRISON | 2025/BSE/161/PS |
@@ -35,86 +27,53 @@ Mbarara University of Science and Technology
 | OSUTA AMEN JOEL | 2025/BSE/152/PS |
 | MUSONIRWA IBRAHIM | 2025/BSE/218/PS |
 
----
+Continue the introduction | 30 seconds. Introduce Group K and move to the problem and scope.
 
-## Slide 3: The Real Problem
+## 3. Problem and project scope
 
-### Operational Bottlenecking and Cash Vulnerability
+- **One primary operator.** The Sales Manager handles sales, records and cash reconciliation. The Owner reviews the daily report.
+- **During the day.** Record sales, update stock and print receipts while customers collect their purchases.
+- **At the end of the day.** Record expenses, compare expected cash with the physical count and save the daily report.
 
-- The Super Manager Bottleneck: One person acts as supervisor, cashier, payroll distributor and record keeper.
-- Unexplained Cash Deficits: Manual computation of cash shortages at the end of the day without a tool to log operational expenses.
-- Informal Labor Practices: Daily cash payouts based on memory, with no formal attendance tracking.
-- Data Vulnerability: All records reside on a single local laptop with no cloud backup.
+Speaker 2 | 2 minutes. Explain why the Sales Manager is the primary user and why the Owner needs a finalized report. Deniz takes payment upfront. The group observed daytime receipting and learned that the Sales Manager uses the laptop to process deficits.
 
----
+## 4. Stakeholders and elicitation methods
 
-## Slide 4: Elicitation Techniques and Field Realities
+- **Stakeholders.** Sales Manager and Owner. Workers and customers are affected. URA is the external regulator.
+- **Direct observation.** We saw the laptop in use and receipts being printed as trucks loaded.
+- **Semi-structured interview.** The Sales Manager reported upfront payments by cash, Mobile Money or bank deposit.
 
-### What We Actually Observed
+Speaker 3 | 1 minute. Distinguish the primary operator, the report audience and the affected stakeholders. The Sales Manager was interviewed during the single site visit. The Owner and workers were unavailable for interviews.
+Speaker 4 | 1 minute. Explain what each method contributed. Observation showed the timing of receipting. The interview provided payment rules that were not visible from truck loading alone.
 
-- Direct Observation: The laptop was powered on and actively used during the day. A printer is on site and physical receipts were being printed for customers as trucks loaded.
-- Semi Structured Interview: Conducted with the Sales Manager to understand payment channels (Cash, Mobile Money, Bank), tax filing processes and primary pain points regarding cash insecurity.
-- Environmental Scan: Customers transport their own goods. Trucks load in bulk. Site has CCTV cameras, indicating baseline security awareness.
+## 5. Group K’s elicitation example
 
----
+- **Observation.** Receipts were printed while customers’ trucks were being loaded.
+- **Limitation.** We could see receipts being printed but could not inspect the fields on them.
+- **Design decision.** Print a receipt when the sale is saved. Specify the receipt fields separately.
 
-## Slide 5: Challenges in Elicitation
+Speaker 5 | 2 minutes. Explain the difference between timing and content. Seeing a receipt printed supports immediate receipting. It does not establish what the existing receipt contains. We recorded that gap because a follow-up visit was not feasible.
 
-### Documented Limitations
+## 6. Key requirements and the offline check
 
-- The Gatekeeper Effect: The Sales Manager was hesitant to share deep financial workflows, such as exact tax calculations and cash storage protocols.
-- Inaccessibility: The Business Owner, Site Workers and Secretary could not be approached directly. These are unresolvable gaps.
-- No Follow up Feasibility: The Sales Manager was unwilling to provide further information and a return visit to the site is not possible. The project scope is locked.
+- **Post sales and print receipts.** Give customers a receipt while their truck is being loaded.
+- **Log each cash expense.** Account for cash paid out on the selected business date.
+- **Reconcile and close the day.** Compare the cash count with expected cash and save the final report for the Owner.
+- **Offline resilience (REQ-NFR-PER-01).** Disconnect the laptop, post a sale and print its receipt. Check that the sale is stored locally.
 
----
+Speaker 6 | 1.5 minutes. Explain the three functional examples and the person each helps. Sale entry and printing are REQ-FUN-SAL-01 and REQ-FUN-SAL-04. Expense logging is REQ-FUN-REC-02. Cash variance and closing are REQ-FUN-REC-04 and REQ-FUN-REC-05.
+Speaker 7 | 1.5 minutes. Explain why the system should handle a sale without internet. Present the disconnect, save, print and local storage sequence as a planned pass check.
 
-## Slide 6: Strategic Business Synthesis
+## 7. Close of Day prototype
 
-### How We Bridged the Information Gaps
+Reserve this slide for one large Close of Day screenshot with sample data.
 
-- Deficit Root Cause: In cash heavy local SMEs, end of day shortages are rarely theft. They are almost always unrecorded petty cash expenses. The system must allow logging of these expenses to balance the till.
-- Dual Phase Workflow: Because physical receipts are printed during the day, the system cannot be evening only. It must support real time transaction processing followed by a dedicated evening reconciliation module.
-- Remote Access Reality: Since the owner visits daily, a live remote dashboard is unnecessary. Cloud technology is strictly for automated nightly disaster recovery and asynchronous historical review.
+Speaker 8 | 1.5 minutes. Point to the business date and the separate recorded activity for Cash, Mobile Money and Bank Deposit. Explain that the three totals belong to the selected date.
+Speaker 9 | 1.5 minutes. Walk through the sample from the verification plan. UGX 450,000 expected, UGX 445,000 counted and a UGX 5,000 deficit. A nonzero variance requires an explanation. Reflect on why separating two business dates matters. Closing one day must preserve its report without clearing or mixing activity for another date.
 
----
+## 8. What we learned
 
-## Slide 7: The Proposed Solution
+- **Fieldwork shaped the design.** Seeing when receipts were printed showed us when the system needed to record sales.
+- **The prototype shows the proposed workflow.** The next checks are offline sales and printing, and a close that preserves each business date.
 
-### Dual Phase Operations Management System
-
-- Phase 1: Real Time Point of Sale. During the day, the system processes individual sales, calculates VAT, updates inventory and prints physical receipts.
-- Phase 2: End of Day Reconciliation. In the evening, the system allows the Sales Manager to balance multi channel payment drawers, log operational expenses, compute cash variances and generate a final daily summary report for the Business Owner.
-- Excluded Features: Credit and debtors modules are excluded as the business operates on a strict no credit policy.
-
----
-
-## Slide 8: Database Architecture for SWE1205
-
-### Advanced SQL Implementation
-
-- Normalization: Database normalized to 3NF to eliminate redundancy across Workers, Attendance, Products, Sales and Operational Expenses.
-- Stored Procedures: CalculateVAT fetches the rate from a System Settings table and applies it to the subtotal.
-- Triggers: TRG Sales Insert automatically reduces Current Stock in the Products table upon sale insertion.
-- Role Based Access Control: Views like View Owner Profitability are strictly restricted to the Business Owner role.
-
----
-
-## Slide 9: Requirements Traceability
-
-### Linking Problems to Code
-
-| Ground Problem | Requirement ID | Requirement Description | Database Implementation |
-|----------------|----------------|-------------------------|-------------------------|
-| Unexplained cash deficits | REQ FUN EXP 01 | Operational Expense module | Table: Operational_Expenses, Trigger: TRG Expense Insert |
-| Informal labor tracking and ghost worker risk | REQ FUN ATT 02 | Reject duplicate attendance entries | Table: Attendance (Composite Unique Key) |
-| Manual URA tax transcription errors | REQ FUN TAX 01 | URA Summary Generation | Stored Procedure: GenerateURA Summary |
-
----
-
-## Slide 10: Conclusion and Next Steps
-
-### Project Delivery and Future Enhancements
-
-- Conclusion: The DCMS architecture is directly driven by the operational bottlenecks observed at Deniz Construction Limited. Every functional requirement maps to a specific database entity, trigger or stored procedure.
-- Next Steps: Deployment of the system on the existing office laptop, accompanied by a simplified User Manual for the Sales Manager.
-- Future Enhancements: Features such as a formal Secretary role or advanced logistics tracking are logged in a Future Enhancements Backlog for post academic implementation.
+Speaker 10 | 1 minute. Recap what Group K observed, the requirement it produced and what still needs verification. Invite questions.

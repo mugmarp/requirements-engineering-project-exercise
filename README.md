@@ -96,7 +96,7 @@ The system follows a Dual Phase architecture established from ground observation
 
 ## Format Standard
 
-All documents are generated from JSON specs by `build/scripts/build_docx.py` and `build/scripts/build_pptx.py` and conform to fixed standards.
+All documents are generated from JSON specs by `build/scripts/build_docx.py` and `build/scripts/build_pptx.mjs` and conform to fixed standards.
 
 ### Word Documents (.docx)
 
@@ -134,9 +134,9 @@ To rebuild Master Document (Phases 2-5):
 python3 build/scripts/build_docx.py build/specs/spec_master.json project_deliverables/Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx
 ```
 
-To rebuild Presentation Deck:
+To rebuild the presentation deck, use Node.js with `@oai/artifact-tool` available to the builder. Pass the prototype PNG or JPEG as the optional third argument to fill slide 7.
 ```bash
-python3 build/scripts/build_pptx.py build/specs/spec_presentation_pptx.json project_deliverables/PhaseFinal_Grand-Project-Presentation.pptx
+node build/scripts/build_pptx.mjs build/specs/spec_presentation_pptx.json project_deliverables/PhaseFinal_Grand-Project-Presentation.pptx
 ```
 
 To rebuild Project Deliverables Guide:

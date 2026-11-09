@@ -10,20 +10,24 @@
   "slides": [
     {
       "title": "Deniz Construction Management System",
-      "subtitle": "Requirements Engineering and Database Design",
       "content": [
         {
           "type": "para",
-          "text": "Group K"
+          "text": "Deniz Construction Limited, Mbarara"
         },
         {
           "type": "para",
-          "text": "SWE2102 Requirements Engineering"
+          "text": "Group K, SWE2102 Requirements Engineering"
         },
         {
           "type": "para",
           "text": "Mbarara University of Science and Technology"
         }
+      ],
+      "notes": [
+        "Speaker 1 | 30 seconds. Introduce the client, a construction materials business that produces blocks, pavers and kerbs. State that this is Group K’s requirements engineering project.",
+        "Rehearsal plan. 14 minutes of content, 1 minute for handoffs and about 5 minutes of Q&A. Assign the ten speaking slots using members’ actual contributions. Each member should prepare one sentence about their own work and one question they can answer.",
+        "Source. Groups Presentation Guide for SWE2102, 10 November 2026."
       ]
     },
     {
@@ -78,141 +82,154 @@
             ]
           ]
         }
+      ],
+      "notes": [
+        "Continue the introduction | 30 seconds. Introduce Group K and move to the problem and scope.",
+        "Source. Original Group K presentation JSON."
       ]
     },
     {
-      "title": "The Real Problem",
-      "subtitle": "Operational Bottlenecking and Cash Vulnerability",
+      "title": "Problem and project scope",
       "content": [
         {
-          "type": "bullets",
-          "items": [
-            "The Super Manager Bottleneck: One person acts as supervisor, cashier, payroll distributor and record keeper.",
-            "Unexplained Cash Deficits: Manual computation of cash shortages at the end of the day without a tool to log operational expenses.",
-            "Informal Labor Practices: Daily cash payouts based on memory, with no formal attendance tracking.",
-            "Data Vulnerability: Records are kept in physical books and on a single local laptop with no cloud backup."
-          ]
+          "type": "section",
+          "heading": "One primary operator",
+          "text": "The Sales Manager handles sales, records and cash reconciliation. The Owner reviews the daily report."
+        },
+        {
+          "type": "section",
+          "heading": "During the day",
+          "text": "Record sales, update stock and print receipts while customers collect their purchases."
+        },
+        {
+          "type": "section",
+          "heading": "At the end of the day",
+          "text": "Record expenses, compare expected cash with the physical count and save the daily report."
         }
+      ],
+      "notes": [
+        "Speaker 2 | 2 minutes. Explain why the Sales Manager is the primary user and why the Owner needs a finalized report. Deniz takes payment upfront. The group observed daytime receipting and learned that the Sales Manager uses the laptop to process deficits.",
+        "Q&A prompt. Why design two workflows? Daytime receipting has to happen at the sale, while checking cash and saving the daily report happens at close.",
+        "Sources. Phase 1 Elicitation and Stakeholder Analysis, sections 2 and 5. Master specification, Part 1 scope and REC requirements."
       ]
     },
     {
-      "title": "Elicitation Techniques and Field Realities",
-      "subtitle": "What We Actually Observed",
+      "title": "Stakeholders and elicitation methods",
       "content": [
         {
-          "type": "bullets",
-          "items": [
-            "Direct Observation: The laptop was powered on and actively used during the day. A printer is on site and physical receipts were being printed for customers as trucks loaded.",
-            "Semi Structured Interview: Conducted with the Sales Manager to understand payment channels (Cash, Mobile Money, Bank), tax filing processes and primary pain points regarding cash insecurity.",
-            "Environmental Scan: Customers transport their own goods. Trucks load in bulk. Site has CCTV cameras, indicating baseline security awareness."
-          ]
+          "type": "section",
+          "heading": "Stakeholders",
+          "text": "Sales Manager and Owner. Workers and customers are affected. URA is the external regulator."
+        },
+        {
+          "type": "section",
+          "heading": "Direct observation",
+          "text": "We saw the laptop in use and receipts being printed as trucks loaded."
+        },
+        {
+          "type": "section",
+          "heading": "Semi-structured interview",
+          "text": "The Sales Manager reported upfront payments by cash, Mobile Money or bank deposit."
         }
+      ],
+      "notes": [
+        "Speaker 3 | 1 minute. Distinguish the primary operator, the report audience and the affected stakeholders. The Sales Manager was interviewed during the single site visit. The Owner and workers were unavailable for interviews.",
+        "Speaker 4 | 1 minute. Explain what each method contributed. Observation showed the timing of receipting. The interview provided payment rules that were not visible from truck loading alone.",
+        "Q&A prompt. Why combine observation with an interview? Each answered a different question about how the work is done.",
+        "Source. Phase 1 Elicitation and Stakeholder Analysis, sections 4 to 6."
       ]
     },
     {
-      "title": "Challenges in Elicitation",
-      "subtitle": "Documented Limitations",
+      "title": "Group K’s elicitation example",
       "content": [
         {
-          "type": "bullets",
-          "items": [
-            "The Gatekeeper Effect: The Sales Manager was hesitant to share deep financial workflows, such as exact tax calculations and cash storage protocols.",
-            "Inaccessibility: The Business Owner, Site Workers could not be approached directly. These are unresolvable gaps.",
-            "No Follow up Feasibility: The Sales Manager was unwilling to provide further information and a return visit to the site is not possible. The project scope is locked."
-          ]
+          "type": "section",
+          "heading": "Observation",
+          "text": "Receipts were printed while customers’ trucks were being loaded."
+        },
+        {
+          "type": "section",
+          "heading": "Limitation",
+          "text": "We could see receipts being printed but could not inspect the fields on them."
+        },
+        {
+          "type": "section",
+          "heading": "Design decision",
+          "text": "Print a receipt when the sale is saved. Specify the receipt fields separately."
         }
+      ],
+      "notes": [
+        "Speaker 5 | 2 minutes. Explain the difference between timing and content. Seeing a receipt printed supports immediate receipting. It does not establish what the existing receipt contains. We recorded that gap because a follow-up visit was not feasible.",
+        "Q&A prompt. What did the receipt observation change? It gave us evidence that recording sales and printing receipts had to be supported during the day.",
+        "Sources. Phase 1 Elicitation and Stakeholder Analysis, sections 5 and 6. Master specification, REQ-FUN-SAL-04."
       ]
     },
     {
-      "title": "Strategic Business Synthesis",
-      "subtitle": "How We Bridged the Information Gaps",
+      "title": "Key requirements and the offline check",
       "content": [
         {
-          "type": "bullets",
-          "items": [
-            "Deficit Root Cause: In cash heavy local SMEs, end of day shortages are rarely theft. They are almost always unrecorded petty cash expenses. The system must allow logging of these expenses to balance the till.",
-            "Dual Phase Workflow: Because physical receipts are printed during the day, the system cannot be evening only. It must support real time transaction processing, followed by a dedicated evening reconciliation module.",
-            "Remote Access Reality: Since the owner visits daily, a live remote dashboard is unnecessary. Cloud technology is strictly for automated nightly disaster recovery and asynchronous historical review."
-          ]
+          "type": "section",
+          "heading": "Post sales and print receipts",
+          "text": "Give customers a receipt while their truck is being loaded."
+        },
+        {
+          "type": "section",
+          "heading": "Log each cash expense",
+          "text": "Account for cash paid out on the selected business date."
+        },
+        {
+          "type": "section",
+          "heading": "Reconcile and close the day",
+          "text": "Compare the cash count with expected cash and save the final report for the Owner."
+        },
+        {
+          "type": "section",
+          "heading": "Offline resilience (REQ-NFR-PER-01)",
+          "text": "Disconnect the laptop, post a sale and print its receipt. Check that the sale is stored locally."
         }
+      ],
+      "notes": [
+        "Speaker 6 | 1.5 minutes. Explain the three functional examples and the person each helps. Sale entry and printing are REQ-FUN-SAL-01 and REQ-FUN-SAL-04. Expense logging is REQ-FUN-REC-02. Cash variance and closing are REQ-FUN-REC-04 and REQ-FUN-REC-05.",
+        "Speaker 7 | 1.5 minutes. Explain why the system should handle a sale without internet. Present the disconnect, save, print and local storage sequence as a planned pass check.",
+        "Q&A prompt. What makes the NFR measurable? The test has a defined offline condition and observable outcomes for posting, printing and local storage.",
+        "Source. Master specification, Part 1 functional and non-functional requirements."
       ]
     },
     {
-      "title": "The Proposed Solution",
-      "subtitle": "Dual Phase Operations Management System",
+      "title": "Close of Day prototype",
       "content": [
         {
-          "type": "bullets",
-          "items": [
-            "Phase 1: Real Time Point of Sale. During the day, the system processes individual sales, calculates VAT, updates inventory and prints physical receipts.",
-            "Phase 2: End of Day Reconciliation. In the evening, the system allows the Sales Manager to balance multi channel payment drawers, log operational expenses, compute cash variances and generate a final daily summary report for the Business Owner.",
-            "Excluded Features: Credit and debtors modules are excluded, as the business operates on a strict no credit policy."
-          ]
+          "type": "screenshot",
+          "text": "Close of Day screenshot to be added",
+          "caption": "Prototype with sample data"
         }
+      ],
+      "notes": [
+        "Before presenting, insert one large screenshot of the actual Close of Day prototype. Use sample data. Keep the business date, three payment-channel totals, expected and actual cash, variance and explanation visible.",
+        "Speaker 8 | 1.5 minutes. Point to the business date and the separate recorded activity for Cash, Mobile Money and Bank Deposit. Explain that the three totals belong to the selected date.",
+        "Speaker 9 | 1.5 minutes. Walk through the sample from the verification plan. UGX 450,000 expected, UGX 445,000 counted and a UGX 5,000 deficit. A nonzero variance requires an explanation. Reflect on why separating two business dates matters. Closing one day must preserve its report without clearing or mixing activity for another date.",
+        "Q&A prompt. Why save the close by date? The Owner needs to reopen the same finalized report, and a second close must return the saved result.",
+        "Source. Master specification, REQ-FUN-REC-01 through REQ-FUN-REC-05 and Part 3 verification cases. Figures are sample data."
       ]
     },
     {
-      "title": "Database Architecture for SWE1205",
-      "subtitle": "Advanced SQL Implementation",
+      "title": "What we learned",
       "content": [
         {
-          "type": "bullets",
-          "items": [
-            "Normalization: Database normalized to 3NF to eliminate redundancy across Workers, Attendance, Products, Sales and Operational Expenses.",
-            "Stored Procedures: CalculateVAT fetches the rate from a System Settings table and applies it to the subtotal.",
-            "Triggers: TRG Sales Insert automatically reduces Current Stock in the Products table upon sale insertion.",
-            "Role Based Access Control: Views like View Owner Profitability are strictly restricted to the Business Owner role."
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Requirements Traceability",
-      "subtitle": "Linking Problems to Code",
-      "content": [
+          "type": "section",
+          "heading": "Fieldwork shaped the design",
+          "text": "Seeing when receipts were printed showed us when the system needed to record sales."
+        },
         {
-          "type": "table",
-          "header": [
-            "Ground Problem",
-            "Requirement ID",
-            "Requirement Description",
-            "Database Implementation"
-          ],
-          "rows": [
-            [
-              "Unexplained cash deficits",
-              "REQ-FUN-EXP-01",
-              "Operational Expense module",
-              "Table: Operational_Expenses, Trigger: TRG Expense Insert"
-            ],
-            [
-              "Informal labor tracking and ghost worker risk",
-              "REQ-FUN-ATT-02",
-              "Reject duplicate attendance entries",
-              "Table: Attendance (Composite Unique Key)"
-            ],
-            [
-              "Manual URA tax transcription errors",
-              "REQ-FUN-TAX-01",
-              "URA Summary Generation",
-              "Stored Procedure: GenerateURA Summary"
-            ]
-          ]
+          "type": "section",
+          "heading": "The prototype shows the proposed workflow",
+          "text": "The next checks are offline sales and printing, and a close that preserves each business date."
         }
-      ]
-    },
-    {
-      "title": "Conclusion and Next Steps",
-      "subtitle": "Project Delivery and Future Enhancements",
-      "content": [
-        {
-          "type": "bullets",
-          "items": [
-            "Conclusion: The DCMS architecture is directly driven by the operational bottlenecks observed at Deniz Construction Limited. Every functional requirement maps to a specific database entity, trigger, or stored procedure.",
-            "Next Steps: Deployment of the system on the existing office laptop, accompanied by a simplified User Manual for the Sales Manager.",
-            "Future Enhancements: advanced logistics tracking are logged in a Future Enhancements Backlog for post academic implementation."
-          ]
-        }
+      ],
+      "notes": [
+        "Speaker 10 | 1 minute. Recap what Group K observed, the requirement it produced and what still needs verification. Invite questions.",
+        "Individual Q&A | About 5 minutes. Each person should be able to state their own contribution and explain one project decision, requirement or course concept. Use the prompts on the previous slides to rehearse.",
+        "Sources. Phase 1 field observations and master specification verification plan."
       ]
     }
   ]
