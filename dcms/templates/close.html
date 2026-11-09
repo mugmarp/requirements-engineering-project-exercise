@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block title %}Close of Day{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">Business date {{ day }}</p>
+    <h1>Close of Day</h1>
+    <p>{{ 'Final daily report for the Business Owner' if saved else 'Review recorded activity and reconcile physical cash.' }}</p>
+  </div>
+  <div class="actions screen-only">
+    <a class="button secondary" href="{{ url_for('home') }}">Change date</a>
+    {% if saved %}<button type="button" data-print>Print report</button>{% endif %}
+  </div>
+</div>
+{% if error %}<p class="notice" role="alert">{{ error }}</p>{% endif %}
+{% if saved %}
+  {% set totals = {'cash': saved.cash_activity, 'mobile_money': saved.mobile_money_activity, 'bank_deposit': saved.bank_activity} %}
+{% else %}
+  {% set totals = activity.channel_totals %}
+{% endif %}
+<section aria-labelledby="payment-activity-heading">
+  <div class="section-heading"><h2 id="payment-activity-heading">Recorded payment activity</h2>{% if saved %}<span class="status closed">Closed · Saved report</span>{% else %}<span class="status">Open</span>{% endif %}</div>
+  <div class="channel-grid">
+    {% for channel, label in channels.items() %}
+    <article class="panel channel">
+      <p>{{ label }}</p>
+      <strong>UGX {{ totals[channel]|money }}</strong>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+{% if saved %}
+<div class="close-grid printable">
+  <section class="panel">
+    <h2>Expected cash</h2>
+    <dl class="ledger">
+      <div><dt>Opening cash</dt><dd>UGX {{ saved.opening_cash|money }}</dd></div>
+      <div><dt>Cash sales</dt><dd>UGX {{ saved.cash_activity|money }}</dd></div>
+      <div><dt>Cash expenses</dt><dd>UGX {{ saved.expenses|money }}</dd></div>
+      <div class="strong"><dt>Expected cash</dt><dd>UGX {{ saved.expected_cash|money }}</dd></div>
+    </dl>
+  </section>
+  <section class="panel">
+    <h2>Physical cash count</h2>
+    <dl class="ledger">
+      <div><dt>Cash counted</dt><dd>UGX {{ saved.actual_cash|money }}</dd></div>
+      <div class="strong"><dt>Variance</dt><dd>UGX {{ saved.variance|money }}</dd></div>
+    </dl>
+    <p class="variance-tag {{ 'deficit' if saved.variance < 0 else 'balanced' }}">
+      {% if saved.variance < 0 %}UGX {{ (-saved.variance)|money }} deficit{% elif saved.variance > 0 %}UGX {{ saved.variance|money }} surplus{% else %}Cash balanced{% endif %}
+    </p>
+    {% if saved.explanation %}<h3>Variance explanation</h3><p class="explanation">{{ saved.explanation }}</p>{% endif %}
+    <p class="muted">Saved {{ saved.closed_at|local_time }}</p>
+  </section>
+</div>
+{% else %}
+<div class="close-grid">
+  <section class="panel">
+    <h2>Expected cash</h2>
+    <dl class="ledger">
+      <div><dt>Opening cash</dt><dd>UGX {{ activity.opening_cash|money }}</dd></div>
+      <div><dt>Cash sales</dt><dd>UGX {{ totals.cash|money }}</dd></div>
+      <div><dt>Cash expenses</dt><dd>UGX {{ activity.total_expenses|money }}</dd></div>
+      <div class="strong"><dt>Expected cash</dt><dd>UGX {{ activity.expected_cash|money }}</dd></div>
+    </dl>
+    <details>
+      <summary>Set opening cash</summary>
+      <form class="inline-form" method="post" action="{{ url_for('opening_cash', day=day) }}">
+        <input type="hidden" name="csrf" value="{{ csrf_token }}">
+        <label>Opening cash (UGX)<input name="amount" inputmode="decimal" required value="{{ activity.opening_cash|amount }}"></label>
+        <button type="submit" class="secondary">Save float</button>
+      </form>
+    </details>
+    <details {% if activity.expenses or expense_entry %}open{% endif %}>
+      <summary>Cash expenses</summary>
+      <ul class="expense-list">
+        {% for item in activity.expenses %}<li><span>{{ item.description }}</span><strong>UGX {{ item.amount|money }}</strong></li>{% endfor %}
+      </ul>
+      <form method="post" action="{{ url_for('expense', day=day) }}">
+        <input type="hidden" name="csrf" value="{{ csrf_token }}">
+        <input type="hidden" name="request_key" value="{{ expense_key }}">
+        <label>Expense description<input name="description" maxlength="180" required value="{{ expense_entry.get('description', '') }}"></label>
+        <label>Amount (UGX)<input name="amount" inputmode="decimal" required value="{{ expense_entry.get('amount', '') }}"></label>
+        <button type="submit" class="secondary">Record expense</button>
+      </form>
+    </details>
+  </section>
+  <section class="panel">
+    <h2>Physical cash count</h2>
+    <form id="close-form" method="post" data-expected="{{ activity.expected_cash }}">
+      <input type="hidden" name="csrf" value="{{ csrf_token }}">
+      <input type="hidden" name="revision" value="{{ row.revision }}">
+      <label>Cash counted (UGX)<input name="actual_cash" id="actual-cash" inputmode="decimal" required value="{{ posted.get('actual_cash', '') }}"></label>
+      <p id="variance-preview" class="variance-tag" aria-live="polite">Enter the cash count to see the variance.</p>
+      <label>Variance explanation <small>Required when cash differs from expected</small><textarea id="explanation" name="explanation" maxlength="500" rows="3">{{ posted.get('explanation', '') }}</textarea></label>
+      <p class="muted">Closing saves the report and prevents new financial activity on this date.</p>
+      <button type="submit">Close date and save report</button>
+    </form>
+  </section>
+</div>
+{% endif %}
+{% endblock %}

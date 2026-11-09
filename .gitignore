@@ -42,3 +42,6 @@ NewiNFO/
 
 # Hermes runtime
 .hermes/
+
+# DCMS local data and Python environment
+instance/

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Daily Sales{% endblock %}
+{% macro line(selected='', quantity='1') %}
+<div class="sale-line">
+  <label>Product
+    <select name="product" required>
+      <option value="">Choose a product</option>
+      {% for p in products %}
+      <option value="{{ p.id }}" data-price="{{ p.unit_price }}" {% if selected == p.id|string %}selected{% endif %}>{{ p.description }} · {{ p.stock }} {{ p.unit }} in stock</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Quantity<input name="quantity" type="number" min="1" max="10000" step="1" required value="{{ quantity }}"></label>
+  <button type="button" class="secondary remove-line" aria-label="Remove product line">Remove</button>
+</div>
+{% endmacro %}
+{% block content %}
+<div class="page-heading">
+  <div><p class="eyebrow">Business date {{ day }}</p><h1>Daily Sales</h1><p>Record a paid sale and issue a receipt.</p></div>
+  <a class="button secondary" href="{{ url_for('home') }}">Change date</a>
+</div>
+{% if error %}<p class="notice" role="alert">{{ error }}</p>{% endif %}
+<form class="sales-layout" method="post" id="sale-form" data-vat="{{ rate }}">
+  <input type="hidden" name="csrf" value="{{ csrf_token }}">
+  <input type="hidden" name="request_key" value="{{ request_key }}">
+  <div class="panel">
+    <h2>Sale details</h2>
+    <label>Customer name<input name="customer" maxlength="100" required value="{{ posted.get('customer', '') }}"></label>
+    <h2 class="subheading">Product lines</h2>
+    <div id="sale-lines">
+      {% for selected, quantity in lines %}{{ line(selected, quantity) }}{% endfor %}
+    </div>
+    <template id="new-line">{{ line() }}</template>
+    <button class="secondary" type="button" id="add-line">Add product line</button>
+  </div>
+  <div class="panel">
+    <h2>Payment</h2>
+    <dl class="ledger sale-totals">
+      <div><dt>Subtotal</dt><dd id="subtotal-preview">UGX 0</dd></div>
+      <div><dt>VAT ({{ '%g'|format(rate / 100) }}%)</dt><dd id="vat-preview">UGX 0</dd></div>
+      <div class="strong"><dt>Total due</dt><dd id="sale-total" aria-live="polite">UGX 0</dd></div>
+    </dl>
+    <label>Payment channel
+      <select name="channel" required id="payment-channel">
+        <option value="">Choose a channel</option>
+        {% for key, label in channels.items() %}<option value="{{ key }}" {% if posted.get('channel') == key %}selected{% endif %}>{{ label }}</option>{% endfor %}
+      </select>
+    </label>
+    <label><span id="reference-label">Payment reference (optional)</span><input name="reference" maxlength="100" value="{{ posted.get('reference', '') }}"></label>
+    <label>Amount received (UGX)<input name="received" id="amount-received" type="text" inputmode="decimal" required value="{{ posted.get('received', '') }}"></label>
+    <button class="secondary" type="button" id="use-total">Use total due</button>
+    <button class="full-width" type="submit">Post sale and open receipt</button>
+  </div>
+</form>
+{% endblock %}

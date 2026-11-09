@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}DCMS{% endblock %} | Deniz Construction</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="{{ url_for('home') }}"><span class="brand-mark" aria-hidden="true">D</span><span>Deniz Construction <small>Operations Management</small></span></a>
+    {% if day %}
+    <nav aria-label="Business date">
+      <a href="{{ url_for('sales', day=day) }}" {% if active == 'sales' %}aria-current="page"{% endif %}>Daily Sales</a>
+      <a href="{{ url_for('reconciliation', day=day) }}" {% if active == 'close' %}aria-current="page"{% endif %}>Close of Day</a>
+      <a href="{{ url_for('receipt_history', day=day) }}" {% if active == 'history' %}aria-current="page"{% endif %}>Receipts</a>
+    </nav>
+    {% endif %}
+    <span class="demo-badge">Prototype · Sample data</span>
+  </div>
+</header>
+<main class="shell">
+  {% block content %}{% endblock %}
+</main>
+<footer class="shell site-footer">DCMS · Group K · SWE2102 Requirements Engineering</footer>
+</body>
+</html>

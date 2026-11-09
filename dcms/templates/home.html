@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Business dates{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <div><p class="eyebrow">DCMS</p><h1>Business dates</h1><p>Open a date to record sales or review a saved close.</p></div>
+  <form class="inline-form" method="post" action="{{ url_for('create_day') }}">
+    <input type="hidden" name="csrf" value="{{ csrf_token }}">
+    <label>Business date<input type="date" name="business_date" required value="{{ today }}"></label>
+    <button type="submit">Open date</button>
+  </form>
+</div>
+<div class="panel day-list">
+{% for row in days %}
+  <div class="day-row">
+    <div><strong>{{ row.business_date }}</strong><span class="status">{{ row.status|capitalize }}</span></div>
+    <div class="actions">
+      {% if row.status == 'open' %}<a class="button secondary" href="{{ url_for('sales', day=row.business_date) }}">Daily Sales</a>{% endif %}
+      <a class="button" href="{{ url_for('reconciliation', day=row.business_date) }}">{{ 'Saved report' if row.status == 'closed' else 'Close of Day' }}</a>
+    </div>
+  </div>
+{% else %}
+  <p>No business dates are open. Choose a date to start.</p>
+{% endfor %}
+</div>
+{% endblock %}

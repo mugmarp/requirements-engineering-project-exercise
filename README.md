@@ -40,6 +40,23 @@ The system being specified is a Dual Phase Operations Management System.
 - **Phase 1 (Day):** Real Time Point of Sale — processes individual sales, calculates VAT, updates inventory, prints physical receipts for customers as trucks load.
 - **Phase 2 (Evening):** End of Day Reconciliation Engine — balances multi channel payment drawers (Cash, Mobile Money, Bank Deposit), logs operational expenses, computes cash variances (deficit/surplus), generates daily summary report for the Business Owner.
 
+## Run the web prototype
+
+From the repository root, initialize a sample database and start the web server.
+
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python -m dcms --database instance/demo.sqlite3 init --demo
+.venv/bin/python -m dcms --database instance/demo.sqlite3 serve
+```
+
+Open [the local DCMS preview](http://127.0.0.1:8080). On **10 November 2026**, open Close of Day and enter `445000` with a sample explanation. The seeded activity gives UGX 450,000 expected and a UGX 5,000 deficit. Use **11 November 2026** to demonstrate a new sale and view its receipt without changing the presentation example. The seed command requires a fresh database path. To rehearse again, choose a new filename rather than overwriting an existing database.
+
+Run the checks with `.venv/bin/python -m unittest discover -s tests -v`. To change the sample VAT rate, use `.venv/bin/python -m dcms --database instance/demo.sqlite3 set-vat 18`. Changes apply to future sales.
+
+For hosting, put the database on persistent local storage for a single app instance. Set `DCMS_DB_PATH`, `DCMS_DEMO_PASSWORD` and a stable `DCMS_SECRET_KEY` through the host's environment. Use HTTPS, enable `--secure-cookies` and sign in as `demo`. Use sample data in the hosted prototype. The standalone offline desktop app is a separate release described in the [implementation plan](IMPLEMENTATION_PLAN.md).
+
 ## Repository Layout
 
 ```
@@ -134,9 +151,9 @@ To rebuild Master Document (Phases 2-5):
 python3 build/scripts/build_docx.py build/specs/spec_master.json project_deliverables/Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx
 ```
 
-To rebuild the presentation deck, use Node.js with `@oai/artifact-tool` available to the builder. Pass the prototype PNG or JPEG as the optional third argument to fill slide 7.
+To rebuild the presentation deck, use Node.js with `@oai/artifact-tool` available to the builder. The third argument supplies the screenshot for slide 7.
 ```bash
-node build/scripts/build_pptx.mjs build/specs/spec_presentation_pptx.json project_deliverables/PhaseFinal_Grand-Project-Presentation.pptx
+node build/scripts/build_pptx.mjs build/specs/spec_presentation_pptx.json project_deliverables/PhaseFinal_Grand-Project-Presentation.pptx project_deliverables/PhaseFinal_Close-of-Day.png
 ```
 
 To rebuild Project Deliverables Guide:

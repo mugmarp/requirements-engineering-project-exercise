@@ -111,7 +111,7 @@
         "Speaker 2 | 2 minutes. Explain why the Sales Manager is the primary user and why the Owner needs a finalized report. Deniz takes payment upfront. The group observed daytime receipting and learned that the Sales Manager uses the laptop to process deficits.",
         "Q&A prompt. Why design two workflows? Daytime receipting has to happen at the sale, while checking cash and saving the daily report happens at close.",
         "Sources. Phase 1 Elicitation and Stakeholder Analysis, sections 2 and 5. Master specification, Part 1 scope and REC requirements.",
-        "Technical Q&A. Each sale can have multiple product lines. The Sales_Items trigger deducts stock from Products. If any line is oversold, the whole sale rolls back. The receipt prints after commit. The database design retains original receipts and records voids or refunds as linked adjustments."
+        "Technical Q&A. Each sale can have multiple product lines. The Sales_Items trigger deducts stock from Products. If any line is oversold, the whole sale rolls back. The receipt prints after commit. The database design retains original receipts and records voids or refunds as linked adjustments. The web prototype uses SQLite and enforces stock changes in the sale transaction."
       ]
     },
     {
@@ -186,12 +186,12 @@
         {
           "type": "section",
           "heading": "Offline resilience (REQ-NFR-PER-01)",
-          "text": "Disconnect the laptop, post a sale and print its receipt. Check that the sale is stored locally."
+          "text": "Standalone app test. With internet disconnected, post a sale, print its receipt and verify local storage."
         }
       ],
       "notes": [
         "Speaker 6 | 1.5 minutes. Explain the three functional examples and the person each helps. Sale entry and printing are REQ-FUN-SAL-01 and REQ-FUN-SAL-04. Expense logging is REQ-FUN-REC-02. Cash variance and closing are REQ-FUN-REC-04 and REQ-FUN-REC-05.",
-        "Speaker 7 | 1.5 minutes. Explain why the system should handle a sale without internet. Present the disconnect, save, print and local storage sequence as a planned pass check.",
+        "Speaker 7 | 1.5 minutes. Explain why the installed desktop app must handle a sale without internet. The disconnect, save, print and local storage sequence is a planned test for that application.",
         "Q&A prompt. What makes the NFR measurable? The test has a defined offline condition and observable outcomes for posting, printing and local storage.",
         "Source. Master specification, Part 1 functional and non-functional requirements.",
         "Traceability reference for Q&A. The master contains the full matrix. These are the 19 requirement mappings.\nREQ-FUN-REC-02 | Operational Expense Logging | Operational_Expenses linked to Business_Day\nREQ-FUN-REC-03 | Expected Cash Computation | Daily_Payment_Activity and Business_Day opening cash, less Operational_Expenses\nREQ-FUN-REC-04 | Variance Reporting with Mandatory Explanation | Daily_Reconciliation table with Variance and Explanation columns\nREQ-FUN-REC-01 | Daily Payment Activity by Channel | Daily_Payment_Activity grouped by business date and payment method\nREQ-FUN-SAL-01 | Transactional Sale Entry | Sales and Sales_Items posted in one transaction\nREQ-FUN-REC-05 | Daily Summary Report Generation | CloseDay and the saved Daily_Reconciliation report\nREQ-FUN-SAL-02 | Automated VAT Calculation | CalculateVAT stored procedure (Subtotal * 0.18)\nREQ-FUN-SAL-03 | Sequential Receipts and Sale Adjustments | Sales and Sale_Adjustments preserve the original receipt and correction history\nREQ-FUN-SAL-04 | Physical Receipt Printing | Application prints after the sale transaction commits\nREQ-FUN-SAL-05 | Inventory Deduction Trigger | AFTER INSERT on Sales_Items updates Products.Current_Stock\nREQ-FUN-ATT-01 | Worker Attendance Logging with Unique Daily Constraint | Attendance table with PK (Worker_ID, Date)\nREQ-FUN-ATT-02 | Daily Payroll Eligibility | Payroll_Eligibility view joining Workers and Attendance\nREQ-FUN-TAX-01 | URA Summary Report | URA_Summary shows recorded VAT and separate adjustments\nREQ-FUN-BAK-01 | Automated Nightly Backup | Backup job scheduled after evening reconciliation\nREQ-NFR-SEC-01 | Role Based Access Control | Database roles and restricted views\nREQ-NFR-SEC-02 | Immutable Audit Trail | Audit_Log table with insert only semantics\nREQ-NFR-USR-01 | Low Literacy Interface | UI with icons and minimal text\nREQ-NFR-PER-01 | Offline Resilience | Local database with queued sync\nREQ-NFR-PER-02 | Hardware Compatibility | Optimized queries and indexing"
@@ -207,7 +207,7 @@
         }
       ],
       "notes": [
-        "Before presenting, insert one large screenshot of the actual Close of Day prototype. Use sample data. Keep the business date, three payment-channel totals, expected and actual cash, variance and explanation visible.",
+        "The screenshot shows the saved Close of Day report from the working web prototype. All figures are sample data.",
         "Speaker 8 | 1.5 minutes. Point to the business date and the separate recorded activity for Cash, Mobile Money and Bank Deposit. Explain that the three totals belong to the selected date.",
         "Speaker 9 | 1.5 minutes. Walk through the sample from the verification plan. UGX 450,000 expected, UGX 445,000 counted and a UGX 5,000 deficit. A nonzero variance requires an explanation. Reflect on why separating two business dates matters. Closing one day must preserve its report without clearing or mixing activity for another date.",
         "Q&A prompt. Why save the close by date? The Owner needs to reopen the same finalized report, and a second close must return the saved result.",
@@ -226,7 +226,7 @@
         {
           "type": "section",
           "heading": "The prototype shows the proposed workflow",
-          "text": "The next checks are offline sales and printing, and a close that preserves each business date."
+          "text": "The web prototype demonstrates the workflow. Offline operation and physical printing still need tests on the standalone app."
         }
       ],
       "notes": [

@@ -59,14 +59,14 @@ Speaker 5 | 2 minutes. Explain the difference between timing and content. Seeing
 - **Post sales and print receipts.** Give customers a receipt while their truck is being loaded.
 - **Log each cash expense.** Account for cash paid out on the selected business date.
 - **Reconcile and close the day.** Compare the cash count with expected cash and save the final report for the Owner.
-- **Offline resilience (REQ-NFR-PER-01).** Disconnect the laptop, post a sale and print its receipt. Check that the sale is stored locally.
+- **Offline resilience (REQ-NFR-PER-01).** Standalone app test. With internet disconnected, post a sale, print its receipt and verify local storage.
 
 Speaker 6 | 1.5 minutes. Explain the three functional examples and the person each helps. Sale entry and printing are REQ-FUN-SAL-01 and REQ-FUN-SAL-04. Expense logging is REQ-FUN-REC-02. Cash variance and closing are REQ-FUN-REC-04 and REQ-FUN-REC-05.
-Speaker 7 | 1.5 minutes. Explain why the system should handle a sale without internet. Present the disconnect, save, print and local storage sequence as a planned pass check.
+Speaker 7 | 1.5 minutes. Explain why the installed desktop app must handle a sale without internet. The disconnect, save, print and local storage sequence is a planned test for that application.
 
 ## 7. Close of Day prototype
 
-Reserve this slide for one large Close of Day screenshot with sample data.
+![Saved Close of Day report with sample data](PhaseFinal_Close-of-Day.png)
 
 Speaker 8 | 1.5 minutes. Point to the business date and the separate recorded activity for Cash, Mobile Money and Bank Deposit. Explain that the three totals belong to the selected date.
 Speaker 9 | 1.5 minutes. Walk through the sample from the verification plan. UGX 450,000 expected, UGX 445,000 counted and a UGX 5,000 deficit. A nonzero variance requires an explanation. Reflect on why separating two business dates matters. Closing one day must preserve its report without clearing or mixing activity for another date.
@@ -74,6 +74,6 @@ Speaker 9 | 1.5 minutes. Walk through the sample from the verification plan. UGX
 ## 8. What we learned
 
 - **Fieldwork shaped the design.** Seeing when receipts were printed showed us when the system needed to record sales.
-- **The prototype shows the proposed workflow.** The next checks are offline sales and printing, and a close that preserves each business date.
+- **The prototype shows the proposed workflow.** The web prototype demonstrates the workflow. Offline operation and physical printing still need tests on the standalone app.
 
 Speaker 10 | 1 minute. Recap what Group K observed, the requirement it produced and what still needs verification. Invite questions.

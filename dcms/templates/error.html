@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block title %}DCMS message{% endblock %}
+{% block content %}
+<div class="panel"><h1>Action unavailable</h1><p role="alert">{{ message }}</p><a class="button" href="{{ url_for('home') }}">Business dates</a></div>
+{% endblock %}

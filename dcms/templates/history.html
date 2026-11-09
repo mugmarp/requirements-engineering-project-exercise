@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Receipts{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <div><p class="eyebrow">Business date {{ day }}</p><h1>Receipts</h1><p>Open a saved receipt to view or print it again.</p></div>
+  <a class="button secondary" href="{{ url_for('home') }}">Change date</a>
+</div>
+<div class="panel day-list">
+{% for sale in sales %}
+  <div class="day-row">
+    <div><strong>{{ '%06d'|format(sale.id) }} · {{ sale.customer }}</strong><p class="muted">{{ channels[sale.channel] }} · UGX {{ sale.total|money }}</p></div>
+    <a class="button secondary" href="{{ url_for('receipt_page', sale_id=sale.id) }}">View receipt</a>
+  </div>
+{% else %}
+  <p>No receipts have been posted for this date.</p>
+{% endfor %}
+</div>
+{% endblock %}

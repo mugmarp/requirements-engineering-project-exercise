@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Receipt {{ '%06d'|format(sale.id) }}{% endblock %}
+{% block content %}
+<div class="page-heading screen-only">
+  <div><p class="eyebrow">Business date {{ day }}</p><h1>Sale posted</h1><p>The receipt is ready to print or reprint.</p></div>
+  <div class="actions"><a class="button secondary" href="{{ url_for('sales', day=day) }}">New sale</a><button type="button" data-print>Print receipt</button></div>
+</div>
+<article class="panel printable receipt">
+  <h2>Deniz Construction Limited</h2>
+  <p>Sample receipt · {{ '%06d'|format(sale.id) }}</p>
+  <dl class="ledger">
+    <div><dt>Business date</dt><dd>{{ day }}</dd></div>
+    <div><dt>Posted</dt><dd>{{ sale.posted_at|local_time }}</dd></div>
+    <div><dt>Customer</dt><dd>{{ sale.customer }}</dd></div>
+    <div><dt>Payment channel</dt><dd>{{ channels[sale.channel] }}</dd></div>
+    {% if sale.payment_reference %}<div><dt>Reference</dt><dd>{{ sale.payment_reference }}</dd></div>{% endif %}
+  </dl>
+  <table class="receipt-lines">
+    <thead><tr><th scope="col">Item</th><th scope="col">Quantity</th><th scope="col">Unit price</th><th scope="col">Amount</th></tr></thead>
+    <tbody>
+      {% for line in lines %}<tr><td>{{ line.description }}</td><td>{{ line.quantity }} {{ line.unit }}</td><td>{{ line.unit_price|money }}</td><td>{{ line.line_total|money }}</td></tr>{% endfor %}
+    </tbody>
+  </table>
+  <dl class="ledger">
+    <div><dt>Subtotal</dt><dd>UGX {{ sale.subtotal|money }}</dd></div>
+    <div><dt>VAT ({{ '%g'|format(sale.vat_rate / 100) }}%)</dt><dd>UGX {{ sale.vat|money }}</dd></div>
+    <div class="strong"><dt>Total paid</dt><dd>UGX {{ sale.total|money }}</dd></div>
+  </dl>
+</article>
+{% endblock %}
