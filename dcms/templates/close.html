@@ -67,11 +67,11 @@
       <div><dt>Cash expenses</dt><dd>UGX {{ activity.total_expenses|money }}</dd></div>
       <div class="strong"><dt>Expected cash</dt><dd>UGX {{ activity.expected_cash|money }}</dd></div>
     </dl>
-    <details>
+    <details {{ 'open' if opening_entry }}>
       <summary>Set opening cash</summary>
-      <form class="inline-form" method="post" action="{{ url_for('opening_cash', day=day) }}">
+      <form class="inline-form" method="post" id="opening-form" data-dirty-guard data-review="opening" data-unsaved="{{ 'true' if opening_entry else 'false' }}" action="{{ url_for('opening_cash', day=day) }}">
         <input type="hidden" name="csrf" value="{{ csrf_token }}">
-        <label>Opening cash (UGX)<input name="amount" inputmode="decimal" required value="{{ activity.opening_cash|amount }}"></label>
+        <label>Opening cash (UGX)<input name="amount" inputmode="decimal" required value="{{ opening_entry.get('amount', activity.opening_cash|amount) }}"></label>
         <button type="submit" class="secondary">Save float</button>
       </form>
     </details>
@@ -80,7 +80,7 @@
       <div class="table-scroll"><table class="data-table expense-table"><thead><tr><th>Description</th><th class="numeric">Amount (UGX)</th></tr></thead><tbody>
         {% for item in activity.expenses %}<tr><td>{{ item.description }}</td><td class="numeric">{{ item.amount|money }}</td></tr>{% else %}<tr><td colspan="2" class="muted">No cash expenses recorded.</td></tr>{% endfor %}
       </tbody></table></div>
-      <form method="post" action="{{ url_for('expense', day=day) }}">
+      <form method="post" id="expense-form" data-dirty-guard data-review="expense" data-unsaved="{{ 'true' if expense_entry else 'false' }}" action="{{ url_for('expense', day=day) }}">
         <input type="hidden" name="csrf" value="{{ csrf_token }}">
         <input type="hidden" name="request_key" value="{{ expense_key }}">
         <label>Expense description<input name="description" maxlength="180" required value="{{ expense_entry.get('description', '') }}"></label>
@@ -91,14 +91,15 @@
   </section>
   <section class="panel">
     <h2>Physical cash count</h2>
-    <form id="close-form" method="post" data-expected="{{ activity.expected_cash }}">
+    <form id="close-form" method="post" data-dirty-guard data-review="close" data-unsaved="{{ 'true' if posted else 'false' }}" data-expected="{{ activity.expected_cash }}">
       <input type="hidden" name="csrf" value="{{ csrf_token }}">
       <input type="hidden" name="revision" value="{{ row.revision }}">
       <label>Cash counted (UGX)<input name="actual_cash" id="actual-cash" inputmode="decimal" required value="{{ posted.get('actual_cash', '') }}"></label>
       <p id="variance-preview" class="variance-tag" aria-live="polite">Enter the cash count to see the variance.</p>
       <label>Variance explanation <small>Required when cash differs from expected</small><textarea id="explanation" name="explanation" maxlength="500" rows="3">{{ posted.get('explanation', '') }}</textarea></label>
+      {% if unmarked %}<label class="checkbox-label"><input type="checkbox" name="unmarked_reviewed" value="{{ unmarked }}" required>I reviewed {{ unmarked }} unmarked worker(s). These workers are excluded from wage eligibility.</label>{% endif %}
       <p class="muted">Closing saves the report and prevents new financial activity on this date.</p>
-      <button type="submit">Close date and save report</button>
+      <div class="actions form-actions"><a class="button secondary" href="{{ url_for('home') }}" data-back>Cancel</a><button type="submit">Close date and save report</button></div>
     </form>
   </section>
 </div>

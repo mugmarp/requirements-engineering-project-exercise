@@ -8,7 +8,7 @@ from datetime import datetime, timedelta, date
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from flask import Flask, Response, abort, g, redirect, render_template, request, session, url_for
+from flask import Flask, Response, abort, g, redirect, render_template, request, session, url_for, flash
 
 from . import services
 from .analytics import overview
@@ -25,7 +25,7 @@ def create_app(database=DEFAULT_DB, *, password=None, secure=False):
         SESSION_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE="Lax",
         SESSION_COOKIE_SECURE=secure,
-        MAX_CONTENT_LENGTH=32_768,
+        MAX_CONTENT_LENGTH=262_144,
     )
 
     def db():
@@ -88,10 +88,19 @@ def create_app(database=DEFAULT_DB, *, password=None, secure=False):
             ).fetchone()
             if row:
                 day_status = row["status"]
+        navigation_url = ''
+        if request.method == 'POST':
+            if request.endpoint in ('create_worker',):
+                navigation_url=url_for('attendance',day=selected_day)
+            elif request.endpoint in ('opening_cash','expense','finalize_close'):
+                navigation_url=url_for('reconciliation',day=selected_day)
+            elif request.endpoint in ('bank_import','bank_match','bank_account_create','bank_reverse'):
+                navigation_url=url_for('bank_home',account_id=request.form.get('account_id') or None)
         return {
+            "navigation_url": navigation_url,
             "csrf_token": session["csrf_token"], "channels": services.CHANNELS,
             "day_status": day_status, "nav_day": nav_day if day_status else None,
-            "today": today,
+            "today": today, "is_sample": bool(db().execute("SELECT 1 FROM demo_metadata LIMIT 1").fetchone()),
 
         }
 
@@ -109,6 +118,11 @@ def create_app(database=DEFAULT_DB, *, password=None, secure=False):
     @app.template_filter("local_time")
     def local_time(value):
         return datetime.fromisoformat(value).astimezone(KAMPALA).strftime("%d %b %Y, %H:%M EAT")
+
+    @app.errorhandler(400)
+    @app.errorhandler(404)
+    def request_error(error):
+        return render_template('error.html', message=error.description), error.code
 
     @app.errorhandler(services.DomainError)
     def domain_error(error):
@@ -183,7 +197,8 @@ def create_app(database=DEFAULT_DB, *, password=None, secure=False):
             return redirect(url_for("reconciliation", day=day))
         products = db().execute("SELECT * FROM products WHERE active = 1 ORDER BY id").fetchall()
         return render_template(
-            "sales.html", active="sales", day=day, products=products, rate=services.vat_rate(db()),
+            "sales.html", active="sales", day=day, products=products, rate=services.vat_rate(db(), day),
+            bank_accounts=db().execute("SELECT * FROM bank_accounts ORDER BY name").fetchall(),
             posted=posted or {}, lines=lines or [("", "1")], error=error,
             request_key=(posted or {}).get("request_key") or secrets.token_hex(16),
         ), status
@@ -200,7 +215,7 @@ def create_app(database=DEFAULT_DB, *, password=None, secure=False):
             sale_id = services.post_sale(
                 db(), day, customer=posted.get("customer", ""), channel=posted.get("channel", ""),
                 reference=posted.get("reference", ""), received=posted.get("received", ""),
-                request_key=posted.get("request_key", ""), lines=lines,
+                request_key=posted.get("request_key", ""), lines=lines, bank_account_id=posted.get("bank_account_id") or None,
             )
         except services.DomainError as error:
             return sale_form(day, error=error, status=error.status, posted=posted, lines=lines)
@@ -209,7 +224,8 @@ def create_app(database=DEFAULT_DB, *, password=None, secure=False):
     @app.get("/receipts/<int:sale_id>")
     def receipt_page(sale_id):
         sale, lines = services.receipt(db(), sale_id)
-        return render_template("receipt.html", active="history", day=sale["business_date"], sale=sale, lines=lines)
+        bank_account = db().execute('SELECT b.* FROM bank_accounts b JOIN sale_bank_accounts a ON a.account_id=b.id WHERE a.sale_id=?',(sale_id,)).fetchone()
+        return render_template("receipt.html", active="history", day=sale["business_date"], sale=sale, lines=lines, bank_account=bank_account)
 
     @app.get("/days/<day>/receipts")
     def receipt_history(day):
@@ -222,34 +238,42 @@ def create_app(database=DEFAULT_DB, *, password=None, secure=False):
 
     @app.route("/days/<day>/attendance", methods=["GET", "POST"])
     def attendance(day):
-        error = None
-        status = 200
-        if request.method == "POST":
+        return attendance_page(day)
+
+    def attendance_page(day, *, worker_entry=None, worker_error=None):
+        error = worker_error
+        status = error.status if error else 200
+        if request.method == "POST" and worker_entry is None:
             try:
                 services.mark_attendance(
                     db(), day, request.form.get("worker_id", ""), request.form.get("status", ""),
+                    expected_status=request.form.get("expected_status", ""), reason=request.form.get("reason", ""),
                 )
             except services.DomainError as problem:
                 error, status = problem, problem.status
             else:
+                flash("Attendance saved.", "success")
                 return redirect(url_for("attendance", day=day), code=303)
         row = services.find_day(db(), day)
         workers, count, total = services.attendance_summary(db(), day)
         return render_template(
             "attendance.html", active="attendance", day=day, row=row, workers=workers,
-            count=count, total=total, error=error,
+            count=count, total=total, error=error, worker_entry=worker_entry or {},
         ), status
 
     @app.post("/days/<day>/workers")
     def create_worker(day):
-        services.find_day(db(), day)
-        services.add_worker(
-            db(), request.form.get("code", ""), request.form.get("name", ""),
-            request.form.get("daily_rate", ""),
-        )
+        try:
+            services.add_worker(
+                db(), request.form.get("code", ""), request.form.get("name", ""),
+                request.form.get("daily_rate", ""), day=day,
+            )
+        except services.DomainError as error:
+            return attendance_page(day, worker_entry=request.form, worker_error=error)
+        flash("Worker saved. Mark attendance separately.", "success")
         return redirect(url_for("attendance", day=day), code=303)
 
-    def close_form(day, *, error=None, status=200, posted=None, expense_entry=None):
+    def close_form(day, *, error=None, status=200, posted=None, expense_entry=None, opening_entry=None):
         row, activity = services.preview_close(db(), day)
         if row["status"] == "closed":
             return render_template(
@@ -258,8 +282,9 @@ def create_app(database=DEFAULT_DB, *, password=None, secure=False):
             ), status
         return render_template(
             "close.html", active="close", day=day, saved=None, row=row, activity=activity,
-            posted=posted or {}, error=error, expense_entry=expense_entry or {},
+            posted=posted or {}, error=error, expense_entry=expense_entry or {}, opening_entry=opening_entry or {},
             expense_key=(expense_entry or {}).get("request_key") or secrets.token_hex(16),
+            unmarked=sum(1 for w in services.attendance_summary(db(),day)[0] if w["status"] is None),
         ), status
 
     @app.get("/days/<day>/close")
@@ -271,7 +296,8 @@ def create_app(database=DEFAULT_DB, *, password=None, secure=False):
         try:
             services.set_opening_cash(db(), day, request.form.get("amount", ""))
         except services.DomainError as error:
-            return close_form(day, error=error, status=error.status)
+            return close_form(day, error=error, status=error.status, opening_entry=request.form)
+        flash("Opening cash saved.", "success")
         return redirect(url_for("reconciliation", day=day), code=303)
 
     @app.post("/days/<day>/expenses")
@@ -283,6 +309,7 @@ def create_app(database=DEFAULT_DB, *, password=None, secure=False):
             )
         except services.DomainError as error:
             return close_form(day, error=error, status=error.status, expense_entry=request.form)
+        flash("Cash expense recorded.", "success")
         return redirect(url_for("reconciliation", day=day), code=303)
 
     @app.post("/days/<day>/close")
@@ -291,9 +318,12 @@ def create_app(database=DEFAULT_DB, *, password=None, secure=False):
             services.close_day(
                 db(), day, actual_cash=request.form.get("actual_cash", ""),
                 explanation=request.form.get("explanation", ""), revision=request.form.get("revision", ""),
+                expected_unmarked=request.form.get("unmarked_reviewed", "0"),
             )
         except services.DomainError as error:
             return close_form(day, error=error, status=error.status, posted=request.form)
         return redirect(url_for("reconciliation", day=day), code=303)
 
+    from .modules import register
+    register(app, db)
     return app

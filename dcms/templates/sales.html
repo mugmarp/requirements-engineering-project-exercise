@@ -23,7 +23,7 @@
   <a class="button secondary" href="{{ url_for('daily_records', next='sales') }}">Change date</a>
 </div>
 {% if error %}<p class="notice" role="alert">{{ error }}</p>{% endif %}
-<form class="sales-layout" method="post" id="sale-form" data-vat="{{ rate }}">
+<form class="sales-layout" method="post" id="sale-form" data-dirty-guard data-review="sale" data-unsaved="{{ 'true' if error else 'false' }}" data-vat="{{ rate }}">
   <input type="hidden" name="csrf" value="{{ csrf_token }}">
   <input type="hidden" name="request_key" value="{{ request_key }}">
   <div class="panel">
@@ -49,10 +49,11 @@
         {% for key, label in channels.items() %}<option value="{{ key }}" {% if posted.get('channel') == key %}selected{% endif %}>{{ label }}</option>{% endfor %}
       </select>
     </label>
+    {% if bank_accounts %}<label id="bank-account-label">Receiving bank account<select name="bank_account_id" id="bank-account-select"><option value="">Select account</option>{% for a in bank_accounts %}<option value="{{ a.id }}" {{ 'selected' if posted.get('bank_account_id') == a.id|string }}>{{ a.name }} · •••• {{ a.account_suffix }}</option>{% endfor %}</select></label>{% endif %}
     <label><span id="reference-label">Payment reference (optional)</span><input name="reference" maxlength="100" value="{{ posted.get('reference', '') }}"></label>
     <label>Amount received (UGX)<input name="received" id="amount-received" type="text" inputmode="decimal" required value="{{ posted.get('received', '') }}"></label>
     <button class="secondary" type="button" id="use-total">Use total due</button>
-    <button class="full-width" type="submit">Post sale and open receipt</button>
+    <div class="actions form-actions"><a class="button secondary" href="{{ url_for('home') }}" data-back>Cancel</a><button type="submit">Post sale and open receipt</button></div>
   </div>
 </form>
 {% endblock %}

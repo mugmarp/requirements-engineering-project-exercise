@@ -22,6 +22,7 @@ def seed(db):
             "INSERT INTO products (sku, description, unit, unit_price, stock) VALUES (?, ?, ?, ?, ?)",
             PRODUCTS,
         )
+        db.execute("INSERT INTO demo_metadata VALUES ('notice','Sample dataset')")
     open_day(db, DEMO_DATE)
     open_day(db, "2026-11-11")
     for product, quantity, channel, received in (
@@ -79,11 +80,16 @@ def seed_history(db, end):
     worker_names = ['Alex Kato', 'Grace Atwine', 'Peter Mugisha', 'Ruth Namara', 'David Okello',
                     'Sarah Akello', 'James Tumusiime', 'Esther Achen', 'Paul Ssemanda', 'Mary Ninsiima']
     for i, name in enumerate(worker_names):
-        services.add_worker(db, f'DW-{i+1:03}', name + ' (Demo)', str(15000 + (i % 4) * 2500))
+        services.add_worker(db, f'DW-{i+1:03}', name, str(15000 + (i % 4) * 2500), start_date=start.isoformat())
     customers = ['Kijani Building Works', 'Hillview Homes', 'West Ridge Builders', 'Lake Road Works',
                  'Sunrise Housing', 'Valley Contractors', 'Market Lane Project', 'Walk-in buyer']
     def at(day, hour, minute, operation):
         moment = datetime(day.year, day.month, day.day, hour, minute, tzinfo=ZoneInfo('Africa/Kampala'))
+        now = datetime.now(ZoneInfo('Africa/Kampala'))
+        if day == now.date() and moment > now:
+            # Do not invent activity later in today's shift. Before 07:00,
+            # today's roster is unmarked and sales are empty, ready for the demo.
+            return None
         token = services._recorded_time.set(moment)
         try:
             return operation()
@@ -97,7 +103,7 @@ def seed_history(db, end):
         # This schedule is a demo assumption, not an observed business calendar.
         if day not in (end, end - timedelta(days=1)) and (day.weekday() == 6 or (index > 0 and index % 47 == 0)):
             db.execute('INSERT INTO non_operating_days VALUES (?,?)',
-                       (iso, 'Demo scheduled rest day' if day.weekday() == 6 else 'Demo maintenance closure'))
+                       (iso, 'Scheduled rest day' if day.weekday() == 6 else 'Maintenance closure'))
         else:
             services.open_day(db, iso)
             special = day == end - timedelta(days=1)
@@ -119,11 +125,11 @@ def seed_history(db, end):
                 total = subtotal + services.calculate_vat(subtotal, services.vat_rate(db))
                 received = f'{total//100}.{total%100:02d}'
                 at(day, 8 + order, rng.randrange(5,55), lambda: services.post_sale(
-                    db, iso, customer=customers[rng.randrange(len(customers))] + ' (Demo)',
-                    channel=channel, reference='' if channel=='cash' else f'DEMO-{iso}-{order+1:02}',
+                    db, iso, customer=customers[rng.randrange(len(customers))],
+                    channel=channel, reference='' if channel=='cash' else f'{"BNK" if channel == "bank_deposit" else "MM"}-{iso.replace("-","")}-{order+1:03}',
                     received=received, request_key=f'history-{iso}-{order}', lines=lines))
-            expenses = [('Loader lunch and local transport (Demo)', 50000)] if special else [
-                (rng.choice(['Loading team lunch', 'Site transport', 'Equipment fuel']) + ' (Demo)', rng.choice([15000,20000,25000,35000]))
+            expenses = [('Loader lunch and local transport', 50000)] if special else [
+                (rng.choice(['Loading team lunch', 'Site transport', 'Equipment fuel']) + '', rng.choice([15000,20000,25000,35000]))
                 for _ in range(rng.randint(0,2))]
             for i, (description, amount) in enumerate(expenses):
                 at(day, 12+i, 30, lambda: services.record_expense(db,iso,description,str(amount),f'history-expense-{iso}-{i}'))
@@ -132,13 +138,34 @@ def seed_history(db, end):
                 _, _, wages = services.attendance_summary(db, iso)
                 if wages and activity['expected_cash'] >= wages:
                     at(day, 17, 45, lambda: services.record_expense(
-                        db, iso, 'Daily worker wage payout (Demo)',
+                        db, iso, 'Daily worker wage payout',
                         f'{wages//100}.{wages%100:02d}', f'history-wages-{iso}'))
             if day < end:
                 row, activity = services.preview_close(db,iso)
                 variance = -500000 if special else rng.choices([0,-100000,-200000,50000],weights=[91,4,3,2])[0]
                 actual = activity['expected_cash'] + variance
-                explanation = 'Demo UGX 5,000 shortage flagged for Owner review.' if special else ('Demo count difference recorded for review.' if variance else '')
+                explanation = 'UGX 5,000 shortage flagged for Owner review.' if special else ('Count difference recorded for review.' if variance else '')
                 at(day,18,15,lambda: services.close_day(db,iso,actual_cash=f'{actual//100}.{actual%100:02}',explanation=explanation,revision=str(row['revision'])))
         day += timedelta(days=1)
         index += 1
+
+    # Illustrative statement history, separate from the posted sales ledger.
+    import csv
+    import io
+    from . import banking
+    account_id = banking.add_account(db, 'Operating account', 'Illustrative Bank', '1001')
+    bank_sales = db.execute("SELECT * FROM sales WHERE channel='bank_deposit' ORDER BY id").fetchall()
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(['id','date','reference','description','credit','debit'])
+    for sale in bank_sales:
+        db.execute('INSERT INTO sale_bank_accounts(sale_id,account_id) VALUES (?,?)',(sale['id'],account_id))
+        settlement = min(date.fromisoformat(sale['business_date']) + timedelta(days=1),end)
+        amount = f'{sale["total"]//100}.{sale["total"]%100:02d}'
+        writer.writerow([f'ST-{sale["id"]:06}',settlement.isoformat(),sale['payment_reference'],'Customer deposit',amount,'0'])
+    writer.writerow(['CHG-001',end.isoformat(),'SERVICE-FEE','Bank service charge','0','2500'])
+    banking.import_statement(db,account_id,output.getvalue())
+    for i,sale in enumerate(bank_sales):
+        if i % 7:
+            tx = db.execute('SELECT id FROM bank_transactions WHERE external_id=? AND account_id=?',(f'ST-{sale["id"]:06}',account_id)).fetchone()[0]
+            banking.match(db,tx,sale['id'],f'{sale["total"]//100}.{sale["total"]%100:02d}')

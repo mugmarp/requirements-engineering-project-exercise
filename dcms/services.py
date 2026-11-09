@@ -6,6 +6,7 @@ import re
 from collections import Counter
 from contextvars import ContextVar
 from datetime import date, datetime, timezone
+from zoneinfo import ZoneInfo
 
 from .db import write
 
@@ -136,14 +137,19 @@ def record_expense(db, day, description, amount, request_key):
         bump_revision(db, day)
 
 
-def vat_rate(db):
-    return db.execute("SELECT value FROM settings WHERE key = 'vat_basis_points'").fetchone()[0]
+def vat_rate(db, day=None):
+    day = day or datetime.now(ZoneInfo('Africa/Kampala')).date().isoformat()
+    return db.execute('SELECT basis_points FROM vat_rates WHERE effective_from<=? ORDER BY effective_from DESC LIMIT 1',(day,)).fetchone()[0]
 
 
-def set_vat_rate(db, basis_points):
+def set_vat_rate(db, basis_points, effective_from=None):
     if not 0 <= basis_points <= 10_000:
         raise DomainError("The VAT rate must be between 0 and 100 percent.")
+    effective_from = business_date(effective_from or datetime.now(ZoneInfo('Africa/Kampala')).date().isoformat())
     with write(db):
+        if db.execute('SELECT 1 FROM sales WHERE business_date>=? LIMIT 1',(effective_from,)).fetchone():
+            raise Conflict('Choose a tax effective date after existing sales. Posted tax snapshots cannot be rewritten.')
+        db.execute('INSERT INTO vat_rates VALUES (?,?) ON CONFLICT(effective_from) DO UPDATE SET basis_points=excluded.basis_points',(effective_from,basis_points))
         db.execute("UPDATE settings SET value = ? WHERE key = 'vat_basis_points'", (basis_points,))
 
 
@@ -151,7 +157,7 @@ def calculate_vat(subtotal, basis_points):
     return (subtotal * basis_points + 5_000) // 10_000
 
 
-def post_sale(db, day, *, customer, channel, reference, received, request_key, lines):
+def post_sale(db, day, *, customer, channel, reference, received, request_key, lines, bank_account_id=None):
     customer = text_value(customer, "a customer name", 100)
     reference = text_value(reference, "a payment reference", 100, required=False)
     received = money_value(received, "the amount received", positive=True)
@@ -168,6 +174,11 @@ def post_sale(db, day, *, customer, channel, reference, received, request_key, l
         if quantities[key] > 10_000:
             raise DomainError("The total quantity per product cannot exceed 10,000.")
     payload = [day, customer, channel, reference, received, sorted(quantities.items())]
+    if bank_account_id:
+        bank_account_id = integer_value(str(bank_account_id), 'bank account')
+        if channel != 'bank_deposit':
+            raise DomainError('Select a bank account only for Bank Deposit payments.')
+        payload.append(bank_account_id)
     request_hash = hashlib.sha256(json.dumps(payload).encode()).hexdigest()
 
     with write(db):
@@ -180,6 +191,10 @@ def post_sale(db, day, *, customer, channel, reference, received, request_key, l
             return existing["id"]
 
         require_open(db, day)
+        if bank_account_id and not db.execute('SELECT 1 FROM bank_accounts WHERE id=?',(bank_account_id,)).fetchone():
+            raise DomainError('Choose an existing bank account.')
+        if channel == 'bank_deposit' and not bank_account_id and db.execute('SELECT 1 FROM bank_accounts LIMIT 1').fetchone():
+            raise DomainError('Choose the receiving bank account for this payment.')
         items = []
         for product_id, quantity in quantities.items():
             product = db.execute(
@@ -190,7 +205,7 @@ def post_sale(db, day, *, customer, channel, reference, received, request_key, l
             items.append((product, quantity, product["unit_price"] * quantity))
 
         subtotal = sum(line_total for _, _, line_total in items)
-        rate = vat_rate(db)
+        rate = vat_rate(db, day)
         vat = calculate_vat(subtotal, rate)
         total = subtotal + vat
         if total > MAX_AMOUNT:
@@ -205,6 +220,8 @@ def post_sale(db, day, *, customer, channel, reference, received, request_key, l
             (day, timestamp(), customer, channel, reference, subtotal, rate, vat, total,
              received, request_key, request_hash),
         ).lastrowid
+        if bank_account_id:
+            db.execute('INSERT INTO sale_bank_accounts(sale_id,account_id) VALUES (?,?)',(sale_id,bank_account_id))
         for product, quantity, line_total in items:
             update = db.execute(
                 "UPDATE products SET stock = stock - ? WHERE id = ? AND stock >= ?",
@@ -265,7 +282,7 @@ def preview_close(db, day):
         db.rollback()
 
 
-def close_day(db, day, *, actual_cash, explanation, revision):
+def close_day(db, day, *, actual_cash, explanation, revision, expected_unmarked=None):
     with write(db):
         existing = close_snapshot(db, day)
         if existing:
@@ -280,7 +297,11 @@ def close_day(db, day, *, actual_cash, explanation, revision):
         if variance and not explanation:
             raise DomainError("Explain the cash difference before closing the date.")
         totals = activity["channel_totals"]
-        _, workers_present, payroll_eligible = attendance_summary(db, day)
+        roster, workers_present, payroll_eligible = attendance_summary(db, day)
+        unmarked=sum(1 for worker in roster if worker['status'] is None)
+        if expected_unmarked is not None and unmarked:
+            if str(unmarked) != str(expected_unmarked):
+                raise Conflict('Review the current unmarked attendance count before closing this date.')
         db.execute(
             """INSERT INTO daily_closes (business_date, opening_cash, cash_activity,
                 mobile_money_activity, bank_activity, expenses, expected_cash, actual_cash,
@@ -293,23 +314,28 @@ def close_day(db, day, *, actual_cash, explanation, revision):
         return close_snapshot(db, day)
 
 
-def add_worker(db, code, name, daily_rate):
+def add_worker(db, code, name, daily_rate, *, day=None, start_date=None):
     code = text_value(code, "a worker code", 30)
     name = text_value(name, "a worker name", 100)
     rate = money_value(daily_rate, "the daily rate", positive=True)
+    start_date = business_date(start_date or day or datetime.now(ZoneInfo('Africa/Kampala')).date().isoformat())
     with write(db):
-        existing = db.execute("SELECT * FROM workers WHERE worker_code = ?", (code,)).fetchone()
+        if day is not None:
+            require_open(db, day)
+        existing = db.execute("SELECT * FROM workers WHERE lower(worker_code) = lower(?)", (code,)).fetchone()
         if existing:
             if (existing["name"], existing["daily_rate"]) != (name, rate):
                 raise Conflict("That worker code already belongs to another worker entry.")
             return existing["id"]
-        return db.execute(
-            "INSERT INTO workers (worker_code, name, daily_rate) VALUES (?, ?, ?)",
-            (code, name, rate),
+        worker_id = db.execute(
+            "INSERT INTO workers (worker_code, name, daily_rate,started_on) VALUES (?, ?, ?,?)",
+            (code, name, rate,start_date),
         ).lastrowid
+        db.execute('INSERT INTO worker_rates VALUES (?,?,?)',(worker_id,start_date,rate))
+        return worker_id
 
 
-def mark_attendance(db, day, worker_id, status):
+def mark_attendance(db, day, worker_id, status, *, expected_status=None, reason=None):
     worker_id = integer_value(worker_id, "worker")
     if status not in ("present", "absent"):
         raise DomainError("Select Present or Absent.")
@@ -318,17 +344,26 @@ def mark_attendance(db, day, worker_id, status):
         worker = db.execute("SELECT * FROM workers WHERE id = ?", (worker_id,)).fetchone()
         if worker is None:
             raise Missing("Worker not found.")
+        if day < worker['started_on'] or (worker['ended_on'] and day > worker['ended_on']):
+            raise DomainError('This worker is not on the roster for this date.')
         current = db.execute(
             "SELECT status FROM attendance WHERE business_date = ? AND worker_id = ?", (day, worker_id)
         ).fetchone()
         if current and current["status"] == status:
             return
+        if expected_status is not None and expected_status != (current['status'] if current else ''):
+            raise Conflict('Attendance changed in another session. Review the current status.')
+        if current and reason is not None:
+            reason = text_value(reason, 'a reason for the attendance correction', 250)
+        rate = db.execute('SELECT daily_rate FROM worker_rates WHERE worker_id=? AND effective_from<=? ORDER BY effective_from DESC LIMIT 1',(worker_id,day)).fetchone()[0]
+        db.execute('INSERT INTO attendance_changes(worker_id,business_date,previous_status,new_status,reason,changed_at) VALUES (?,?,?,?,?,?)',
+                   (worker_id,day,current['status'] if current else None,status,reason or ('Initial attendance entry' if current is None else 'Service attendance correction'),timestamp()))
         db.execute(
             """INSERT INTO attendance (business_date, worker_id, status, daily_rate, recorded_at)
                VALUES (?, ?, ?, ?, ?)
                ON CONFLICT (business_date, worker_id) DO UPDATE
                SET status = excluded.status, recorded_at = excluded.recorded_at""",
-            (day, worker_id, status, worker["daily_rate"], timestamp()),
+            (day, worker_id, status, rate, timestamp()),
         )
         bump_revision(db, day)
 
@@ -336,12 +371,31 @@ def mark_attendance(db, day, worker_id, status):
 def attendance_summary(db, day):
     rows = db.execute(
         """SELECT workers.id, workers.worker_code, workers.name,
-                  COALESCE(attendance.daily_rate, workers.daily_rate) AS daily_rate,
+                  COALESCE(attendance.daily_rate, (SELECT daily_rate FROM worker_rates r WHERE r.worker_id=workers.id AND r.effective_from<=? ORDER BY r.effective_from DESC LIMIT 1)) AS daily_rate,
                   attendance.status
            FROM workers LEFT JOIN attendance
              ON attendance.worker_id = workers.id AND attendance.business_date = ?
+           WHERE workers.started_on<=? AND (workers.ended_on IS NULL OR workers.ended_on>=?)
            ORDER BY workers.id""",
-        (day,),
+        (day,day,day,day),
     ).fetchall()
     present = [row for row in rows if row["status"] == "present"]
     return rows, len(present), sum(row["daily_rate"] for row in present)
+
+
+def update_worker(db, worker_id, *, effective_from, daily_rate, ended_on=''):
+    worker_id=integer_value(str(worker_id),'worker')
+    effective_from=business_date(effective_from)
+    rate=money_value(daily_rate,'the daily rate',positive=True)
+    ended_on=business_date(ended_on) if ended_on else None
+    with write(db):
+        worker=db.execute('SELECT * FROM workers WHERE id=?',(worker_id,)).fetchone()
+        if worker is None: raise Missing('Worker not found.')
+        if effective_from<worker['started_on'] or (ended_on and ended_on<worker['started_on']):
+            raise DomainError('Dates cannot precede the worker start date.')
+        if db.execute('SELECT 1 FROM attendance WHERE worker_id=? AND business_date>=? LIMIT 1',(worker_id,effective_from)).fetchone():
+            raise Conflict('Choose a rate effective date after recorded attendance. Historical rates must remain unchanged.')
+        if ended_on and db.execute('SELECT 1 FROM attendance WHERE worker_id=? AND business_date>? LIMIT 1',(worker_id,ended_on)).fetchone():
+            raise Conflict('End date would exclude recorded attendance.')
+        db.execute('INSERT INTO worker_rates VALUES (?,?,?) ON CONFLICT(worker_id,effective_from) DO UPDATE SET daily_rate=excluded.daily_rate',(worker_id,effective_from,rate))
+        db.execute('UPDATE workers SET ended_on=? WHERE id=?',(ended_on,worker_id))

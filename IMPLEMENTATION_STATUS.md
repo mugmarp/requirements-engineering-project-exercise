@@ -93,3 +93,41 @@ For the 10 June–10 November 2026 sample:
 Today remains open, and 9 November preserves the UGX 5,000 shortage worked example. The current local preview uses `instance/history-demo-v2.sqlite3` on port 8081; the previous presentation database remains intact. Generated databases are ignored by Git and can be reproduced using `init --history --end-date 2026-11-10` with a new database filename.
 
 Validation: fourteen tests pass. The added checks cover dashboard aggregation, date filtering, calendar completeness, historical timestamps, stock conservation, receipt math, attendance snapshots, close arithmetic, the shortage example, empty-installation behavior, workflow-preserving navigation and linked-page rendering. JavaScript syntax and Git whitespace checks pass.
+
+## Return navigation and workflow integrity — 10 November 2026
+
+The dashboard/UI history work was pushed to `main` as `dd371a3` before this review. The following follow-up changes are local.
+
+- Every screen has an explicit return link and contextual breadcrumbs. A per-tab navigation trail returns to the originating screen, including its dashboard period or table filter. Cancel uses the same destination. Direct entries have a normal application-link fallback, and return paths stay on the current origin.
+- Sales, cash count, expenses, opening cash and worker registration detect unsaved edits. Leaving prompts to keep editing or explicitly discard. Reload/tab-close protection uses the browser's standard unload prompt. These are unsaved-entry guards, not automatic draft persistence.
+- Paid-sale posting, cash expenses, opening-cash changes, worker registration and day-close have review dialogs. Attendance corrections review the previous and new status; initial marking remains quick. Final confirmation disables repeated submissions. Existing server-side transaction and idempotency checks remain authoritative.
+- Day-close is blocked in the interface while expense or opening-cash edits remain unsaved. Submitting one form warns when another form's unsaved entries would be lost on refresh.
+- Worker creation now checks the date is open inside the worker transaction. Invalid worker and opening-cash submissions preserve the attempted fields. Expired forms and missing routes render the application's navigation rather than an isolated server error page.
+- Successful expense, float, worker and attendance changes display feedback. Printing remains a separate action on a saved receipt/report.
+
+Validation: 19 automated tests pass, including closed-day worker creation, field preservation, error navigation and the existing stock, payment, duplicate-submission, stale-close and concurrent-posting checks. JavaScript syntax and whitespace checks pass. Browser verification covered Dashboard → New sale → Back with the reporting period preserved; Cancel/Keep editing/Discard; paid-sale review and posting; receipt-list filter restoration; pending-expense close blocking; close review cancellation and successful closure; and closed-day sales navigation. Posting tests used `/tmp/dcms-navigation-review.sqlite3`, a separate copy. The original demo retained 756 receipts, 128 saved closes and an open 10 November date. Both databases passed SQLite integrity checks.
+
+Confirmation dialogs require JavaScript and establish user intent, not authorization. Production role permissions, audit history, correction/refund workflows and physical printer acceptance remain separate work already identified in the implementation plan.
+
+## Taxes, worker records and banking — 10 November 2026
+
+Added Workers, Taxes and Banking to the shared navigation. These changes, together with the preceding return-navigation fixes, are local after `dd371a3`.
+
+Sales VAT Summary groups stored sale snapshots by calendar month and applied rate, provides receipt drill-down, printing and CSV export, and distinguishes output VAT from VAT payable. It includes URA source links and a following-month filing reminder. Registration/TIN are unverified, purchase/input VAT is not captured, credit/debit notes and refunds are not implemented, and EFRIS is not connected. Business-date aggregation is not asserted to establish statutory tax-point treatment. No PAYE, withholding or income-tax calculator was added. Effective-dated VAT configuration prevents current rates from silently applying to earlier business dates; posted receipts are unchanged.
+
+Workers now have roster dates and effective-dated rates. Historical attendance keeps its recorded rates and excludes workers outside their roster dates. Registration is accessible from a dedicated Workers screen and from Attendance. Corrections require a reason and compare the expected previous status. Their event history is visible on the worker record. Closing requires explicit review of unmarked attendance. Individual wage payments and authenticated operator identities remain outside this prototype.
+
+Banking now records UGX account labels and last four digits, receiving accounts on new bank-paid sales, CSV preview/import, unmatched credits and receipts, partial/multiple allocations and reasoned reversals. Duplicate transaction IDs, over-allocation, account mismatches, delayed request retries and stale reversals are checked transactionally. Allocation events preserve the correction trail. Posted sales and saved cash closes remain unchanged. Fees/transfers are left for separate review. There is no live feed, bank login, transfer or complete bank ledger/balance reconciliation.
+
+The refreshed dataset is `instance/operations-20261110.sqlite3`; prior databases were retained. Before the simulated morning shift it has 752 receipts, 250 cash expenses, 10 workers, 1,280 attendance entries and 128 saved closes. It includes 79 illustrative bank statement rows and 66 initial allocations. Today's future shift events are omitted rather than future-timestamped. Ordinary names/descriptions/calendar reasons no longer carry repeated “Demo” labels; one environment notice identifies sample data. Printed receipts remain explicitly internal and not EFRIS-fiscalised.
+
+Validation: 28 automated tests pass. They cover rate periods, stored tax totals, CSV export, worker roster/rate history, correction reasons and stale statuses, unmarked attendance review, statement preview, atomic duplicate/conflict imports, allocations and reversals, late request retries, unchanged financial snapshots and sample timestamp bounds. Browser checks in an isolated copy verified tax layout, worker registration, attendance correction/history, statement preview and confirmed import, allocation and reasoned reversal, and narrow-screen table containment. No bank credentials or live integration were used.
+
+Sources checked on 10 November 2026:
+
+- [URA VAT filing guidance](https://ura.go.ug/en/ask-ura-commissioner-general-42/)
+- [URA EFRIS handbook](https://ura.go.ug/en/efris-handbook/)
+- [URA EFRIS system integration guidance](https://ura.go.ug/en/efris-brochure-23-24/)
+- [ERPNext bank reconciliation](https://docs.frappe.io/erpnext/bank-reconciliation)
+
+Before a production release, confirm the business's actual tax position and fiscal integration requirements, add authenticated permissions and actor audit records, and validate fiscal rounding, input VAT and adjustment handling. These remain separate acceptance gates; the new screens do not establish production tax compliance.

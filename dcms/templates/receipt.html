@@ -11,12 +11,14 @@
 </div>
 <article class="panel printable receipt">
   <h2>Deniz Construction Limited</h2>
-  <p>Sample receipt · {{ '%06d'|format(sale.id) }}</p>
+  <p>Receipt · {{ '%06d'|format(sale.id) }}</p>
+  <p class="muted">Internal receipt · EFRIS fiscalisation not connected{{ ' · Sample data' if is_sample }}</p>
   <dl class="ledger">
     <div><dt>Business date</dt><dd>{{ day }}</dd></div>
     <div><dt>Posted</dt><dd>{{ sale.posted_at|local_time }}</dd></div>
     <div><dt>Customer</dt><dd>{{ sale.customer }}</dd></div>
     <div><dt>Payment channel</dt><dd>{{ channels[sale.channel] }}</dd></div>
+    {% if sale.channel == 'bank_deposit' %}<div><dt>Receiving account</dt><dd>{{ bank_account.name ~ ' · •••• ' ~ bank_account.account_suffix if bank_account else 'Not assigned' }}</dd></div>{% endif %}
     {% if sale.payment_reference %}<div><dt>Reference</dt><dd>{{ sale.payment_reference }}</dd></div>{% endif %}
   </dl>
   <div class="table-scroll"><table class="receipt-lines">

@@ -22,6 +22,7 @@ def main():
     init.add_argument("--end-date", default=datetime.now(KAMPALA).date().isoformat(), help="Historical demo end date (YYYY-MM-DD).")
     vat = commands.add_parser("set-vat", help="Set the demo VAT percentage.")
     vat.add_argument("percent")
+    vat.add_argument("--effective-from", help="Effective date after existing sales (YYYY-MM-DD).")
     server = commands.add_parser("serve", help="Run the web application with Waitress.")
     server.add_argument("--host", default="127.0.0.1")
     server.add_argument("--port", type=int, default=8080)
@@ -51,7 +52,7 @@ def main():
         elif args.command == "set-vat":
             initialize(args.database)
             with connect(args.database) as db:
-                set_vat_rate(db, money_value(args.percent, "the VAT percentage"))
+                set_vat_rate(db, money_value(args.percent, "the VAT percentage"), args.effective_from)
         else:
             from waitress import serve
 

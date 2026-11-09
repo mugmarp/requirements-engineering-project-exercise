@@ -195,3 +195,21 @@ The following table maps each RE phase to the techniques applied and the deliver
 
 URL: https://github.com/mugmarp/requirements-engineering-project-exercise
 Branch: main
+
+## Taxes, Workers and Banking
+
+The current module preview uses `instance/operations-20261110.sqlite3`. To reopen it:
+
+```bash
+.venv/bin/python -m dcms --database instance/operations-20261110.sqlite3 serve --port 8081
+```
+
+- **Taxes:** Choose a calendar month, inspect sales excluding VAT, recorded sales VAT and totals including VAT, drill into receipts, or export CSV. This is a sales report, not a VAT return, input-tax claim or calculation of VAT payable. EFRIS submission and fiscal document generation are not connected. The monthly filing reminder follows [URA guidance](https://ura.go.ug/en/ask-ura-commissioner-general-42/). Confirm the actual VAT registration, TIN, taxable supply classifications, tax point and adjustment treatment before operational use. PAYE, withholding, income tax and purchase/input VAT are outside this report. See the [URA EFRIS handbook](https://ura.go.ug/en/efris-handbook/).
+- **Workers:** Register a worker with a start date and daily rate. Open the worker record to schedule a future rate or last working date. Historical attendance uses saved rate snapshots. A worker is shown only within their roster dates. Attendance corrections require a reason and check for a stale previous status. Unmarked workers are shown explicitly and require acknowledgement before a day closes. Wage eligibility is a gross amount, separate from cash wages paid and payroll deductions.
+- **Banking:** Register a UGX account using a label, bank name and last four digits. Select that account on new Bank Deposit sales. Import a statement using CSV preview, then confirm. Allocate statement credits against existing bank-paid receipts; partial and combined allocations are supported. Reversals require a reason and retain events. Matching does not create sales, alter cash or rewrite closed daily reports. Bank fees and transfers are shown for separate review, not automatically treated as sales. No live feed, bank login or transfer is implemented.
+
+Statement CSV columns must be exactly `id,date,reference,description,credit,debit`. Dates use `YYYY-MM-DD`; amounts use plain UGX decimal values without thousands separators. Supply stable transaction IDs from the source; identical IDs within an account are skipped, while changed values are rejected atomically. Import at most 500 rows per batch. Source files with different formats need deliberate conversion to this template. These are internal import/export formats, not URA upload templates.
+
+VAT settings now have effective dates. For example, an administrator can schedule a rate using `set-vat PERCENT --effective-from YYYY-MM-DD`. The effective date must follow existing sales. Changing a rate never recalculates a posted receipt. The stored invoice-level rounding policy remains a prototype convention to verify during fiscal integration.
+
+The sample-data indicator comes from dataset metadata. Worker names, customer names, expenses and calendar reasons no longer repeat “Demo”. Historical generation skips today's shift events that have not yet occurred. Earlier presentation databases are preserved; use a new filename to regenerate samples. Imported sample bank rows are illustrative and do not establish a real bank balance.

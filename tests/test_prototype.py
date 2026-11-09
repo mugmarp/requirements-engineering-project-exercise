@@ -54,7 +54,7 @@ class PrototypeTest(unittest.TestCase):
             self.assertEqual((sale["subtotal"], sale["vat"], sale["total"]), (450000, 81000, 531000))
             self.assertEqual(len(lines), 2)
             self.assertEqual(db.execute("SELECT stock FROM products WHERE id = 1").fetchone()[0], before[0][1] - 1)
-            services.set_vat_rate(db, 0)
+            services.set_vat_rate(db, 0, "2026-11-12")
             self.assertEqual(services.receipt(db, sale_id)[0]["vat"], 81000)
 
     def test_two_concurrent_sales_cannot_oversell(self):

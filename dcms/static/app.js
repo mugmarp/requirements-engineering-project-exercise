@@ -38,6 +38,12 @@ if (sale) {
     sale.querySelector("#vat-preview").textContent = currency(vat);
     sale.querySelector("#sale-total").textContent = currency(total);
     const channel = sale.querySelector("#payment-channel").value;
+    const bankAccount = sale.querySelector("#bank-account-select");
+    if (bankAccount) {
+      bankAccount.disabled = channel !== "bank_deposit";
+      bankAccount.required = channel === "bank_deposit";
+      sale.querySelector("#bank-account-label").hidden = channel !== "bank_deposit";
+    }
     referenceLabel.textContent = {
       mobile_money: "Mobile Money transaction reference (optional)",
       bank_deposit: "Bank deposit slip number (optional)",
@@ -117,12 +123,20 @@ if (navigationToggle) {
 
 document.querySelectorAll("[data-filter]").forEach((input) => {
   const table = document.getElementById(input.dataset.filter);
-  input.addEventListener("input", () => {
+  function filterRows() {
     const query = input.value.trim().toLocaleLowerCase();
     const rows = [...table.querySelectorAll("[data-record]")];
     rows.forEach((row) => { row.hidden = !row.textContent.toLocaleLowerCase().includes(query); });
     table.closest(".list-panel").querySelector(".filter-empty").hidden = !rows.length || rows.some((row) => !row.hidden);
-  });
+    const url = new URL(location.href);
+    if (input.value) url.searchParams.set("q", input.value);
+    else url.searchParams.delete("q");
+    history.replaceState(null, "", url.pathname + url.search);
+    document.dispatchEvent(new Event("dcms:locationchange"));
+  }
+  input.value = new URLSearchParams(location.search).get("q") || "";
+  input.addEventListener("input", filterRows);
+  filterRows();
 });
 
 const reportPeriod = document.querySelector("#report-period");

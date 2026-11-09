@@ -16,9 +16,10 @@
   <title>{% block title %}Operations{% endblock %} | Deniz Construction</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+<script src="{{ url_for('static', filename='navigation.js') }}" defer></script>
 </head>
-<body>
-{% set links = [('dashboard', 'Dashboard', url_for('home'), 'home'), ('records', 'Daily records', url_for('daily_records'), 'history'), ('sales', 'Daily Sales', url_for('start_workflow', workflow='sales', day=nav_day), 'sales'), ('close', 'Reconciliation', url_for('start_workflow', workflow='close', day=nav_day), 'close'), ('history', 'Receipts', url_for('start_workflow', workflow='receipts', day=nav_day), 'history'), ('attendance', 'Attendance', url_for('start_workflow', workflow='attendance', day=nav_day), 'attendance')] %}
+<body data-navigation-url="{{ navigation_url }}" data-page-title="{{ self.title() }}" data-business-date="{{ day|default('') }}">
+{% set links = [('dashboard', 'Dashboard', url_for('home'), 'home'), ('records', 'Daily records', url_for('daily_records'), 'history'), ('workers', 'Workers', url_for('workers'), 'attendance'), ('taxes', 'Taxes', url_for('taxes'), 'close'), ('banking', 'Banking', url_for('bank_home'), 'close'), ('sales', 'Daily Sales', url_for('start_workflow', workflow='sales', day=nav_day), 'sales'), ('close', 'Reconciliation', url_for('start_workflow', workflow='close', day=nav_day), 'close'), ('history', 'Receipts', url_for('start_workflow', workflow='receipts', day=nav_day), 'history'), ('attendance', 'Attendance', url_for('start_workflow', workflow='attendance', day=nav_day), 'attendance')] %}
 <aside class="app-rail screen-only" aria-label="Application shortcuts">
   <a class="brand-mark" href="{{ url_for('home') }}" aria-label="Deniz Construction home">D</a>
   {% for key, label, href, glyph in links %}<a class="rail-link {{ 'selected' if active == key }}" href="{{ href }}" title="{{ label }}" aria-label="{{ label }}">{{ icon(glyph) }}</a>{% endfor %}
@@ -38,14 +39,30 @@
     <a href="{{ url_for('daily_records', next={'sales':'sales','history':'receipts','attendance':'attendance','close':'close'}.get(active, 'close')) }}">Change working date</a>{% else %}<span>Choose a daily workflow to start today's operations.</span>{% endif %}
     <a href="{{ url_for('start_workflow', workflow='sales', day=today) }}">Go to today</a>
   </div>
-  <div class="demo-badge">Sample data · Prototype</div>
+  <div class="demo-badge">{{ 'Sample data' if is_sample else 'Deniz Construction' }}</div>
 </aside>
 <div class="app-main">
   <header class="page-toolbar screen-only">
     <div class="toolbar-title"><button type="button" class="icon-button" id="sidebar-toggle" aria-controls="app-sidebar" aria-expanded="true" aria-label="Toggle navigation">{{ icon('menu') }}</button><h1>{{ self.title() }}</h1>{% if day %}<span class="status {{ day_status }}">{{ day_status|capitalize }}</span>{% endif %}</div>
     {% block toolbar_actions %}{% endblock %}
   </header>
-  <main class="shell" id="main-content">{% block content %}{% endblock %}</main>
+  <main class="shell" id="main-content">
+    {% set parent_url = url_for('receipt_history', day=day) if sale is defined else url_for('home') %}
+    {% set parent_label = 'Receipts' if sale is defined else 'Dashboard' %}
+    <div class="page-context screen-only">
+      <a class="return-link" data-back data-return-label href="{{ parent_url }}" {% if active == 'dashboard' %}hidden{% endif %}>← Back to {{ parent_label }}</a>
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="{{ url_for('home') }}">Dashboard</a>{% if day %}<span aria-hidden="true">/</span><a href="{{ url_for('daily_records') }}">Daily records</a>{% if sale is defined %}<span aria-hidden="true">/</span><a href="{{ url_for('receipt_history',day=day) }}">Receipts</a>{% endif %}{% endif %}<span aria-hidden="true">/</span><span aria-current="page">{{ self.title() }}</span></nav>
+    </div>
+    {% for category,message in get_flashed_messages(with_categories=true) %}<p class="feedback {{ category }}" role="status">{{ message }}</p>{% endfor %}
+    <p class="notice screen-only" id="workflow-notice" hidden role="alert"></p>
+    <p class="draft-notice screen-only" id="draft-notice" hidden role="status">Unsaved entries — save or discard them before leaving.</p>
+    {% block content %}{% endblock %}</main>
 </div>
+<dialog id="action-dialog" aria-labelledby="action-dialog-title" aria-describedby="action-dialog-message">
+  <h2 id="action-dialog-title">Review action</h2>
+  <p id="action-dialog-message"></p>
+  <label id="dialog-reason-label" hidden>Reason for correction<textarea id="dialog-reason" rows="3" maxlength="250"></textarea></label>
+  <div class="actions"><button type="button" class="secondary" id="dialog-cancel">Keep editing</button><button type="button" id="dialog-confirm">Continue</button></div>
+</dialog>
 </body>
 </html>
