@@ -10,24 +10,24 @@
   "slides": [
     {
       "title": "Deniz Construction Management System",
+      "subtitle": "Requirements Engineering and Database Design",
       "content": [
         {
           "type": "para",
-          "text": "Deniz Construction Limited, Mbarara"
+          "text": "Group K"
         },
         {
           "type": "para",
-          "text": "Group K, SWE2102 Requirements Engineering"
+          "text": "SWE2102 Requirements Engineering"
         },
         {
           "type": "para",
           "text": "Mbarara University of Science and Technology"
+        },
+        {
+          "type": "para",
+          "text": "10th November 2026"
         }
-      ],
-      "notes": [
-        "Speaker 1 | 30 seconds. Introduce the client, a construction materials business that produces blocks, pavers and kerbs. State that this is Group K’s requirements engineering project.",
-        "Rehearsal plan. 14 minutes of content, 1 minute for handoffs and about 5 minutes of Q&A. Assign the ten speaking slots using members’ actual contributions. Each member should prepare one sentence about their own work and one question they can answer.",
-        "Source. Groups Presentation Guide for SWE2102, 10 November 2026."
       ]
     },
     {
@@ -40,199 +40,121 @@
             "Registration Number"
           ],
           "rows": [
-            [
-              "JOAS TAREMWA",
-              "2025/BSE/171/PS"
-            ],
-            [
-              "ASUMA KADDE KEVIN",
-              "2025/BSE/045/PS"
-            ],
-            [
-              "SSEBUGWAWO HARRISON",
-              "2025/BSE/161/PS"
-            ],
-            [
-              "TIBAMANYA DAVIS",
-              "2025/BSE/172/PS"
-            ],
-            [
-              "EDOU SIMON PETER",
-              "2025/BSE/066/PS"
-            ],
-            [
-              "MUGENDAWALA MARK PAUL",
-              "2025/BSE/108/PS"
-            ],
-            [
-              "DAMBYA RACHAEL",
-              "2025/BSE/065/PS"
-            ],
-            [
-              "OFAMBA JAMES",
-              "2025/BSE/143/PS"
-            ],
-            [
-              "OSUTA AMEN JOEL",
-              "2025/BSE/152/PS"
-            ],
-            [
-              "MUSONIRWA IBRAHIM",
-              "2025/BSE/218/PS"
-            ]
+            ["JOAS TAREMWA", "2025/BSE/171/PS"],
+            ["ASUMA KADDE KEVIN", "2025/BSE/045/PS"],
+            ["SSEBUGWAWO HARRISON", "2025/BSE/161/PS"],
+            ["TIBAMANYA DAVIS", "2025/BSE/172/PS"],
+            ["EDOU SIMON PETER", "2025/BSE/066/PS"],
+            ["MUGENDAWALA MARK PAUL", "2025/BSE/108/PS"],
+            ["DAMBYA RACHAEL", "2025/BSE/065/PS"],
+            ["OFAMBA JAMES", "2025/BSE/143/PS"],
+            ["OSUTA AMEN JOEL", "2025/BSE/152/PS"],
+            ["MUSONIRWA IBRAHIM", "2025/BSE/218/PS"]
           ]
         }
-      ],
-      "notes": [
-        "Continue the introduction | 30 seconds. Introduce Group K and move to the problem and scope.",
-        "Source. Original Group K presentation JSON."
       ]
     },
     {
-      "title": "Problem and project scope",
+      "title": "Project Overview",
+      "subtitle": "Deniz Construction Limited, Ishanyu-Bushenyi Road, Mbarara",
       "content": [
         {
-          "type": "section",
-          "heading": "One primary operator",
-          "text": "The Sales Manager handles sales, records and cash reconciliation. The Owner reviews the daily report."
-        },
-        {
-          "type": "section",
-          "heading": "During the day",
-          "text": "Record sales, update stock and print receipts while customers collect their purchases."
-        },
-        {
-          "type": "section",
-          "heading": "At the end of the day",
-          "text": "Record expenses, compare expected cash with the physical count and save the daily report."
+          "type": "bullets",
+          "items": [
+            "Client: Deniz Construction Limited — produces and sells concrete blocks, pavers and kerbs",
+            "Problem: Super-Manager bottleneck (one person = supervisor, cashier, payroll, records, tax), unexplained cash deficits, informal labor, data vulnerability",
+            "Users: Sales Manager (primary), Business Owner (daily review), Workers (attendance)",
+            "Scope: Dual-phase system — Day: Real-time POS with receipt printing; Evening: Reconciliation with cash variance and daily report"
+          ]
         }
-      ],
-      "notes": [
-        "Speaker 2 | 2 minutes. Explain why the Sales Manager is the primary user and why the Owner needs a finalized report. Deniz takes payment upfront. The group observed daytime receipting and learned that the Sales Manager uses the laptop to process deficits.",
-        "Q&A prompt. Why design two workflows? Daytime receipting has to happen at the sale, while checking cash and saving the daily report happens at close.",
-        "Sources. Phase 1 Elicitation and Stakeholder Analysis, sections 2 and 5. Master specification, Part 1 scope and REC requirements.",
-        "Technical Q&A. Each sale can have multiple product lines. The Sales_Items trigger deducts stock from Products. If any line is oversold, the whole sale rolls back. The receipt prints after commit. The database design retains original receipts and records voids or refunds as linked adjustments."
       ]
     },
     {
-      "title": "Stakeholders and elicitation methods",
+      "title": "Elicitation: Stakeholders, Method & Challenge",
+      "subtitle": "Group K Topic: Elicitation",
       "content": [
         {
-          "type": "section",
-          "heading": "Stakeholders",
-          "text": "Sales Manager and Owner. Workers and customers are affected. URA is the external regulator."
-        },
-        {
-          "type": "section",
-          "heading": "Direct observation",
-          "text": "We saw the laptop in use and receipts being printed as trucks loaded."
-        },
-        {
-          "type": "section",
-          "heading": "Semi-structured interview",
-          "text": "The Sales Manager reported upfront payments by cash, Mobile Money or bank deposit."
+          "type": "bullets",
+          "items": [
+            "Stakeholders: Sales Manager (primary, interviewed), Business Owner (daily visitor, not interviewed), Site Workers (no access), URA (external), Customers (upfront payment, self-transport)",
+            "Methods: Direct Observation (laptop active, receipts printed during truck loading), Semi-Structured Interview (Sales Manager: payment channels, tax, pain points)",
+            "Finding: Dual-phase reality — laptop used during day for real-time receipts AND evening for deficit reconciliation",
+            "Challenge: Gatekeeper Effect — Sales Manager withheld tax calculations, cash storage, receipt fields; Owner/Workers inaccessible"
+          ]
         }
-      ],
-      "notes": [
-        "Speaker 3 | 1 minute. Distinguish the primary operator, the report audience and the affected stakeholders. The Sales Manager was interviewed during the single site visit. The Owner and workers were unavailable for interviews.",
-        "Speaker 4 | 1 minute. Explain what each method contributed. Observation showed the timing of receipting. The interview provided payment rules that were not visible from truck loading alone.",
-        "Q&A prompt. Why combine observation with an interview? Each answered a different question about how the work is done.",
-        "Source. Phase 1 Elicitation and Stakeholder Analysis, sections 4 to 6."
       ]
     },
     {
-      "title": "Group K’s elicitation example",
+      "title": "Key Requirements",
+      "subtitle": "Selected functional and non-functional requirements",
       "content": [
         {
-          "type": "section",
-          "heading": "Observation",
-          "text": "Receipts were printed while customers’ trucks were being loaded."
-        },
-        {
-          "type": "section",
-          "heading": "Limitation",
-          "text": "We could see receipts being printed but could not inspect the fields on them."
-        },
-        {
-          "type": "section",
-          "heading": "Design decision",
-          "text": "Print a receipt when the sale is saved. Specify the receipt fields separately."
+          "type": "bullets",
+          "items": [
+            "REQ-FUN-SAL-01: Post a sale to an open business date with multiple product lines; atomic commit (stock + sale + drawer); receipt prints after commit",
+            "REQ-FUN-REC-02: Log cash expenses against an open business date; deducts from expected cash",
+            "REQ-NFR-PER-01: Offline resilience — full sale + receipt printing without internet; local storage with queued sync"
+          ]
         }
-      ],
-      "notes": [
-        "Speaker 5 | 2 minutes. Explain the difference between timing and content. Seeing a receipt printed supports immediate receipting. It does not establish what the existing receipt contains. We recorded that gap because a follow-up visit was not feasible.",
-        "Q&A prompt. What did the receipt observation change? It gave us evidence that recording sales and printing receipts had to be supported during the day.",
-        "Sources. Phase 1 Elicitation and Stakeholder Analysis, sections 5 and 6. Master specification, REQ-FUN-SAL-04."
       ]
     },
     {
-      "title": "Key requirements and the offline check",
+      "title": "Project Example & Reflection",
+      "subtitle": "Stakeholder Power/Interest table + Lesson learned",
       "content": [
         {
-          "type": "section",
-          "heading": "Post sales and print receipts",
-          "text": "Give customers a receipt while their truck is being loaded."
+          "type": "table",
+          "header": [
+            "Stakeholder",
+            "Power",
+            "Interest",
+            "Status"
+          ],
+          "rows": [
+            ["Business Owner", "High", "High", "Gap — not interviewed"],
+            ["Sales Manager", "High", "High", "Interviewed — gatekeeper"],
+            ["Site Workers", "Low", "Low", "Gap — no access"],
+            ["URA (External)", "High", "Low", "Compliance driver"]
+          ]
         },
         {
-          "type": "section",
-          "heading": "Log each cash expense",
-          "text": "Account for cash paid out on the selected business date."
-        },
-        {
-          "type": "section",
-          "heading": "Reconcile and close the day",
-          "text": "Compare the cash count with expected cash and save the final report for the Owner."
-        },
-        {
-          "type": "section",
-          "heading": "Offline resilience (REQ-NFR-PER-01)",
-          "text": "Disconnect the laptop, post a sale and print its receipt. Check that the sale is stored locally."
+          "type": "bullets",
+          "items": [
+            "Artifact: Stakeholder Power/Interest table from Phase 1 field visit",
+            "Lesson: Initial end-of-day batch assumption corrected to dual-phase after observing real-time receipt printing during day"
+          ]
         }
-      ],
-      "notes": [
-        "Speaker 6 | 1.5 minutes. Explain the three functional examples and the person each helps. Sale entry and printing are REQ-FUN-SAL-01 and REQ-FUN-SAL-04. Expense logging is REQ-FUN-REC-02. Cash variance and closing are REQ-FUN-REC-04 and REQ-FUN-REC-05.",
-        "Speaker 7 | 1.5 minutes. Explain why the system should handle a sale without internet. Present the disconnect, save, print and local storage sequence as a planned pass check.",
-        "Q&A prompt. What makes the NFR measurable? The test has a defined offline condition and observable outcomes for posting, printing and local storage.",
-        "Source. Master specification, Part 1 functional and non-functional requirements.",
-        "Traceability reference for Q&A. The master contains the full matrix. These are the 19 requirement mappings.\nREQ-FUN-REC-02 | Operational Expense Logging | Operational_Expenses linked to Business_Day\nREQ-FUN-REC-03 | Expected Cash Computation | Daily_Payment_Activity and Business_Day opening cash, less Operational_Expenses\nREQ-FUN-REC-04 | Variance Reporting with Mandatory Explanation | Daily_Reconciliation table with Variance and Explanation columns\nREQ-FUN-REC-01 | Daily Payment Activity by Channel | Daily_Payment_Activity grouped by business date and payment method\nREQ-FUN-SAL-01 | Transactional Sale Entry | Sales and Sales_Items posted in one transaction\nREQ-FUN-REC-05 | Daily Summary Report Generation | CloseDay and the saved Daily_Reconciliation report\nREQ-FUN-SAL-02 | Automated VAT Calculation | CalculateVAT stored procedure (Subtotal * 0.18)\nREQ-FUN-SAL-03 | Sequential Receipts and Sale Adjustments | Sales and Sale_Adjustments preserve the original receipt and correction history\nREQ-FUN-SAL-04 | Physical Receipt Printing | Application prints after the sale transaction commits\nREQ-FUN-SAL-05 | Inventory Deduction Trigger | AFTER INSERT on Sales_Items updates Products.Current_Stock\nREQ-FUN-ATT-01 | Worker Attendance Logging with Unique Daily Constraint | Attendance table with PK (Worker_ID, Date)\nREQ-FUN-ATT-02 | Daily Payroll Eligibility | Payroll_Eligibility view joining Workers and Attendance\nREQ-FUN-TAX-01 | URA Summary Report | URA_Summary shows recorded VAT and separate adjustments\nREQ-FUN-BAK-01 | Automated Nightly Backup | Backup job scheduled after evening reconciliation\nREQ-NFR-SEC-01 | Role Based Access Control | Database roles and restricted views\nREQ-NFR-SEC-02 | Immutable Audit Trail | Audit_Log table with insert only semantics\nREQ-NFR-USR-01 | Low Literacy Interface | UI with icons and minimal text\nREQ-NFR-PER-01 | Offline Resilience | Local database with queued sync\nREQ-NFR-PER-02 | Hardware Compatibility | Optimized queries and indexing"
       ]
     },
     {
-      "title": "Close of Day prototype",
+      "title": "Database Architecture Highlights",
+      "subtitle": "SWE1205: 3NF design with Business_Day model",
       "content": [
         {
-          "type": "screenshot",
-          "text": "Close of Day screenshot to be added",
-          "caption": "Prototype with sample data"
+          "type": "bullets",
+          "items": [
+            "Core entities: Business_Day (Open/Closed, Opening_Cash), Sales, Sales_Items, Products, Operational_Expenses, Sale_Adjustments, Daily_Reconciliation",
+            "Atomic sales: AFTER INSERT on Sales_Items deducts Products.Current_Stock; rejects oversold lines; rolls back entire sale on failure",
+            "Adjustments: Sale_Adjustments preserves original receipt, restores stock for entry errors, records refunds via original channel",
+            "Reconciliation: CloseDay locks Business_Day row in one InnoDB transaction; validates cash count; saves snapshot + Closed status atomically",
+            "Views: Daily_Payment_Activity by date/channel; URA_Summary separates recorded VAT from adjustments; Owner-only views for Total_Profit, Tax_Liability"
+          ]
         }
-      ],
-      "notes": [
-        "Before presenting, insert one large screenshot of the actual Close of Day prototype. Use sample data. Keep the business date, three payment-channel totals, expected and actual cash, variance and explanation visible.",
-        "Speaker 8 | 1.5 minutes. Point to the business date and the separate recorded activity for Cash, Mobile Money and Bank Deposit. Explain that the three totals belong to the selected date.",
-        "Speaker 9 | 1.5 minutes. Walk through the sample from the verification plan. UGX 450,000 expected, UGX 445,000 counted and a UGX 5,000 deficit. A nonzero variance requires an explanation. Reflect on why separating two business dates matters. Closing one day must preserve its report without clearing or mixing activity for another date.",
-        "Q&A prompt. Why save the close by date? The Owner needs to reopen the same finalized report, and a second close must return the saved result.",
-        "Source. Master specification, REQ-FUN-REC-01 through REQ-FUN-REC-05 and Part 3 verification cases. Figures are sample data.",
-        "Technical Q&A. Opening cash, net cash activity and logged expenses determine expected cash for the business date. CloseDay locks that date, saves the report snapshot and marks the date closed in the same transaction. Daily_Payment_Activity groups recorded activity by date and payment channel. URA_Summary shows recorded VAT and adjustments separately."
       ]
     },
     {
-      "title": "What we learned",
+      "title": "Conclusion & Next Steps",
+      "subtitle": "Project Delivery and Future Enhancements",
       "content": [
         {
-          "type": "section",
-          "heading": "Fieldwork shaped the design",
-          "text": "Seeing when receipts were printed showed us when the system needed to record sales."
-        },
-        {
-          "type": "section",
-          "heading": "The prototype shows the proposed workflow",
-          "text": "The next checks are offline sales and printing, and a close that preserves each business date."
+          "type": "bullets",
+          "items": [
+            "Conclusion: DCMS architecture driven by observed bottlenecks; every requirement maps to a database entity, trigger, or stored procedure",
+            "Next Steps: Deploy on existing office laptop with User Manual for Sales Manager; verify offline sale + receipt; verify CloseDay preserves each business date",
+            "Future Enhancements: Advanced logistics tracking, formal Secretary role logged in Future Enhancements Backlog for post-academic implementation",
+            "Q&A: 5 minutes — each member prepared to explain their contribution and one project decision"
+          ]
         }
-      ],
-      "notes": [
-        "Speaker 10 | 1 minute. Recap what Group K observed, the requirement it produced and what still needs verification. Invite questions.",
-        "Individual Q&A | About 5 minutes. Each person should be able to state their own contribution and explain one project decision, requirement or course concept. Use the prompts on the previous slides to rehearse.",
-        "Sources. Phase 1 field observations and master specification verification plan."
       ]
     }
   ]
