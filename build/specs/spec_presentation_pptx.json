@@ -144,8 +144,8 @@
         {
           "type": "bullets",
           "items": [
-            "Phase 1: Real Time Point of Sale. During the day, the system processes individual sales, calculates VAT, updates inventory and prints physical receipts.",
-            "Phase 2: End of Day Reconciliation. In the evening, the system allows the Sales Manager to balance multi channel payment drawers, log operational expenses, compute cash variances and generate a final daily summary report for the Business Owner.",
+            "Phase 1: Real Time Point of Sale. During the day, the system processes individual sales with multiple product lines, calculates VAT, updates inventory atomically and prints physical receipts after commit.",
+            "Phase 2: End of Day Reconciliation. In the evening, the system shows recorded payment activity by channel, logs operational expenses, computes cash variance with opening float, and generates a final daily summary report for the Business Owner.",
             "Excluded Features: Credit and debtors modules are excluded, as the business operates on a strict no credit policy."
           ]
         }
@@ -158,17 +158,19 @@
         {
           "type": "bullets",
           "items": [
-            "Normalization: Database normalized to 3NF to eliminate redundancy across Workers, Attendance, Products, Sales and Operational Expenses.",
-            "Stored Procedures: CalculateVAT fetches the rate from a System Settings table and applies it to the subtotal.",
-            "Triggers: TRG Sales Insert automatically reduces Current Stock in the Products table upon sale insertion.",
-            "Role Based Access Control: Views like View Owner Profitability are strictly restricted to the Business Owner role."
+            "Normalization: Database normalized to 3NF across Workers, Attendance, Products, Sales, Sales_Items, Business_Day, Operational_Expenses, Sale_Adjustments, Daily_Reconciliation.",
+            "Business Day Model: Each business date has an opening cash float, status (Open/Closed), and owns all sales, expenses, adjustments and one reconciliation snapshot.",
+            "Atomic Sales: AFTER INSERT trigger on Sales_Items deducts stock from Products.Current_Stock; rejects oversold lines; rolls back entire sale on any failure.",
+            "Adjustments: Sale_Adjustments preserves original receipt, restores stock for entry errors, records refunds through original channel, respects closed-date immutability.",
+            "Reconciliation: CloseDay locks Business_Day row in one InnoDB transaction; validates cash count and explanation; saves snapshot and Closed status atomically.",
+            "Views: Daily_Payment_Activity groups by business date and channel; URA_Summary separates recorded VAT from adjustments; Owner-only views for Total_Profit and Tax_Liability."
           ]
         }
       ]
     },
     {
       "title": "Requirements Traceability",
-      "subtitle": "Linking Problems to Code",
+      "subtitle": "Linking Problems to Code (19 Entries)",
       "content": [
         {
           "type": "table",
@@ -181,21 +183,117 @@
           "rows": [
             [
               "Unexplained cash deficits",
-              "REQ-FUN-EXP-01",
-              "Operational Expense module",
-              "Table: Operational_Expenses, Trigger: TRG Expense Insert"
+              "REQ-FUN-REC-02",
+              "Operational Expense Logging",
+              "Operational_Expenses linked to Business_Day"
             ],
             [
-              "Informal labor tracking and ghost worker risk",
+              "Unexplained cash deficits",
+              "REQ-FUN-REC-03",
+              "Expected Cash Computation",
+              "Daily_Payment_Activity and Business_Day opening cash, less Operational_Expenses"
+            ],
+            [
+              "Unexplained till variances at end of day",
+              "REQ-FUN-REC-04",
+              "Variance Reporting with Mandatory Explanation",
+              "Daily_Reconciliation table with Variance and Explanation columns"
+            ],
+            [
+              "Three payment channels need separate daily totals",
+              "REQ-FUN-REC-01",
+              "Daily Payment Activity by Channel",
+              "Daily_Payment_Activity grouped by business date and payment method"
+            ],
+            [
+              "Daytime sales need to be recorded during loading",
+              "REQ-FUN-SAL-01",
+              "Transactional Sale Entry",
+              "Sales and Sales_Items posted in one transaction"
+            ],
+            [
+              "Owner needs a record of the completed day",
+              "REQ-FUN-REC-05",
+              "Daily Summary Report Generation",
+              "CloseDay and the saved Daily_Reconciliation report"
+            ],
+            [
+              "Manual VAT calculation errors",
+              "REQ-FUN-SAL-02",
+              "Automated VAT Calculation",
+              "CalculateVAT stored procedure (Subtotal * 0.18)"
+            ],
+            [
+              "Receipt history must remain traceable",
+              "REQ-FUN-SAL-03",
+              "Sequential Receipts and Sale Adjustments",
+              "Sales and Sale_Adjustments preserve the original receipt and correction history"
+            ],
+            [
+              "Real time receipt printing required during truck loading",
+              "REQ-FUN-SAL-04",
+              "Physical Receipt Printing",
+              "Application prints after the sale transaction commits"
+            ],
+            [
+              "Inventory not tracking sold blocks in real time",
+              "REQ-FUN-SAL-05",
+              "Inventory Deduction Trigger",
+              "AFTER INSERT on Sales_Items updates Products.Current_Stock"
+            ],
+            [
+              "No formal attendance; ghost worker risk",
+              "REQ-FUN-ATT-01",
+              "Worker Attendance Logging with Unique Daily Constraint",
+              "Attendance table with PK (Worker_ID, Date)"
+            ],
+            [
+              "Daily payroll based on memory",
               "REQ-FUN-ATT-02",
-              "Reject duplicate attendance entries",
-              "Table: Attendance (Composite Unique Key)"
+              "Daily Payroll Eligibility",
+              "Payroll_Eligibility view joining Workers and Attendance"
             ],
             [
-              "Manual URA tax transcription errors",
+              "URA tax filing requires manual transcription",
               "REQ-FUN-TAX-01",
-              "URA Summary Generation",
-              "Stored Procedure: GenerateURA Summary"
+              "URA Summary Report",
+              "URA_Summary shows recorded VAT and separate adjustments"
+            ],
+            [
+              "Single laptop data vulnerability",
+              "REQ-FUN-BAK-01",
+              "Automated Nightly Backup",
+              "Backup job scheduled after evening reconciliation"
+            ],
+            [
+              "Sales Manager cannot see Owner financials",
+              "REQ-NFR-SEC-01",
+              "Role Based Access Control",
+              "Database roles and restricted views"
+            ],
+            [
+              "Financial record tampering risk",
+              "REQ-NFR-SEC-02",
+              "Immutable Audit Trail",
+              "Audit_Log table with insert only semantics"
+            ],
+            [
+              "Worker literacy varies",
+              "REQ-NFR-USR-01",
+              "Low Literacy Interface",
+              "UI with icons and minimal text"
+            ],
+            [
+              "Internet unavailable during day",
+              "REQ-NFR-PER-01",
+              "Offline Resilience",
+              "Local database with queued sync"
+            ],
+            [
+              "Laptop hardware limits",
+              "REQ-NFR-PER-02",
+              "Hardware Compatibility",
+              "Optimized queries and indexing"
             ]
           ]
         }
