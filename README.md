@@ -48,7 +48,6 @@ Phase1_Elicitation-and-Stakeholder-Analysis.docx       Phase 1 deliverable
 Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx  Phases 2-5 master deliverable
 Phase2-5_Project-Deliverables-Guide.docx               Deliverables guide
 PhaseFinal_Grand-Project-Presentation.pptx             Phase Final: presentation deck (PPTX)
-PhaseFinal_Grand-Project-Presentation-Backup.docx      Phase Final: presentation deck (DOCX backup)
 build/                                                 Build pipeline (specs + scripts)
 project_deliverables/                                  Generated deliverables
 reference_data/                                        Raw input documents + chat export
@@ -61,7 +60,7 @@ reference_data/                                        Raw input documents + cha
 | 1 | Requirements Elicitation and Stakeholder Analysis | Phase 1 | Complete | Phase1_Elicitation-and-Stakeholder-Analysis.docx |
 | 2 | Specification, Traceability, and Management (Master) | Phases 2-5 | Complete | Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx |
 | 9 | Grand Project Presentation Deck | Phase Final | Complete | PhaseFinal_Grand-Project-Presentation.pptx |
-| 10 | User Manual / SOP | Phase Final | Pending | — |
+| 10 | User Manual / SOP | Phase Final | Complete | User-Manual-SOP.docx |
 | — | Project Deliverables Guide | Reference | Complete | Phase2-5_Project-Deliverables-Guide.docx |
 
 **Note:** Documents 3 through 8 from the original roadmap (SRS, RTM, V&V Plan, Management Plan, ER Diagram, Physical DB Design) have been consolidated into the single Master Document (Document 2) per the corrected roadmap.
@@ -74,7 +73,7 @@ reference_data/                                        Raw input documents + cha
 | Weeks 3-4 | Phase 2 & 3: Analysis & Specification | SRS (IEEE 830), Functional & Non-Functional Requirements, Use Cases, RTM | Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx (Parts 1-2) |
 | Weeks 5-6 | Phase 4 & 5: Validation & Management | V&V Plan, Requirements Management Plan, Change Control, Version Control | Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx (Parts 3-4) |
 | SWE1205 | Database & System Design | ER Diagram, Data Dictionary, Stored Procedures, Triggers, Views | Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx (Part 5) |
-| End of Semester | Phase Final: Grand Presentation | Presentation Deck, User Manual / SOP | PhaseFinal_Grand-Project-Presentation.pptx + Doc 10 (pending) |
+| End of Semester | Phase Final: Grand Presentation | Presentation Deck, User Manual / SOP | PhaseFinal_Grand-Project-Presentation.pptx + User-Manual-SOP.docx |
 | Ongoing | Reference | Project Deliverables Guide | Phase2-5_Project-Deliverables-Guide.docx |
 
 ## Architecture
