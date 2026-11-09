@@ -36,6 +36,7 @@ import sys
 from docx import Document
 from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_LINE_SPACING
+from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Pt, RGBColor
 
@@ -171,6 +172,7 @@ def add_meta(doc, lines):
 def add_heading(doc, text, level):
     p = doc.add_paragraph()
     style_paragraph(p, space_before=12, space_after=6)
+    p.paragraph_format.keep_with_next = True
     set_run(p.add_run(clean(text)), bold=True)
     return p
 
@@ -211,6 +213,7 @@ def add_table(doc, header, rows):
     table = doc.add_table(rows=1, cols=ncols)
     table.style = "Table Grid"
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    table.rows[0]._tr.get_or_add_trPr().append(OxmlElement("w:tblHeader"))
 
     hdr = table.rows[0].cells
     for i, cell_text in enumerate(header):
@@ -221,7 +224,9 @@ def add_table(doc, header, rows):
         set_run(p.add_run(clean(cell_text)), bold=True)
 
     for row in rows:
-        cells = table.add_row().cells
+        table_row = table.add_row()
+        table_row._tr.get_or_add_trPr().append(OxmlElement("w:cantSplit"))
+        cells = table_row.cells
         for i in range(ncols):
             value = row[i] if i < len(row) else ""
             cell = cells[i]

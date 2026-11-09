@@ -29,7 +29,7 @@
     },
     {
       "type": "para",
-      "text": "The DCMS is a Dual Phase Operations Management System. During the day, it functions as a Real Time Point of Sale to process individual sales, calculate VAT, update inventory and print physical receipts for customers. In the evening, it functions as an End of Day Reconciliation Engine, allowing the Sales Manager to balance multi channel payment drawers, log operational expenses, compute cash variances and generate a final daily summary report for the Business Owner."
+      "text": "The DCMS is a Dual Phase Operations Management System. During the day, it functions as a Real Time Point of Sale to process individual sales, calculate VAT, update inventory and print physical receipts for customers. In the evening, it functions as an End of Day Reconciliation Engine, allowing the Sales Manager to review recorded payment activity by channel, log operational expenses, compute cash variances and generate a final daily summary report for the Business Owner."
     },
     {
       "type": "h2",
@@ -124,7 +124,7 @@
       "items": [
         "The system must run on the existing single office laptop (assumed baseline standard office specification).",
         "The system must operate in an offline first mode for real time receipting during the day and batch reconciliation in the evening.",
-        "The system must support multi channel payment tracking (Cash, Mobile Money, Bank Deposit) with strict separation of drawer balances.",
+        "The system must support multi channel payment tracking (Cash, Mobile Money, Bank Deposit) with separate totals by business date and channel.",
         "All financial data must be backed up automatically to a secure cloud destination each evening after reconciliation."
       ]
     },
@@ -161,7 +161,7 @@
           "bold": true
         },
         {
-          "text": "The system shall allow the Sales Manager to log an individual sale by entering the product, quantity, unit price and payment method (Cash, Mobile Money, Bank Deposit)."
+          "text": "The system shall allow the Sales Manager to post a sale to an open business date with one or more product lines, each with a positive quantity and a unit price, and one payment method (Cash, Mobile Money or Bank Deposit). The sale and all stock changes shall commit together."
         }
       ]
     },
@@ -185,7 +185,7 @@
           "bold": true
         },
         {
-          "text": "The system shall generate a unique, sequential Receipt ID for every transaction. If an error occurs, the system shall not allow hard deletion. Instead, the receipt shall be marked as voided with a mandatory reason to maintain an unbroken sequence for URA audit compliance."
+          "text": "The system shall generate a unique, sequential Receipt ID for every transaction. The system shall retain the original receipt and require a reason for every void, refund or correction. An erroneous entry on an open day may be voided if no payment was received and no goods were released. Record a full refund only when the full payment was returned through the original channel. Record corrections to a closed sale on an open business date and preserve the original close."
         }
       ]
     },
@@ -197,7 +197,7 @@
           "bold": true
         },
         {
-          "text": "Upon saving a sale, the system shall immediately format and send a physical receipt to the attached printer containing the sequential ID, date, customer name, product description, quantity, unit price, subtotal, VAT, total amount and payment method."
+          "text": "After the sale commits, the system shall immediately format and send a physical receipt to the attached printer containing the sequential ID, date, customer name, product description, quantity, unit price, subtotal, VAT, total amount and payment method."
         }
       ]
     },
@@ -209,7 +209,7 @@
           "bold": true
         },
         {
-          "text": "An AFTER INSERT trigger on the Sales table shall automatically deduct the sold quantity from the Current Stock in the Inventory table for the corresponding product."
+          "text": "The system shall deduct stock for each sale line. If any quantity exceeds the stock available for that product, the system shall reject the entire sale. It shall flag stock at or below the reorder level."
         }
       ]
     },
@@ -221,11 +221,11 @@
       "type": "para",
       "runs": [
         {
-          "text": "REQ-FUN-REC-01 (Multi Channel Drawer Balances). ",
+          "text": "REQ-FUN-REC-01 (Daily Payment Activity by Channel). ",
           "bold": true
         },
         {
-          "text": "The system shall maintain three independent virtual drawer balances: Cash, Mobile Money and Bank Deposit. Each sale shall increment the corresponding drawer balance based on its payment method."
+          "text": "The system shall show separate recorded payment activity for Cash, Mobile Money and Bank Deposit for the selected business date. Each channel total shall include sales recorded for that date, less entry voids for sales of that date and refunds paid that date. Mobile Money and Bank Deposit totals represent recorded activity. External statement matching is outside this design."
         }
       ]
     },
@@ -237,7 +237,7 @@
           "bold": true
         },
         {
-          "text": "The system shall provide an Operational Expense module allowing the Sales Manager to log individual cash out events (for example, loader lunch, transport fare) during the day or during the evening reconciliation session."
+          "text": "The system shall allow the Sales Manager to log zero or more individual cash expenses against an open business date during the day or at evening reconciliation."
         }
       ]
     },
@@ -249,7 +249,7 @@
           "bold": true
         },
         {
-          "text": "At the end of the day, the system shall calculate the Expected Cash Balance as the sum of all Cash sales minus the sum of all Operational Expenses logged against the Cash drawer."
+          "text": "The system shall calculate expected cash for the selected business date as recorded opening cash plus net cash sales activity minus logged cash expenses. Net cash sales activity excludes entry errors voided on the same date and subtracts cash refunds paid that date. A bookkeeping correction to an earlier date does not reduce today's expected cash. Opening cash defaults to zero and can be recorded before closing if a float is carried. The site practice for carrying a float is unconfirmed."
         }
       ]
     },
@@ -261,7 +261,7 @@
           "bold": true
         },
         {
-          "text": "The system shall prompt the Sales Manager to enter the Actual Physical Cash on hand. The system shall then compute the Variance (Deficit or Surplus) as Actual Cash minus Expected Cash. A mandatory text explanation shall be required before the day can be closed."
+          "text": "The system shall require a physical cash count of zero or more. Variance equals actual cash minus expected cash. A negative variance is a deficit and a positive variance is a surplus. The Sales Manager shall provide a nonblank explanation when the variance is nonzero."
         }
       ]
     },
@@ -273,7 +273,7 @@
           "bold": true
         },
         {
-          "text": "Upon closing the day, the system shall generate a Daily Summary Report displaying Operational Metrics (Total Trucks Dispatched, Total Blocks Sold, Total Workers Present) followed by Financial Summary (Total Sales by Payment Channel, Operational Expenses, Expected Cash, Actual Cash, Variance, Notes)."
+          "text": "The system shall finalize one Daily Summary Report per business date. Closing shall save the payment totals for all three channels, opening cash, expenses, expected cash, actual cash, variance and explanation together. The report shall include trucks dispatched, blocks sold and workers present. Repeating a successful close shall return the saved result. A closed business date shall reject new financial postings."
         }
       ]
     },
@@ -317,13 +317,13 @@
           "bold": true
         },
         {
-          "text": "The system shall generate a URA Compliance Summary Report displaying Total Gross Sales and Total Calculated VAT (18 percent) for the selected period, formatted for direct transcription into the URA online portal."
+          "text": "The system shall generate a URA Compliance Summary Report showing posted sales, their recorded VAT and separately identified adjustments for the selected period. The filing treatment of refunds and corrections remains subject to verification against URA guidance."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "3.5 Module D: Data Backup and Recovery"
+      "text": "3.5 Module E: Data Backup and Recovery"
     },
     {
       "type": "para",
@@ -381,7 +381,7 @@
           "bold": true
         },
         {
-          "text": "The system shall enforce strict RBAC at both the database and application layers. The Sales Manager role shall have INSERT/UPDATE on Sales, Attendance and Expenses. The Owner role shall have SELECT on all tables and views including restricted views for Total Profit and Tax Liability. "
+          "text": "The system shall enforce strict RBAC at both the database and application layers. The Sales Manager shall post sales, expenses, adjustments and reconciliation through authorized operations that enforce the business date lock. The role shall have no direct write access to those financial tables. The role may maintain attendance. The Owner role shall have SELECT on all tables and views including restricted views for Total Profit and Tax Liability."
         }
       ]
     },
@@ -431,16 +431,16 @@
       ],
       "rows": [
         [
-          "Cash deficits caused by unrecorded petty cash expenses",
+          "Unexplained cash deficits",
           "REQ-FUN-REC-02",
           "Operational Expense Logging",
-          "Operational_Expenses table linked to Daily_Sales"
+          "Operational_Expenses linked to Business_Day"
         ],
         [
-          "Cash deficits caused by unrecorded petty cash expenses",
+          "Unexplained cash deficits",
           "REQ-FUN-REC-03",
           "Expected Cash Computation",
-          "Daily_Reconciliation view computing Expected_Cash = SUM(Cash_Sales) - SUM(Operational_Expenses)"
+          "Daily_Payment_Activity and Business_Day opening cash, less Operational_Expenses"
         ],
         [
           "Unexplained till variances at end of day",
@@ -449,10 +449,22 @@
           "Daily_Reconciliation table with Variance and Explanation columns"
         ],
         [
-          "Mixing of Cash, Mobile Money and Bank balances",
+          "Three payment channels need separate daily totals",
           "REQ-FUN-REC-01",
-          "Multi Channel Drawer Balances",
-          "Virtual_Drawers table (Cash, MoMo, Bank) updated per sale"
+          "Daily Payment Activity by Channel",
+          "Daily_Payment_Activity grouped by business date and payment method"
+        ],
+        [
+          "Daytime sales need to be recorded during loading",
+          "REQ-FUN-SAL-01",
+          "Transactional Sale Entry",
+          "Sales and Sales_Items posted in one transaction"
+        ],
+        [
+          "Owner needs a record of the completed day",
+          "REQ-FUN-REC-05",
+          "Daily Summary Report Generation",
+          "CloseDay and the saved Daily_Reconciliation report"
         ],
         [
           "Manual VAT calculation errors",
@@ -461,22 +473,22 @@
           "CalculateVAT stored procedure (Subtotal * 0.18)"
         ],
         [
-          "Broken URA receipt sequence due to deletions",
+          "Receipt history must remain traceable",
           "REQ-FUN-SAL-03",
-          "Sequential Receipt Generation with Void Only",
-          "Sales table with Status (Active, Voided) and Void_Reason columns"
+          "Sequential Receipts and Sale Adjustments",
+          "Sales and Sale_Adjustments preserve the original receipt and correction history"
         ],
         [
           "Real time receipt printing required during truck loading",
           "REQ-FUN-SAL-04",
           "Physical Receipt Printing",
-          "Receipt generation trigger on Sales INSERT"
+          "Application prints after the sale transaction commits"
         ],
         [
           "Inventory not tracking sold blocks in real time",
           "REQ-FUN-SAL-05",
           "Inventory Deduction Trigger",
-          "AFTER INSERT trigger on Sales updating Inventory.Current_Stock"
+          "AFTER INSERT on Sales_Items updates Products.Current_Stock"
         ],
         [
           "No formal attendance; ghost worker risk",
@@ -494,7 +506,7 @@
           "URA tax filing requires manual transcription",
           "REQ-FUN-TAX-01",
           "URA Summary Report",
-          "URA_Summary view aggregating Sales with 18 percent VAT"
+          "URA_Summary shows recorded VAT and separate adjustments"
         ],
         [
           "Single laptop data vulnerability",
@@ -567,11 +579,11 @@
       "type": "bullets",
       "items": [
         "Unit Test: CalculateVAT Stored Procedure. Input: Subtotal = 100,000. Expected Output: VAT = 18,000, Total = 118,000. Edge case: Subtotal = 0 returns VAT = 0.",
-        "Unit Test: Inventory Deduction Trigger. Insert a Sale record for Product X, Quantity = 5. Verify Inventory.Current_Stock for Product X decrements by 5. Edge case: Stock reaches zero does not go negative.",
-        "Unit Test: Sequential Receipt Void Logic. Insert Sale A (Active), Sale B (Active), Void Sale A with Reason. Verify Receipt IDs are sequential (1, 2), Sale A Status = Voided, Void_Reason populated, Sequence unbroken.",
-        "Unit Test: Multi Channel Drawer Isolation. Insert Cash Sale, MoMo Sale, Bank Sale. Verify Cash_Drawer increments only for Cash, MoMo_Drawer only for MoMo, Bank_Drawer only for Bank.",
-        "Unit Test: Expected Cash Computation. Cash Sales = 500,000. Operational Expenses (Cash) = 50,000. Expected Cash = 450,000. Verify calculation in Daily_Reconciliation view.",
-        "Unit Test: Variance Calculation. Actual Cash = 445,000. Expected Cash = 450,000. Variance = -5,000 (Deficit). Verify sign and mandatory explanation field enforcement.",
+        "Inventory and atomic sale posting. Sell two products and check each deduction. Retry with an oversold line and verify the sale, all stock changes and any alert roll back. Test zero, negative and exact stock quantities.",
+        "Sale adjustments. Void an unpaid entry error and verify the original receipt remains visible, stock is restored and the entry is removed from net payment activity. Record a refund on an open date and verify the linked adjustment, stock for goods returned and unchanged prior close. Reject a duplicate full adjustment. Correct a prior day entry error and verify current expected cash and the closed snapshot stay unchanged.",
+        "Payment totals and closing. Post sales in three channels across two business dates. Verify each channel and date is isolated. Close one date while another session attempts to post to it. Verify the post is included or rejected, a second close returns the saved result and the other date is unaffected.",
+        "Expected cash. With zero opening cash, cash sales of 500,000 and expenses of 50,000, expected cash is 450,000. With an opening float of 20,000 and a cash refund of 10,000, expected cash is 460,000.",
+        "Variance. Actual cash of 445,000 against expected cash of 450,000 gives a deficit of 5,000 with a negative stored variance. Reject a blank explanation for a nonzero variance and accept a blank explanation at zero variance. Reject missing or negative cash counts.",
         "Unit Test: Attendance Unique Daily Constraint. Attempt to insert duplicate (Worker_ID, Date). Verify database constraint rejection.",
         "Unit Test: RBAC Enforcement. Attempt SELECT on Total_Profit view as Sales Manager role. Verify permission denied. Attempt same as Owner role. Verify permission granted.",
         "Integration Test: End to End Daily Workflow. Simulate 10 sales across all payment channels, 3 expenses, 5 attendance logs. Run evening reconciliation. Verify Daily Summary Report matches manual calculation."
@@ -656,32 +668,44 @@
         [
           "Sales",
           "Sale_ID",
-          "Date_Time, Customer_Name, Subtotal, VAT, Total, Payment_Method, Status (Active, Voided), Void_Reason",
-          "1:N Sales_Items, N:1 Virtual_Drawers"
+          "Business_Date, Date_Time, Customer_Name, Subtotal, VAT, Total, Payment_Method",
+          "1:N Sales_Items, N:1 Business_Day"
         ],
         [
           "Sales_Items",
           "(Sale_ID, Product_ID) composite",
-          "Quantity, Line_Total",
+          "Quantity, Unit_Price, Line_Total",
           "N:1 Sales, N:1 Products"
         ],
         [
-          "Virtual_Drawers",
-          "Drawer_Type (Cash, MoMo, Bank)",
-          "Opening_Balance, Current_Balance",
-          "1:N Sales"
+          "Business_Day",
+          "Business_Date",
+          "Status (Open, Closed), Opening_Cash",
+          "One day has many sales, expenses and adjustments and zero or one final reconciliation"
         ],
         [
           "Operational_Expenses",
           "Expense_ID",
-          "Date, Description, Amount, Drawer_Type (Cash), Logged_By",
-          "N:1 Daily_Reconciliation"
+          "Business_Date, Description, Amount, Logged_By",
+          "N:1 Business_Day"
         ],
         [
           "Daily_Reconciliation",
-          "Reconciliation_Date",
-          "Expected_Cash, Actual_Cash, Variance, Explanation, Closed_By",
-          "1:1 Operational_Expenses (Cash)"
+          "Business_Date",
+          "Opening_Cash, Cash_Activity, MoMo_Activity, Bank_Activity, Cash_Expenses, Expected_Cash, Actual_Cash, Variance, Explanation, Closed_By, Report_Snapshot",
+          "One final record per closed Business_Day"
+        ],
+        [
+          "Sale_Adjustments",
+          "Sale_ID",
+          "Effective_Business_Date, Kind, Reason, Net_Amount, VAT_Amount, Recorded_By",
+          "Zero or one full adjustment per sale, N:1 Business_Day"
+        ],
+        [
+          "Adjustment_Items",
+          "(Sale_ID, Product_ID)",
+          "Quantity_Restocked",
+          "N:1 Sale_Adjustments, linked to original Sales_Items"
         ],
         [
           "Audit_Log",
@@ -707,23 +731,23 @@
     },
     {
       "type": "para",
-      "text": "CloseDay() RETURNS Daily_Reconciliation_Record: Computes Expected_Cash per REQ-FUN-REC-03, creates the Daily_Reconciliation record and marks the day as closed. Requires Actual_Cash input and mandatory Explanation if Variance != 0."
+      "text": "CloseDay accepts Business_Date, Actual_Cash, Explanation and Closed_By. In one InnoDB transaction it locks the selected Business_Day row. If closed, it returns the saved reconciliation. Otherwise it validates the count and explanation, calculates the daily totals and saves the report snapshot and Closed status together. An error rolls back the close. Opening cash changes use the same business date lock and require Open status. Each new date has its own activity and opening cash."
     },
     {
       "type": "h2",
-      "text": "3. Triggers"
+      "text": "3. Stock Trigger and Transaction Rules"
     },
     {
       "type": "para",
-      "text": "AFTER INSERT ON Sales FOR EACH ROW: UPDATE Inventory SET Current_Stock = Current_Stock - NEW.Quantity WHERE Product_ID = NEW.Product_ID. IF Current_Stock <= Reorder_Level THEN INSERT INTO Inventory_Alerts."
+      "text": "An AFTER INSERT trigger on Sales_Items rejects nonpositive quantities. It deducts NEW.Quantity from Products.Current_Stock for NEW.Product_ID only if enough stock remains. If no row is updated, it raises an error. Stock at or below Reorder_Level is flagged using the resulting product balance."
     },
     {
       "type": "para",
-      "text": "AFTER INSERT ON Sales FOR EACH ROW: UPDATE Virtual_Drawers SET Current_Balance = Current_Balance + NEW.Total WHERE Drawer_Type = NEW.Payment_Method."
+      "text": "PostSale and cash expense posting must lock the same Business_Day row as CloseDay and require Open status. PostSale saves the header and all lines in one InnoDB transaction and rolls back on any failure. Receipt printing follows commit. Compute payment totals from posted records for each date and channel."
     },
     {
       "type": "para",
-      "text": "AFTER INSERT ON Operational_Expenses FOR EACH ROW: UPDATE Virtual_Drawers SET Current_Balance = Current_Balance - NEW.Amount WHERE Drawer_Type = Cash."
+      "text": "RecordSaleAdjustment locks the effective Business_Day and the original sale in one transaction. The project design supports one full adjustment per sale and refunds through the original channel. Net_Amount and VAT_Amount are signed reversals of the original subtotal and VAT. Refund payment activity uses the combined amount. For an entry error, reverse the recorded sale amount and VAT and restore stock only for goods that were never released. For a refund, require confirmation that the original total was returned through the original channel and restore only goods returned to stock. Preserve closed snapshots. Record the reason and audit entry in the same transaction."
     },
     {
       "type": "h2",
@@ -731,11 +755,11 @@
     },
     {
       "type": "para",
-      "text": "Daily_Sales_Summary: Aggregates Sales by Payment_Method for a given date. Used for the Daily Summary Report."
+      "text": "Daily_Payment_Activity groups original sales and signed adjustments by business date and payment method. Count a same day entry void or an actual refund once in payment activity. Show corrections of prior day entry errors separately because they do not move money on the current date. The original entry remains visible in the transaction history."
     },
     {
       "type": "para",
-      "text": "URA_Summary: Aggregates Sales by date range with 18 percent VAT calculation. Formatted for URA portal transcription."
+      "text": "URA_Summary reports recorded sales and VAT with linked adjustments shown separately by effective date. Filing treatment of refunds and corrections requires validation."
     },
     {
       "type": "para",
@@ -743,15 +767,15 @@
     },
     {
       "type": "para",
-      "text": "Total_Profit (Owner Only): Restricted view computing Revenue minus Expenses per period. SELECT permission granted to Owner role only."
+      "text": "Total_Profit (Owner Only): Restricted view computing net revenue after recorded adjustments minus expenses per period. SELECT permission granted to Owner role only."
     },
     {
       "type": "para",
-      "text": "Tax_Liability (Owner Only): Restricted view computing total VAT collected per period. SELECT permission granted to Owner role only."
+      "text": "Tax_Liability (Owner Only): Restricted view showing recorded VAT and related adjustments for the period. SELECT permission granted to Owner role only."
     },
     {
       "type": "para",
-      "text": "Daily_Reconciliation_Report: Combines Daily_Reconciliation, Virtual_Drawers and Operational_Expenses for the final Owner report."
+      "text": "Daily_Reconciliation_Report reads the saved Daily_Reconciliation snapshot for the selected business date."
     }
   ]
 }

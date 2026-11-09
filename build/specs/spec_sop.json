@@ -72,29 +72,29 @@
       "The system instantly calculates 18% VAT and shows the Total.",
       "A physical receipt prints automatically on the attached printer.",
       "Hand the receipt to the customer.",
-      "The sale is recorded, inventory reduced, and the payment drawer updated."
+      "A successful save records all sale lines and reduces stock. Check the payment total for the selected business date. If stock is insufficient, correct the quantities before trying again."
     ] },
 
     { "type": "h2", "text": "3.6 Void a Sale (If Mistake)" },
     { "type": "numbered", "items": [
       "From the Home Dashboard click View Sales.",
       "Find the incorrect sale by Receipt ID.",
-      "Click Void, enter a reason (e.g. wrong quantity).",
-      "The receipt is marked Voided. The sequence stays unbroken for URA audit."
+      "Use Void for an entry error on an open date when no money was received and no goods were released. Enter the reason.",
+      "The original receipt stays in the history. If money was returned or the sale date is already closed, record a linked adjustment on an open date. For a full refund, confirm the original payment was returned through the same channel and record which goods came back into stock."
     ] },
 
     { "type": "h1", "text": "4. END-OF-DAY RECONCILIATION WORKFLOW (EVENING)" },
-    { "type": "para", "text": "Run this once per day before the Business Owner arrives. It balances all payment drawers, logs expenses and produces the Daily Summary Report." },
+    { "type": "para", "text": "Run this once per day before the Business Owner arrives. It shows recorded payment activity by channel, reconciles physical cash and produces the Daily Summary Report." },
 
     { "type": "h2", "text": "4.1 Open Reconciliation" },
     { "type": "numbered", "items": [
       "From the Home Dashboard click End of Day Reconciliation.",
-      "The screen shows three virtual drawers: Cash, Mobile Money, Bank Deposit."
+      "Select the open business date. The screen shows recorded activity for Cash, Mobile Money and Bank Deposit."
     ] },
 
-    { "type": "h2", "text": "4.2 Verify Drawer Balances" },
+    { "type": "h2", "text": "4.2 Review Payment Activity and Count Cash" },
     { "type": "numbered", "items": [
-      "Each drawer shows the Expected Balance (total sales for that method).",
+      "Review the recorded total for each payment method. Enter the opening cash float if one was carried. Expected cash includes the opening float and net cash activity, less logged cash expenses.",
       "For Cash: count the physical cash in the drawer.",
       "Enter the Actual Cash Counted.",
       "The system computes Variance = Actual minus Expected."
@@ -105,21 +105,21 @@
       "Click Add Expense.",
       "Enter description (e.g. Loader lunch, Transport fare, Boda-boda).",
       "Enter amount paid from the Cash drawer.",
-      "Click Save. The Cash drawer balance reduces automatically."
+      "Click Save. Expected cash and the variance are recalculated for the selected date."
     ] },
 
     { "type": "h2", "text": "4.4 Enter Variance Explanation" },
     { "type": "numbered", "items": [
       "If Variance is not zero, the system requires a text explanation.",
       "Type the reason (e.g. Unrecorded petty cash, Counting error).",
-      "This field is mandatory before closing the day."
+      "You can leave the explanation blank if the variance is zero."
     ] },
 
     { "type": "h2", "text": "4.5 Close the Day" },
     { "type": "numbered", "items": [
       "Review the Daily Summary Report preview.",
       "Click Close Day.",
-      "The system generates the final Daily Summary Report.",
+      "The system saves the final report and closes the selected business date. Use the saved report if you need to review it again.",
       "An encrypted cloud backup runs automatically.",
       "The report is ready for the Business Owner's morning review."
     ] },
@@ -128,7 +128,7 @@
     { "type": "para", "text": "The report has two sections:" },
     { "type": "bullets", "items": [
       "Operational Metrics: Total Trucks Dispatched, Total Blocks Sold, Total Workers Present.",
-      "Financial Summary: Total Sales by Payment Channel, Operational Expenses, Expected Cash, Actual Cash, Variance, Notes."
+      "Financial Summary: Net Payment Activity by Channel, Opening Cash, Operational Expenses, Expected Cash, Actual Cash, Variance, Notes."
     ] },
     { "type": "para", "text": "The Business Owner reviews this each morning." },
 
