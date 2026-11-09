@@ -57,6 +57,7 @@ def add_slide_textbox(slide, left, top, width, height, text, font_name, font_siz
     txBox = slide.shapes.add_textbox(Inches(left), Inches(top), Inches(width), Inches(height))
     tf = txBox.text_frame
     tf.word_wrap = True
+    tf.auto_size = MSO_ANCHOR.TOP  # Allow text to grow downward
     p = tf.paragraphs[0]
     run = p.add_run()
     run.text = text
@@ -110,10 +111,10 @@ def build(spec, out_path):
             if btype == "bullets":
                 items = block.get("items", [])
                 for item in items:
-                    add_slide_textbox(slide, 1.0, y, 11, 0.5, f"• {item}",
+                    add_slide_textbox(slide, 1.0, y, 11, 0.6, f"• {item}",
                                      font_name, font_size, False, body_color, PP_ALIGN.LEFT)
-                    y += 0.45
-                y += 0.2
+                    y += 0.5
+                y += 0.3
             elif btype == "table":
                 header = block.get("header", [])
                 rows = block.get("rows", [])
@@ -141,7 +142,7 @@ def build(spec, out_path):
                             if i % 2 == 1:
                                 cell.fill.solid()
                                 cell.fill.fore_color.rgb = hex_to_rgb("F5F5F5")
-                    y += 0.4 * (len(rows) + 1) + 0.3
+                    y += 0.4 * (len(rows) + 1) + 0.5
             elif btype == "para":
                 text = block.get("text", "")
                 add_slide_textbox(slide, 0.7, y, 11.5, 1.0, text,
