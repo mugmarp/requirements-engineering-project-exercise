@@ -54,7 +54,6 @@
       "rows": [
         ["Business Owner", "Strategic oversight. Visits the site daily to review operations and cash.", "High", "High", "Manage Closely. Status: Gap. Never interviewed. The system must prioritise the metrics he reviews during his daily evening visits."],
         ["Sales Manager", "The absolute centre of operations. Acts as supervisor, cashier, payroll distributor and record keeper.", "High", "High", "Manage Closely. Status: Fact. Interviewed. Acts as the gatekeeper."],
-        ["Secretary", "Named in initial project scoping to handle tax records and data entry.", "Medium", "High", "Keep Informed. Status: Gap. Never met. Ground observation confirms the Sales Manager currently performs all data entry."],
         ["Site Workers", "Produce blocks and pavers. Paid daily in cash. No formal legal contracts.", "Low", "Low", "Monitor. Status: Gap. No chance to speak to them."],
         ["URA (External)", "Uganda Revenue Authority. Dictates tax compliance, VAT and receipting standards.", "High", "Low", "Keep Satisfied. External regulator. No direct engagement but dictates compliance rules."],
         ["Customers and Builders", "Purchase blocks and pavers. Pay upfront. Transport their own goods by truck.", "Low", "Medium", "Keep Informed. The system must ensure quick processing to minimise loading delays."]
@@ -108,7 +107,7 @@
       "type": "numbered",
       "items": [
         "Stakeholder Hesitance and Information Withholding. The Sales Manager was reluctant to disclose the exact fields on the physical receipts, the method used to calculate URA taxes and the physical cash storage protocols.",
-        "Inaccessibility of Secondary Stakeholders. The Business Owner was not available for interview and the Site Workers and Secretary could not be approached directly.",
+        "Inaccessibility of Secondary Stakeholders. The Business Owner was not available for interview and the Site Workers could not be approached directly.",
         "Incomplete Workflow Visibility. We knew the laptop is used to process deficits, but we could not observe the exact formula or the physical cash reconciliation process.",
         "Further follow-up visits were not feasible. The Sales Manager was unwilling to provide further information and a return visit to the site could not be arranged. The project scope is locked."
       ]
@@ -139,7 +138,7 @@
 
     { "type": "h1", "text": "8. CONCLUSION AND TRANSITION" },
     { "type": "para", "text": "By combining direct observation with logical business synthesis, Group K has mapped the current As-Is state of Deniz Construction Limited and documented all unresolvable elicitation challenges." },
-    { "type": "para", "text": "All gaps (Secretary, Workers, Receipt Fields, Cash Storage, Tax Calculation Method) are formally documented as limitations." },
+    { "type": "para", "text": "All gaps (Workers, Receipt Fields, Cash Storage, Tax Calculation Method) are formally documented as limitations." },
     { "type": "para", "text": "This elicitation and stakeholder analysis provides the input for Phase 2: Requirements Analysis and Specification, where the documented facts, synthesis, and implications will be translated into formal Software Requirements (SRS)." }
   ]
 }

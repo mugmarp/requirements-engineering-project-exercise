@@ -83,18 +83,6 @@
       "type": "para",
       "runs": [
         {
-          "text": "Secretary. ",
-          "bold": true
-        },
-        {
-          "text": "Status is a documented limitation. Never met and no interview data exists. System defaults all data entry permissions to the Sales Manager. This role is retained in the database schema purely for future organizational scaling."
-        }
-      ]
-    },
-    {
-      "type": "para",
-      "runs": [
-        {
           "text": "Site Workers. ",
           "bold": true
         },
@@ -393,7 +381,7 @@
           "bold": true
         },
         {
-          "text": "The system shall enforce strict RBAC at both the database and application layers. The Sales Manager role shall have INSERT/UPDATE on Sales, Attendance and Expenses. The Owner role shall have SELECT on all tables and views including restricted views for Total Profit and Tax Liability. The Secretary role (future scaling) shall have restricted INSERT/SELECT permissions."
+          "text": "The system shall enforce strict RBAC at both the database and application layers. The Sales Manager role shall have INSERT/UPDATE on Sales, Attendance and Expenses. The Owner role shall have SELECT on all tables and views including restricted views for Total Profit and Tax Liability. "
         }
       ]
     },
@@ -564,7 +552,7 @@
         "Walkthrough with Sales Manager: Review the Real Time Sale flow and End of Day Reconciliation flow against the observed As Is workflow. Confirm the Dual Phase model matches her mental model of daily operations.",
         "Owner Review of Daily Summary Report: Present the generated Daily Summary Report mockup to the Business Owner. Confirm the Operational Metrics First structure (Trucks, Blocks, Workers) followed by Financial Summary matches what he reviews during his daily evening visits.",
         "URA Compliance Check: Verify the URA Summary Report output format against a blank URA VAT form (obtained from the site or standard template). Confirm all required fields are present and VAT calculation matches the 18 percent standard.",
-        "Gap Closure Verification: For each documented gap (Secretary, Workers, Receipt Fields), verify that the stated assumption (for example, standard URA fiscal fields for receipts) is acceptable to the primary stakeholder (Sales Manager) during the walkthrough."
+        "Gap Closure Verification: For each documented gap (Workers, Receipt Fields), verify that the stated assumption (for example, standard URA fiscal fields for receipts) is acceptable to the primary stakeholder (Sales Manager) during the walkthrough."
       ]
     },
     {

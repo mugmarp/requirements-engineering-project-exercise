@@ -117,7 +117,7 @@
           "type": "bullets",
           "items": [
             "The Gatekeeper Effect: The Sales Manager was hesitant to share deep financial workflows, such as exact tax calculations and cash storage protocols.",
-            "Inaccessibility: The Business Owner, Site Workers and Secretary could not be approached directly. These are unresolvable gaps.",
+            "Inaccessibility: The Business Owner, Site Workers could not be approached directly. These are unresolvable gaps.",
             "No Follow up Feasibility: The Sales Manager was unwilling to provide further information and a return visit to the site is not possible. The project scope is locked."
           ]
         }
@@ -210,7 +210,7 @@
           "items": [
             "Conclusion: The DCMS architecture is directly driven by the operational bottlenecks observed at Deniz Construction Limited. Every functional requirement maps to a specific database entity, trigger, or stored procedure.",
             "Next Steps: Deployment of the system on the existing office laptop, accompanied by a simplified User Manual for the Sales Manager.",
-            "Future Enhancements: Features such as a formal Secretary role or advanced logistics tracking are logged in a Future Enhancements Backlog for post academic implementation."
+            "Future Enhancements: advanced logistics tracking are logged in a Future Enhancements Backlog for post academic implementation."
           ]
         }
       ]
