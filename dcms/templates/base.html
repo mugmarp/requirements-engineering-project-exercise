@@ -11,13 +11,17 @@
 <header class="site-header">
   <div class="header-inner">
     <a class="brand" href="{{ url_for('home') }}"><span class="brand-mark" aria-hidden="true">D</span><span>Deniz Construction <small>Operations Management</small></span></a>
-    {% if day %}
     <nav aria-label="Business date">
+      <a href="{{ url_for('home') }}" {% if not day %}aria-current="page"{% endif %}>Business dates</a>
+      {% if day %}
+      {% if day_status != 'closed' %}
       <a href="{{ url_for('sales', day=day) }}" {% if active == 'sales' %}aria-current="page"{% endif %}>Daily Sales</a>
-      <a href="{{ url_for('reconciliation', day=day) }}" {% if active == 'close' %}aria-current="page"{% endif %}>Close of Day</a>
+      {% endif %}
+      <a href="{{ url_for('reconciliation', day=day) }}" {% if active == 'close' %}aria-current="page"{% endif %}>{{ 'Saved report' if day_status == 'closed' else 'Close of Day' }}</a>
       <a href="{{ url_for('receipt_history', day=day) }}" {% if active == 'history' %}aria-current="page"{% endif %}>Receipts</a>
+      <a href="{{ url_for('attendance', day=day) }}" {% if active == 'attendance' %}aria-current="page"{% endif %}>Attendance</a>
+      {% endif %}
     </nav>
-    {% endif %}
     <span class="demo-badge">Prototype · Sample data</span>
   </div>
 </header>

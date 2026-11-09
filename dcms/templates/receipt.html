@@ -3,7 +3,11 @@
 {% block content %}
 <div class="page-heading screen-only">
   <div><p class="eyebrow">Business date {{ day }}</p><h1>Sale posted</h1><p>The receipt is ready to print or reprint.</p></div>
-  <div class="actions"><a class="button secondary" href="{{ url_for('sales', day=day) }}">New sale</a><button type="button" data-print>Print receipt</button></div>
+  <div class="actions">
+    {% if day_status == 'open' %}<a class="button secondary" href="{{ url_for('sales', day=day) }}">New sale</a>{% endif %}
+    <a class="button secondary" href="{{ url_for('receipt_history', day=day) }}">All receipts</a>
+    <button type="button" data-print>Print receipt</button>
+  </div>
 </div>
 <article class="panel printable receipt">
   <h2>Deniz Construction Limited</h2>

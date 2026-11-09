@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Attendance{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <div><p class="eyebrow">Business date {{ day }}</p><h1>Attendance</h1><p>Mark each worker present or absent for the selected date.</p></div>
+  <span class="status">{{ row.status|capitalize }}</span>
+</div>
+{% if error %}<p class="notice" role="alert">{{ error }}</p>{% endif %}
+<div class="channel-grid">
+  <article class="panel channel"><p>Workers present</p><strong>{{ count }}</strong></article>
+  <article class="panel channel"><p>Payroll eligibility</p><strong>UGX {{ total|money }}</strong></article>
+</div>
+<p class="muted attendance-note">Eligibility is based on workers marked present and their recorded daily rate. Wage payments are recorded separately as cash expenses when paid.</p>
+<section class="panel">
+  <h2>Worker register</h2>
+  {% for worker in workers %}
+  <div class="day-row">
+    <div><strong>{{ worker.name }}</strong><p class="muted">{{ worker.worker_code }} · UGX {{ worker.daily_rate|money }} per day · {{ worker.status|capitalize if worker.status else 'Unmarked' }}</p></div>
+    {% if row.status == 'open' %}
+    <form method="post" class="actions">
+      <input type="hidden" name="csrf" value="{{ csrf_token }}">
+      <input type="hidden" name="worker_id" value="{{ worker.id }}">
+      <button type="submit" name="status" value="present" {% if worker.status == 'present' %}disabled{% endif %}>Present</button>
+      <button type="submit" name="status" value="absent" class="secondary" {% if worker.status == 'absent' %}disabled{% endif %}>Absent</button>
+    </form>
+    {% endif %}
+  </div>
+  {% else %}<p>Add a worker to start recording attendance.</p>{% endfor %}
+</section>
+{% if row.status == 'open' %}
+<details class="panel">
+  <summary>Add a worker</summary>
+  <form method="post" action="{{ url_for('create_worker', day=day) }}">
+    <input type="hidden" name="csrf" value="{{ csrf_token }}">
+    <label>Worker code<input name="code" maxlength="30" required></label>
+    <label>Worker name<input name="name" maxlength="100" required></label>
+    <label>Daily rate (UGX)<input name="daily_rate" inputmode="decimal" required></label>
+    <button type="submit">Add worker</button>
+  </form>
+</details>
+{% endif %}
+{% endblock %}

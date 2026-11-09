@@ -15,6 +15,8 @@
     <div><strong>{{ row.business_date }}</strong><span class="status">{{ row.status|capitalize }}</span></div>
     <div class="actions">
       {% if row.status == 'open' %}<a class="button secondary" href="{{ url_for('sales', day=row.business_date) }}">Daily Sales</a>{% endif %}
+      <a class="button secondary" href="{{ url_for('attendance', day=row.business_date) }}">Attendance</a>
+      <a class="button secondary" href="{{ url_for('receipt_history', day=row.business_date) }}">Receipts</a>
       <a class="button" href="{{ url_for('reconciliation', day=row.business_date) }}">{{ 'Saved report' if row.status == 'closed' else 'Close of Day' }}</a>
     </div>
   </div>

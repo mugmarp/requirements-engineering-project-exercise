@@ -70,7 +70,23 @@ def create_app(database=DEFAULT_DB, *, password=None, secure=False):
     def context():
         if "csrf_token" not in session:
             session["csrf_token"] = secrets.token_urlsafe(32)
-        return {"csrf_token": session["csrf_token"], "channels": services.CHANNELS}
+        selected_day = (request.view_args or {}).get("day")
+        sale_id = (request.view_args or {}).get("sale_id")
+        if sale_id:
+            sale = db().execute("SELECT business_date FROM sales WHERE id = ?", (sale_id,)).fetchone()
+            if sale:
+                selected_day = sale["business_date"]
+        day_status = None
+        if selected_day:
+            row = db().execute(
+                "SELECT status FROM business_days WHERE business_date = ?", (selected_day,),
+            ).fetchone()
+            if row:
+                day_status = row["status"]
+        return {
+            "csrf_token": session["csrf_token"], "channels": services.CHANNELS,
+            "day_status": day_status,
+        }
 
     @app.template_filter("money")
     def money(amount):
@@ -153,6 +169,35 @@ def create_app(database=DEFAULT_DB, *, password=None, secure=False):
             (day,),
         ).fetchall()
         return render_template("history.html", active="history", day=day, sales=sales)
+
+    @app.route("/days/<day>/attendance", methods=["GET", "POST"])
+    def attendance(day):
+        error = None
+        status = 200
+        if request.method == "POST":
+            try:
+                services.mark_attendance(
+                    db(), day, request.form.get("worker_id", ""), request.form.get("status", ""),
+                )
+            except services.DomainError as problem:
+                error, status = problem, problem.status
+            else:
+                return redirect(url_for("attendance", day=day), code=303)
+        row = services.find_day(db(), day)
+        workers, count, total = services.attendance_summary(db(), day)
+        return render_template(
+            "attendance.html", active="attendance", day=day, row=row, workers=workers,
+            count=count, total=total, error=error,
+        ), status
+
+    @app.post("/days/<day>/workers")
+    def create_worker(day):
+        services.find_day(db(), day)
+        services.add_worker(
+            db(), request.form.get("code", ""), request.form.get("name", ""),
+            request.form.get("daily_rate", ""),
+        )
+        return redirect(url_for("attendance", day=day), code=303)
 
     def close_form(day, *, error=None, status=200, posted=None, expense_entry=None):
         row, activity = services.preview_close(db(), day)

@@ -163,6 +163,46 @@ class PrototypeTest(unittest.TestCase):
         self.assertIn(b"Test customer", fresh.get(receipt_url).data)
         self.assertIn(b"View receipt", fresh.get(f"/days/{NEXT_DAY}/receipts").data)
 
+    def test_attendance_eligibility_and_close_snapshot(self):
+        with connect(self.path) as db:
+            worker = services.add_worker(db, "W-01", "Sample worker", "20000")
+            other = services.add_worker(db, "W-02", "Other worker", "25000")
+            self.assertEqual(services.add_worker(db, "W-01", "Sample worker", "20000"), worker)
+            services.mark_attendance(db, NEXT_DAY, str(worker), "present")
+            revision = services.find_day(db, NEXT_DAY)["revision"]
+            services.mark_attendance(db, NEXT_DAY, str(worker), "present")
+            self.assertEqual(services.find_day(db, NEXT_DAY)["revision"], revision)
+            services.mark_attendance(db, NEXT_DAY, str(other), "absent")
+            self.assertEqual(services.attendance_summary(db, NEXT_DAY)[1:], (1, 2000000))
+            services.mark_attendance(db, DAY, str(worker), "absent")
+            self.assertEqual(services.attendance_summary(db, NEXT_DAY)[1:], (1, 2000000))
+            services.mark_attendance(db, NEXT_DAY, str(worker), "absent")
+            self.assertEqual(services.attendance_summary(db, NEXT_DAY)[1:], (0, 0))
+            services.mark_attendance(db, NEXT_DAY, str(worker), "present")
+            revision = services.find_day(db, NEXT_DAY)["revision"]
+            saved = services.close_day(db, NEXT_DAY, actual_cash="0", explanation="", revision=str(revision))
+            self.assertEqual((saved["workers_present"], saved["payroll_eligible"]), (1, 2000000))
+            with self.assertRaises(services.Conflict):
+                services.mark_attendance(db, NEXT_DAY, str(worker), "absent")
+            self.assertEqual(services.close_snapshot(db, NEXT_DAY)["payroll_eligible"], 2000000)
+
+    def test_worker_and_attendance_web_entry(self):
+        response = self.submit(
+            f"/days/{NEXT_DAY}/workers", code="W-01", name="Sample worker", daily_rate="15000",
+        )
+        self.assertEqual(response.status_code, 303)
+        response = self.submit(f"/days/{NEXT_DAY}/attendance", worker_id="1", status="present")
+        self.assertEqual(response.status_code, 303)
+        page = self.client.get(response.location)
+        self.assertIn(b"UGX 15,000", page.data)
+        self.assertIn(b"Present", page.data)
+        self.assertEqual(self.submit(
+            f"/days/{NEXT_DAY}/attendance", worker_id="1", status="half-day",
+        ).status_code, 422)
+        self.assertEqual(self.submit(
+            f"/days/{NEXT_DAY}/workers", code="W-01", name="Different", daily_rate="20000",
+        ).status_code, 409)
+
     def test_csrf_and_demo_password(self):
         self.assertEqual(self.client.post("/days", data={"business_date": "2026-11-12"}).status_code, 400)
         private = create_app(self.path, password="sample-pass").test_client()

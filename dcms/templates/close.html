@@ -34,6 +34,10 @@
   <section class="panel">
     <h2>Expected cash</h2>
     <dl class="ledger">
+      {% if saved.workers_present is not none %}
+      <div><dt>Workers present</dt><dd>{{ saved.workers_present }}</dd></div>
+      <div><dt>Payroll eligibility</dt><dd>UGX {{ saved.payroll_eligible|money }}</dd></div>
+      {% endif %}
       <div><dt>Opening cash</dt><dd>UGX {{ saved.opening_cash|money }}</dd></div>
       <div><dt>Cash sales</dt><dd>UGX {{ saved.cash_activity|money }}</dd></div>
       <div><dt>Cash expenses</dt><dd>UGX {{ saved.expenses|money }}</dd></div>

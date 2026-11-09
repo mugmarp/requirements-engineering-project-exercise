@@ -273,13 +273,68 @@ def close_day(db, day, *, actual_cash, explanation, revision):
         if variance and not explanation:
             raise DomainError("Explain the cash difference before closing the date.")
         totals = activity["channel_totals"]
+        _, workers_present, payroll_eligible = attendance_summary(db, day)
         db.execute(
             """INSERT INTO daily_closes (business_date, opening_cash, cash_activity,
                 mobile_money_activity, bank_activity, expenses, expected_cash, actual_cash,
-                variance, explanation, closed_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                variance, explanation, closed_at, workers_present, payroll_eligible) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             (day, row["opening_cash"], totals["cash"], totals["mobile_money"], totals["bank_deposit"],
              activity["total_expenses"], activity["expected_cash"], actual, variance,
-             explanation, timestamp()),
+             explanation, timestamp(), workers_present, payroll_eligible),
         )
         db.execute("UPDATE business_days SET status = 'closed' WHERE business_date = ?", (day,))
         return close_snapshot(db, day)
+
+
+def add_worker(db, code, name, daily_rate):
+    code = text_value(code, "a worker code", 30)
+    name = text_value(name, "a worker name", 100)
+    rate = money_value(daily_rate, "the daily rate", positive=True)
+    with write(db):
+        existing = db.execute("SELECT * FROM workers WHERE worker_code = ?", (code,)).fetchone()
+        if existing:
+            if (existing["name"], existing["daily_rate"]) != (name, rate):
+                raise Conflict("That worker code already belongs to another worker entry.")
+            return existing["id"]
+        return db.execute(
+            "INSERT INTO workers (worker_code, name, daily_rate) VALUES (?, ?, ?)",
+            (code, name, rate),
+        ).lastrowid
+
+
+def mark_attendance(db, day, worker_id, status):
+    worker_id = integer_value(worker_id, "worker")
+    if status not in ("present", "absent"):
+        raise DomainError("Select Present or Absent.")
+    with write(db):
+        require_open(db, day)
+        worker = db.execute("SELECT * FROM workers WHERE id = ?", (worker_id,)).fetchone()
+        if worker is None:
+            raise Missing("Worker not found.")
+        current = db.execute(
+            "SELECT status FROM attendance WHERE business_date = ? AND worker_id = ?", (day, worker_id)
+        ).fetchone()
+        if current and current["status"] == status:
+            return
+        db.execute(
+            """INSERT INTO attendance (business_date, worker_id, status, daily_rate, recorded_at)
+               VALUES (?, ?, ?, ?, ?)
+               ON CONFLICT (business_date, worker_id) DO UPDATE
+               SET status = excluded.status, recorded_at = excluded.recorded_at""",
+            (day, worker_id, status, worker["daily_rate"], timestamp()),
+        )
+        bump_revision(db, day)
+
+
+def attendance_summary(db, day):
+    rows = db.execute(
+        """SELECT workers.id, workers.worker_code, workers.name,
+                  COALESCE(attendance.daily_rate, workers.daily_rate) AS daily_rate,
+                  attendance.status
+           FROM workers LEFT JOIN attendance
+             ON attendance.worker_id = workers.id AND attendance.business_date = ?
+           ORDER BY workers.id""",
+        (day,),
+    ).fetchall()
+    present = [row for row in rows if row["status"] == "present"]
+    return rows, len(present), sum(row["daily_rate"] for row in present)
