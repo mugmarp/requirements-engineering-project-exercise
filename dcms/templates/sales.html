@@ -11,13 +11,16 @@
     </select>
   </label>
   <label>Quantity<input name="quantity" type="number" min="1" max="10000" step="1" required value="{{ quantity }}"></label>
+  <div class="line-value"><span>Rate (UGX)</span><output class="line-rate">0</output></div>
+  <div class="line-value"><span>Amount (UGX)</span><output class="line-amount">0</output></div>
   <button type="button" class="secondary remove-line" aria-label="Remove product line">Remove</button>
 </div>
 {% endmacro %}
+{% block toolbar_actions %}<button type="submit" form="sale-form">Post sale</button>{% endblock %}
 {% block content %}
 <div class="page-heading">
-  <div><p class="eyebrow">Business date {{ day }}</p><h1>Daily Sales</h1><p>Record a paid sale and issue a receipt.</p></div>
-  <a class="button secondary" href="{{ url_for('home') }}">Change date</a>
+  <div><p class="eyebrow">Business date {{ day }}</p><p>Record a paid sale and issue a receipt.</p></div>
+  <a class="button secondary" href="{{ url_for('daily_records', next='sales') }}">Change date</a>
 </div>
 {% if error %}<p class="notice" role="alert">{{ error }}</p>{% endif %}
 <form class="sales-layout" method="post" id="sale-form" data-vat="{{ rate }}">
@@ -26,8 +29,8 @@
   <div class="panel">
     <h2>Sale details</h2>
     <label>Customer name<input name="customer" maxlength="100" required value="{{ posted.get('customer', '') }}"></label>
-    <h2 class="subheading">Product lines</h2>
-    <div id="sale-lines">
+    <h2 class="subheading">Items</h2>
+    <div class="item-grid" id="sale-lines">
       {% for selected, quantity in lines %}{{ line(selected, quantity) }}{% endfor %}
     </div>
     <template id="new-line">{{ line() }}</template>

@@ -1,42 +1,14 @@
 {% extends 'base.html' %}
 {% block title %}Attendance{% endblock %}
 {% block content %}
-<div class="page-heading">
-  <div><p class="eyebrow">Business date {{ day }}</p><h1>Attendance</h1><p>Mark each worker present or absent for the selected date.</p></div>
-  <span class="status">{{ row.status|capitalize }}</span>
-</div>
+<div class="page-heading"><p class="muted">Business date {{ day }} · Mark daily attendance and review wage eligibility.</p></div>
 {% if error %}<p class="notice" role="alert">{{ error }}</p>{% endif %}
-<div class="channel-grid">
-  <article class="panel channel"><p>Workers present</p><strong>{{ count }}</strong></article>
-  <article class="panel channel"><p>Payroll eligibility</p><strong>UGX {{ total|money }}</strong></article>
-</div>
-<p class="muted attendance-note">Eligibility is based on workers marked present and their recorded daily rate. Wage payments are recorded separately as cash expenses when paid.</p>
-<section class="panel">
-  <h2>Worker register</h2>
-  {% for worker in workers %}
-  <div class="day-row">
-    <div><strong>{{ worker.name }}</strong><p class="muted">{{ worker.worker_code }} · UGX {{ worker.daily_rate|money }} per day · {{ worker.status|capitalize if worker.status else 'Unmarked' }}</p></div>
-    {% if row.status == 'open' %}
-    <form method="post" class="actions">
-      <input type="hidden" name="csrf" value="{{ csrf_token }}">
-      <input type="hidden" name="worker_id" value="{{ worker.id }}">
-      <button type="submit" name="status" value="present" {% if worker.status == 'present' %}disabled{% endif %}>Present</button>
-      <button type="submit" name="status" value="absent" class="secondary" {% if worker.status == 'absent' %}disabled{% endif %}>Absent</button>
-    </form>
-    {% endif %}
-  </div>
-  {% else %}<p>Add a worker to start recording attendance.</p>{% endfor %}
-</section>
-{% if row.status == 'open' %}
-<details class="panel">
-  <summary>Add a worker</summary>
-  <form method="post" action="{{ url_for('create_worker', day=day) }}">
-    <input type="hidden" name="csrf" value="{{ csrf_token }}">
-    <label>Worker code<input name="code" maxlength="30" required></label>
-    <label>Worker name<input name="name" maxlength="100" required></label>
-    <label>Daily rate (UGX)<input name="daily_rate" inputmode="decimal" required></label>
-    <button type="submit">Add worker</button>
-  </form>
-</details>
-{% endif %}
+<div class="channel-grid attendance-stats"><article class="panel channel"><p>Workers present</p><strong>{{ count }}</strong></article><article class="panel channel"><p>Payroll eligibility</p><strong>UGX {{ total|money }}</strong></article></div>
+<p class="muted attendance-note">Eligibility uses each present worker's recorded daily rate. Record wage payments separately as cash expenses.</p>
+<section class="panel list-panel"><div class="list-toolbar"><h2>Worker register</h2><label class="search-field"><span class="sr-only">Filter workers</span><input type="search" data-filter="workers-table" placeholder="Worker name, code or status"></label></div>
+<div class="table-scroll"><table class="data-table" id="workers-table"><thead><tr><th>Worker</th><th>Code</th><th class="numeric">Daily rate (UGX)</th><th>Status</th>{% if row.status == 'open' %}<th>Attendance</th>{% endif %}</tr></thead><tbody>
+{% for worker in workers %}<tr data-record><td class="record-title">{{ worker.name }}</td><td>{{ worker.worker_code }}</td><td class="numeric">{{ worker.daily_rate|money }}</td><td><span class="status {{ worker.status or '' }}">{{ worker.status|capitalize if worker.status else 'Unmarked' }}</span></td>{% if row.status == 'open' %}<td><form method="post" class="actions"><input type="hidden" name="csrf" value="{{ csrf_token }}"><input type="hidden" name="worker_id" value="{{ worker.id }}"><button type="submit" name="status" value="present" class="secondary" {% if worker.status == 'present' %}disabled{% endif %}>Present</button><button type="submit" name="status" value="absent" class="secondary" {% if worker.status == 'absent' %}disabled{% endif %}>Absent</button></form></td>{% endif %}</tr>
+{% else %}<tr><td colspan="{{ 5 if row.status == 'open' else 4 }}" class="empty-state">Add a worker to start recording attendance.</td></tr>{% endfor %}
+</tbody></table></div><p class="filter-empty muted" hidden>No matching workers.</p></section>
+{% if row.status == 'open' %}<details class="panel"><summary>Add a worker</summary><form method="post" action="{{ url_for('create_worker', day=day) }}"><input type="hidden" name="csrf" value="{{ csrf_token }}"><div class="form-grid"><label>Worker code<input name="code" maxlength="30" required></label><label>Worker name<input name="name" maxlength="100" required></label><label>Daily rate (UGX)<input name="daily_rate" inputmode="decimal" required></label></div><button type="submit">Add worker</button></form></details>{% endif %}
 {% endblock %}

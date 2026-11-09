@@ -2,7 +2,7 @@
 {% block title %}Receipt {{ '%06d'|format(sale.id) }}{% endblock %}
 {% block content %}
 <div class="page-heading screen-only">
-  <div><p class="eyebrow">Business date {{ day }}</p><h1>Sale posted</h1><p>The receipt is ready to print or reprint.</p></div>
+  <div><p class="eyebrow">Business date {{ day }}</p><span class="status closed">Paid</span><p>The receipt is ready to print or reprint.</p></div>
   <div class="actions">
     {% if day_status == 'open' %}<a class="button secondary" href="{{ url_for('sales', day=day) }}">New sale</a>{% endif %}
     <a class="button secondary" href="{{ url_for('receipt_history', day=day) }}">All receipts</a>
@@ -19,12 +19,12 @@
     <div><dt>Payment channel</dt><dd>{{ channels[sale.channel] }}</dd></div>
     {% if sale.payment_reference %}<div><dt>Reference</dt><dd>{{ sale.payment_reference }}</dd></div>{% endif %}
   </dl>
-  <table class="receipt-lines">
+  <div class="table-scroll"><table class="receipt-lines">
     <thead><tr><th scope="col">Item</th><th scope="col">Quantity</th><th scope="col">Unit price</th><th scope="col">Amount</th></tr></thead>
     <tbody>
       {% for line in lines %}<tr><td>{{ line.description }}</td><td>{{ line.quantity }} {{ line.unit }}</td><td>{{ line.unit_price|money }}</td><td>{{ line.line_total|money }}</td></tr>{% endfor %}
     </tbody>
-  </table>
+  </table></div>
   <dl class="ledger">
     <div><dt>Subtotal</dt><dd>UGX {{ sale.subtotal|money }}</dd></div>
     <div><dt>VAT ({{ '%g'|format(sale.vat_rate / 100) }}%)</dt><dd>UGX {{ sale.vat|money }}</dd></div>

@@ -42,16 +42,22 @@ The system being specified is a Dual Phase Operations Management System.
 
 ## Run the web prototype
 
-From the repository root, initialize a sample database and start the web server.
+The application opens on **Operations Dashboard**. Use the sidebar for Daily records, Daily Sales, Reconciliation, Receipts and Attendance. A selected working date stays with the daily workflows. The dashboard's period filter controls historical reporting independently of today's actions.
+
+From the repository root, create a fresh five-month synthetic dataset and start the server:
 
 ```bash
 python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
-.venv/bin/python -m dcms --database instance/demo.sqlite3 init --demo
-.venv/bin/python -m dcms --database instance/demo.sqlite3 serve
+.venv/bin/python -m dcms --database instance/overview-demo.sqlite3 init --history
+.venv/bin/python -m dcms --database instance/overview-demo.sqlite3 serve --port 8081
 ```
 
-Open [the local DCMS preview](http://127.0.0.1:8080). On **10 November 2026**, open Close of Day and enter `445000` with a sample explanation. The seeded activity gives UGX 450,000 expected and a UGX 5,000 deficit. Use **11 November 2026** to demonstrate a new sale and view its receipt without changing the presentation example. The seed command requires a fresh database path. To rehearse again, choose a new filename rather than overwriting an existing database.
+Open [the local dashboard](http://127.0.0.1:8081). The generator defaults to the current Kampala date and starts five calendar months earlier. Use `init --history --end-date 2026-11-10` to reproduce the presentation dataset. Initialization requires a fresh database path and preserves existing databases. After initialization, run only the `serve` command to reopen the same dataset.
+
+The 10 November dataset includes 756 receipts, 251 cash expenses, 10 fictional workers, 1,290 attendance entries, 128 saved reconciliations and 25 explicitly non-operating dates. It documents opening stock instead of inventing replenishment history. Customer identities, working patterns, rates and volumes are synthetic. Today remains open. The prior date, **9 November 2026**, contains the saved UGX 5,000 deficit example. Today’s Attendance, New sale and Reconcile today actions always target today, even while reviewing older records. **All history** shows the full five months.
+
+For the original small worked example, use `init --demo` with a different fresh database path. That fixture retains the 10 November reconciliation inputs and 11 November open date used in the original tests and presentation rehearsal.
 
 The **Attendance** tab lets the Sales Manager add workers with unique codes and daily rates, then mark them Present or Absent for an open business date. Only Present workers enter the payroll eligibility total. Closing the day saves the headcount and eligibility amount and locks that date's attendance. Record wages as cash expenses when actually paid. Existing databases migrate automatically at server startup. Reports closed before attendance was introduced keep their original financial totals and have no captured attendance figures.
 

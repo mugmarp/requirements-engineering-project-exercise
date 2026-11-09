@@ -1,18 +1,11 @@
 {% extends 'base.html' %}
 {% block title %}Receipts{% endblock %}
+{% block toolbar_actions %}{% if day_status == 'open' %}<a class="button" href="{{ url_for('sales', day=day) }}">New sale</a>{% endif %}{% endblock %}
 {% block content %}
-<div class="page-heading">
-  <div><p class="eyebrow">Business date {{ day }}</p><h1>Receipts</h1><p>Open a saved receipt to view or print it again.</p></div>
-  <a class="button secondary" href="{{ url_for('home') }}">Change date</a>
-</div>
-<div class="panel day-list">
-{% for sale in sales %}
-  <div class="day-row">
-    <div><strong>{{ '%06d'|format(sale.id) }} · {{ sale.customer }}</strong><p class="muted">{{ channels[sale.channel] }} · UGX {{ sale.total|money }}</p></div>
-    <a class="button secondary" href="{{ url_for('receipt_page', sale_id=sale.id) }}">View receipt</a>
-  </div>
-{% else %}
-  <p>No receipts have been posted for this date.</p>
-{% endfor %}
-</div>
+<div class="page-heading"><p class="muted">Business date {{ day }} · View or reprint posted receipts.</p></div>
+<section class="panel list-panel"><div class="list-toolbar"><h2>Posted receipts <span class="count">{{ sales|length }}</span></h2><label class="search-field"><span class="sr-only">Filter receipts</span><input type="search" data-filter="receipts-table" placeholder="Receipt, customer or channel"></label></div>
+<div class="table-scroll"><table class="data-table" id="receipts-table"><thead><tr><th>Receipt</th><th>Customer</th><th>Payment channel</th><th class="numeric">Total (UGX)</th><th></th></tr></thead><tbody>
+{% for sale in sales %}<tr data-record><td class="record-title"><a href="{{ url_for('receipt_page', sale_id=sale.id) }}">{{ '%06d'|format(sale.id) }}</a></td><td>{{ sale.customer }}</td><td>{{ channels[sale.channel] }}</td><td class="numeric">{{ sale.total|money }}</td><td class="align-right"><a href="{{ url_for('receipt_page', sale_id=sale.id) }}">View receipt</a></td></tr>
+{% else %}<tr><td colspan="5" class="empty-state">No receipts posted for this date.</td></tr>{% endfor %}
+</tbody></table></div><p class="filter-empty muted" hidden>No matching receipts.</p></section>
 {% endblock %}

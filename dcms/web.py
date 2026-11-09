@@ -4,13 +4,14 @@ import hmac
 import os
 import secrets
 import sqlite3
-from datetime import datetime
+from datetime import datetime, timedelta, date
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from flask import Flask, Response, abort, g, redirect, render_template, request, session, url_for
 
 from . import services
+from .analytics import overview
 from .db import connect
 
 DEFAULT_DB = Path(__file__).resolve().parents[1] / "instance" / "dcms.sqlite3"
@@ -76,16 +77,22 @@ def create_app(database=DEFAULT_DB, *, password=None, secure=False):
             sale = db().execute("SELECT business_date FROM sales WHERE id = ?", (sale_id,)).fetchone()
             if sale:
                 selected_day = sale["business_date"]
-        day_status = None
+        today = datetime.now(KAMPALA).date().isoformat()
         if selected_day:
+            session['business_date'] = selected_day
+        nav_day = selected_day or session.get('business_date') or today
+        day_status = None
+        if nav_day:
             row = db().execute(
-                "SELECT status FROM business_days WHERE business_date = ?", (selected_day,),
+                "SELECT status FROM business_days WHERE business_date = ?", (nav_day,),
             ).fetchone()
             if row:
                 day_status = row["status"]
         return {
             "csrf_token": session["csrf_token"], "channels": services.CHANNELS,
-            "day_status": day_status,
+            "day_status": day_status, "nav_day": nav_day if day_status else None,
+            "today": today,
+
         }
 
     @app.template_filter("money")
@@ -114,16 +121,59 @@ def create_app(database=DEFAULT_DB, *, password=None, secure=False):
         app.logger.exception("Database error")
         return render_template("error.html", message="Could not access the DCMS database."), 500
 
+    WORKFLOWS = {"sales": "sales", "attendance": "attendance", "close": "reconciliation", "receipts": "receipt_history"}
+
     @app.get("/")
     def home():
+        today = datetime.now(KAMPALA).date()
+        period = request.args.get('period', '30')
+        first = db().execute('SELECT MIN(business_date) FROM (SELECT business_date FROM business_days UNION ALL SELECT business_date FROM non_operating_days)').fetchone()[0]
+        if period == 'custom':
+            start, end = request.args.get('start', ''), request.args.get('end', '')
+        elif period == 'history':
+            start, end = first or today.isoformat(), today.isoformat()
+        elif period in ('today', '7', '30'):
+            length = 1 if period == 'today' else int(period)
+            start, end = (today-timedelta(days=length-1)).isoformat(), today.isoformat()
+        else:
+            raise services.DomainError('Choose a valid reporting period.')
+        services.business_date(start)
+        services.business_date(end)
+        if start > end or (date.fromisoformat(end)-date.fromisoformat(start)).days > 3660:
+            raise services.DomainError('Choose a reporting period of up to ten years with the start before the end.')
+        data = overview(db(), start, end, today.isoformat())
+        return render_template('dashboard.html', active='dashboard', data=data, start=start,
+                               end=end, period=period)
+
+    @app.get('/daily-records')
+    def daily_records():
         days = db().execute("SELECT * FROM business_days ORDER BY business_date DESC").fetchall()
-        return render_template("home.html", days=days, today=datetime.now(KAMPALA).date().isoformat())
+        non_operating = db().execute('SELECT * FROM non_operating_days ORDER BY business_date DESC').fetchall()
+        target = request.args.get('next', 'close')
+        if target not in WORKFLOWS:
+            target = 'close'
+        return render_template('home.html', active='records', days=days,
+                               non_operating=non_operating, target=target)
+
+    @app.get('/work/<workflow>')
+    def start_workflow(workflow):
+        if workflow not in WORKFLOWS:
+            abort(404)
+        selected = request.args.get('day') or datetime.now(KAMPALA).date().isoformat()
+        row = db().execute('SELECT status FROM business_days WHERE business_date=?', (selected,)).fetchone()
+        if row:
+            endpoint = 'receipt_history' if workflow == 'sales' and row['status'] == 'closed' else WORKFLOWS[workflow]
+            return redirect(url_for(endpoint, day=selected))
+        return redirect(url_for('daily_records', next=workflow))
 
     @app.post("/days")
     def create_day():
         day = request.form.get("business_date", "")
         services.open_day(db(), day)
-        return redirect(url_for("reconciliation", day=day), code=303)
+        target = WORKFLOWS.get(request.form.get('next', 'close'), 'reconciliation')
+        if target == 'sales' and services.find_day(db(), day)['status'] == 'closed':
+            target = 'receipt_history'
+        return redirect(url_for(target, day=day), code=303)
 
     def sale_form(day, *, error=None, status=200, posted=None, lines=None):
         row = services.find_day(db(), day)
@@ -159,7 +209,7 @@ def create_app(database=DEFAULT_DB, *, password=None, secure=False):
     @app.get("/receipts/<int:sale_id>")
     def receipt_page(sale_id):
         sale, lines = services.receipt(db(), sale_id)
-        return render_template("receipt.html", active="sales", day=sale["business_date"], sale=sale, lines=lines)
+        return render_template("receipt.html", active="history", day=sale["business_date"], sale=sale, lines=lines)
 
     @app.get("/days/<day>/receipts")
     def receipt_history(day):

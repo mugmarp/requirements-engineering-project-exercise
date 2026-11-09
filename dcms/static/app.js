@@ -26,6 +26,9 @@ if (sale) {
       if (Number.isInteger(quantity) && quantity > 0 && quantity <= 10000) {
         subtotal += price * quantity;
       }
+      const validQuantity = Number.isInteger(quantity) && quantity > 0 && quantity <= 10000;
+      row.querySelector(".line-rate").textContent = number.format(price / 100);
+      row.querySelector(".line-amount").textContent = number.format((validQuantity ? price * quantity : 0) / 100);
       row.querySelector(".remove-line").disabled = rows.length === 1;
     }
     addLine.disabled = rows.length >= 50;
@@ -83,4 +86,48 @@ if (close) {
 
   cash.addEventListener("input", updateVariance);
   updateVariance();
+}
+
+const navigationToggle = document.querySelector("#sidebar-toggle");
+if (navigationToggle) {
+  const narrow = window.matchMedia("(max-width: 760px)");
+  function resetNavigation() {
+    document.body.classList.remove("sidebar-collapsed", "sidebar-open");
+    navigationToggle.setAttribute("aria-expanded", String(!narrow.matches));
+  }
+  navigationToggle.addEventListener("click", () => {
+    const className = narrow.matches ? "sidebar-open" : "sidebar-collapsed";
+    const toggled = document.body.classList.toggle(className);
+    navigationToggle.setAttribute("aria-expanded", String(narrow.matches ? toggled : !toggled));
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && narrow.matches) {
+      document.body.classList.remove("sidebar-open");
+      navigationToggle.setAttribute("aria-expanded", "false");
+    }
+  });
+  document.querySelector("#sidebar-close").addEventListener("click", () => {
+    document.body.classList.remove("sidebar-open");
+    navigationToggle.setAttribute("aria-expanded", "false");
+    navigationToggle.focus();
+  });
+  narrow.addEventListener("change", resetNavigation);
+  resetNavigation();
+}
+
+document.querySelectorAll("[data-filter]").forEach((input) => {
+  const table = document.getElementById(input.dataset.filter);
+  input.addEventListener("input", () => {
+    const query = input.value.trim().toLocaleLowerCase();
+    const rows = [...table.querySelectorAll("[data-record]")];
+    rows.forEach((row) => { row.hidden = !row.textContent.toLocaleLowerCase().includes(query); });
+    table.closest(".list-panel").querySelector(".filter-empty").hidden = !rows.length || rows.some((row) => !row.hidden);
+  });
+});
+
+const reportPeriod = document.querySelector("#report-period");
+if (reportPeriod) {
+  ["#report-start", "#report-end"].forEach((selector) => {
+    document.querySelector(selector).addEventListener("input", () => { reportPeriod.value = "custom"; });
+  });
 }

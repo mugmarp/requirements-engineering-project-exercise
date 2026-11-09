@@ -4,6 +4,7 @@ import hashlib
 import json
 import re
 from collections import Counter
+from contextvars import ContextVar
 from datetime import date, datetime, timezone
 
 from .db import write
@@ -28,8 +29,12 @@ class Missing(DomainError):
     status = 404
 
 
+# Internal clock override used only by the fresh-database historical demo builder.
+_recorded_time = ContextVar("dcms_recorded_time", default=None)
+
+
 def timestamp():
-    return datetime.now(timezone.utc).isoformat(timespec="seconds")
+    return (_recorded_time.get() or datetime.now(timezone.utc)).isoformat(timespec="seconds")
 
 
 def text_value(value, label, limit, *, required=True):
@@ -88,6 +93,8 @@ def require_open(db, day):
 def open_day(db, day):
     business_date(day)
     with write(db):
+        if db.execute("SELECT 1 FROM non_operating_days WHERE business_date = ?", (day,)).fetchone():
+            raise Conflict("This date is marked non-operating. Choose an operating date.")
         db.execute(
             "INSERT INTO business_days (business_date) VALUES (?) ON CONFLICT DO NOTHING",
             (day,),
