@@ -89,8 +89,35 @@ def clean(text: str) -> str:
     # remove remaining quotes and apostrophes
     text = text.replace('"', "")
     text = text.replace("'", "")
-    # hyphens become spaces so End-of-Day reads End of Day, not EndofDay
+    # --- hyphen protection: preserve REQ IDs and SQL minus operators ---
+    req_ids = []
+    sql_minuses = []
+
+    def protect_req_id(match):
+        req_ids.append(match.group(0))
+        return f"__REQ_ID_{len(req_ids)-1}__"
+
+    # Protect actual requirement IDs: REQ-FUN-XXX-NN, REQ-NFR-XXX-NN
+    text = re.sub(r'REQ-(?:FUN|NFR)-[A-Z]{3,}-\d{2}', protect_req_id, text)
+    # Protect template patterns: REQ-FUN-<MODULE>-<NN>, REQ-NFR-<MODULE>-<NN>
+    text = re.sub(r'REQ-(?:FUN|NFR)-<[A-Z_]+>-<[A-Z0-9_]+>', protect_req_id, text)
+
+    def protect_sql_minus(match):
+        sql_minuses.append(match.group(0))
+        return f"__SQL_MINUS_{len(sql_minuses)-1}__"
+
+    text = re.sub(r' - ', protect_sql_minus, text)
+
+    # now safe to replace remaining layout/text hyphens with spaces
     text = text.replace("-", " ")
+
+    # restore protected patterns
+    for i, original in enumerate(req_ids):
+        text = text.replace(f"__REQ_ID_{i}__", original)
+    for i, original in enumerate(sql_minuses):
+        text = text.replace(f"__SQL_MINUS_{i}__", original)
+    # --- end hyphen protection ---
+
     text = fix_case(text)
     # collapse doubled spaces introduced by substitutions, but keep a single
     # trailing space so bold lead in runs stay separated from the body text

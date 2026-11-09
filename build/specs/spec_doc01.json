@@ -25,7 +25,6 @@
     ] },
     { "type": "h2", "text": "1.5 References" },
     { "type": "bullets", "items": [
-      "CURATED_DATA.md - Curated knowledge base (facts, synthesis, gaps, decisions)",
       "IEEE Std 830-1998 - Recommended Practice for Software Requirements Specifications",
       "SWE2102 Course Allocation - Group K, Requirements Engineering"
     ] },
