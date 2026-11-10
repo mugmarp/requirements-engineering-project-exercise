@@ -48,6 +48,13 @@ Two compact previews from the hosted application. Select an image to open it at 
 |---|---|
 | <a href="screenshots/03-dashboard-analytics.png"><img src="screenshots/03-dashboard-analytics.png" alt="Sales trend and payment-channel charts across five months" width="300"></a> | <a href="screenshots/05-reconciliation.png"><img src="screenshots/05-reconciliation.png" alt="Saved daily report showing expected cash, counted cash and a UGX 5,000 deficit" width="300"></a> |
 
+## Implementation and operations
+
+- [Architecture](ARCHITECTURE.md): implemented components, data, transaction rules and the planned desktop boundary.
+- [Implementation plan](IMPLEMENTATION_PLAN.md) and [current status](IMPLEMENTATION_STATUS.md): delivered modules and remaining acceptance gates.
+- [Local running guide](RUNNING.md): setup, login, starting, stopping, updating and troubleshooting.
+- [Server guide](DEPLOYMENT.md): deployment, service controls, backups, updates and recovery.
+
 ## Run the web prototype
 
 The application opens on **Operations Dashboard**. Use the sidebar for Daily records, Daily Sales, Reconciliation, Receipts and Attendance. A selected working date stays with the daily workflows. The dashboard's period filter controls historical reporting independently of today's actions.
@@ -112,7 +119,7 @@ screenshots/                                           Application captures and 
 
 ## Architecture
 
-The system follows a Dual Phase architecture established from ground observations:
+The custom Flask/Waitress application uses SQLite, with Caddy providing hosted HTTPS. See [the implemented architecture](ARCHITECTURE.md) for code responsibilities and deployment boundaries. The two operational phases established from ground observations are:
 
 - **Phase 1 (Day):** Real Time Point of Sale — processes individual sales, calculates VAT, updates inventory, prints physical receipts for customers as trucks load.
 - **Phase 2 (Evening):** End of Day Reconciliation Engine — balances multi channel payment drawers (Cash, Mobile Money, Bank Deposit), logs operational expenses, computes cash variances (deficit/surplus), generates daily summary report for the Business Owner.

@@ -1,8 +1,16 @@
 # DCMS implementation status
 
-The latest local update is described under "Dashboard and historical demo" below. The earlier implementation record follows.
+## Current position — 10 November 2026
 
-Status as of 9 November 2026. The web prototype and updated presentation are on [main at 3b300ab](https://github.com/mugmarp/requirements-engineering-project-exercise/commit/3b300ab).
+The hosted application is running at <https://dcms.tirallab.page>. It includes dashboard analytics, paid sales and receipts, date-scoped reconciliation, attendance/workers, recorded sales VAT, CSV bank matching and Sales Manager/CEO account access. Both server services are active and enabled. Twelve workflow screenshots are committed in [the gallery](screenshots/README.md).
+
+The standalone desktop app, Windows `.exe` and Debian `.deb` packages remain planned. Voids/refunds, complete inventory movement history, comprehensive financial actor audit, automated off-machine backup and tested recovery remain pending. Physical printing, production capacity and live tax treatment need acceptance evidence.
+
+Use [ARCHITECTURE.md](ARCHITECTURE.md) for the implemented design, [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) for remaining gates, [RUNNING.md](RUNNING.md) for local startup/stopping and [DEPLOYMENT.md](DEPLOYMENT.md) for server operation. The server source observed during this review is `9445df0`; repository pushes are not automatically deployed.
+
+The sections below are a chronological implementation record. Earlier pending items, test counts, member-roster references and shutdown entries describe their date, not the current release. Later entries supersede them. The most recent application regression run recorded 33 passing tests; this documentation-only update does not change application behaviour.
+
+## Original implementation record — 9 November 2026
 
 ## Completed work
 
@@ -147,3 +155,9 @@ After pushing the documentation changes, stopped and disabled dcms and its dedic
 ## Screenshot gallery and reactivation - 10 November 2026
 
 Reactivated dcms and its dedicated Caddy proxy at the user request. Captured twelve unedited browser screenshots from the hosted application, including login, dashboard overview and analytics, daily records, saved reconciliation, workers, sales VAT, banking, attendance, a saved receipt, the new-sale form and CEO read-only reporting. Both accounts were signed out after capture. No operational forms were submitted. Added the full gallery and capture context in screenshots/README.md, with two 300-pixel-wide linked previews in the repository README. The site is left running.
+
+## Architecture and operating documentation — 10 November 2026
+
+Added the implemented architecture, code responsibilities, persistent records, transaction and trust boundaries, and the separate planned desktop design. Added a local run/stop/restart/update guide. Expanded the server guide with verified paths, service/proxy definitions, account handling, backup, migration-aware updates, shutdown/boot policy, verification and recovery. Revised the implementation plan to distinguish delivered modules from remaining acceptance gates. Rechecked server service state and configuration over SSH; no server configuration, records or swap settings were changed. The site remains running.
+
+Documentation verification: local Markdown links and whitespace checks passed. A temporary five-month database initialized successfully; Waitress served the dashboard, stopped and restarted with all 756 generated sales preserved, and SQLite integrity returned `ok`. This was separate from the hosted database and its captured 752-sale snapshot.
