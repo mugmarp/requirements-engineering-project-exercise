@@ -63,6 +63,8 @@ def main():
             serve(
                 create_app(args.database, password=password, secure=args.secure_cookies),
                 host=args.host, port=args.port,
+                trusted_proxy="127.0.0.1",
+                trusted_proxy_headers={"x-forwarded-for", "x-forwarded-proto"},
             )
     except ValueError as error:
         parser.error(str(error))
