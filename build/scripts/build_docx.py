@@ -98,8 +98,11 @@ def clean(text: str) -> str:
         req_ids.append(match.group(0))
         return f"__REQ_ID_{len(req_ids)-1}__"
 
+    text = re.sub(r'https?://[^\s)]+', protect_req_id, text)
+    text = re.sub(r'(?<![\w/])[\w./-]+\.(?:docx|pptx|json|mjs|py|md|pdf|png)(?!\w)', protect_req_id, text)
     # Protect actual requirement IDs: REQ-FUN-XXX-NN, REQ-NFR-XXX-NN
     text = re.sub(r'REQ-(?:FUN|NFR)-[A-Z]{3,}-\d{2}', protect_req_id, text)
+    text = re.sub(r'(?:US|EPIC)-\d{2}', protect_req_id, text)
     # Protect template patterns: REQ-FUN-<MODULE>-<NN>, REQ-NFR-<MODULE>-<NN>
     text = re.sub(r'REQ-(?:FUN|NFR)-<[A-Z_]+>-<[A-Z0-9_]+>', protect_req_id, text)
 
@@ -181,6 +184,8 @@ def add_para(doc, text=None, runs=None):
     p = doc.add_paragraph()
     style_paragraph(p, space_after=6)
     if runs:
+        if all(spec.get("bold") for spec in runs):
+            p.paragraph_format.keep_with_next = True
         for spec in runs:
             set_run(p.add_run(clean(spec["text"])), bold=bool(spec.get("bold")))
     else:

@@ -5,151 +5,283 @@
     "Group: K",
     "Client Site: Deniz Construction Limited, Ishanyu Bushenyi Road, Mbarara",
     "Project: Deniz Construction Management System (DCMS)",
-    "Version: 1.0"
+    "Version: 2.0. Hosted web prototype, 10 November 2026"
   ],
   "blocks": [
-    { "type": "h1", "text": "1. INTRODUCTION" },
-    { "type": "h2", "text": "1.1 Purpose" },
-    { "type": "para", "text": "This manual guides the Sales Manager through daily operations using the Deniz Construction Management System (DCMS). It covers two workflows: processing sales during the day and reconciling accounts in the evening." },
-    { "type": "h2", "text": "1.2 Audience" },
-    { "type": "para", "text": "Primary user: Sales Manager (supervisor, cashier, payroll distributor, record keeper). Secondary: Business Owner (views daily summary report)." },
-    { "type": "h2", "text": "1.3 System Overview" },
-    { "type": "para", "text": "DCMS runs on the existing office laptop. It operates offline during the day and syncs to cloud backup each evening after reconciliation. No internet required for daily sales." },
-
-    { "type": "h1", "text": "2. GETTING STARTED" },
-    { "type": "h2", "text": "2.1 Launch the Application" },
-    { "type": "numbered", "items": [
-      "Turn on the office laptop.",
-      "Double-click the DCMS icon on the desktop.",
-      "The Home Dashboard opens showing two main buttons: Daily Sales and End of Day Reconciliation."
-    ] },
-    { "type": "h2", "text": "2.2 Login" },
-    { "type": "numbered", "items": [
-      "Enter your User ID (provided by Group K during setup).",
-      "Enter your password.",
-      "Click Login. The system remembers you for the day."
-    ] },
-
-    { "type": "h1", "text": "3. DAILY SALES WORKFLOW (DAY TIME)" },
-    { "type": "para", "text": "Use this workflow each time a customer buys blocks, pavers or kerbs. The system prints a physical receipt immediately." },
-
-    { "type": "h2", "text": "3.1 Open Daily Sales" },
-    { "type": "numbered", "items": [
-      "From the Home Dashboard click Daily Sales.",
-      "The New Sale screen opens with empty fields."
-    ] },
-
-    { "type": "h2", "text": "3.2 Select Product" },
-    { "type": "numbered", "items": [
-      "Tap the Product dropdown.",
-      "Choose the category: Solid Blocks, Hollow Blocks, Pavers or Kerbs.",
-      "Select the exact item from the list:"
-    ] },
-    { "type": "bullets", "items": [
-      "Solid Blocks: 4×8×16, 6×8×16, 8×8×16 inches",
-      "Hollow Blocks: 4×8×16, 6×8×16, 8×8×16 inches",
-      "Pavers: 60mm Interlocking, 60mm Rectangular, 60mm Hexagonal, 80mm Interlocking, 80mm Rectangular, 80mm Hexagonal",
-      "Kerbs: Garden, Road"
-    ] },
-
-    { "type": "h2", "text": "3.3 Enter Quantity and Price" },
-    { "type": "numbered", "items": [
-      "Enter the quantity sold (pieces, square metres or bundles as shown).",
-      "The Unit Price fills automatically from the product catalogue.",
-      "Verify the Subtotal = Quantity × Unit Price."
-    ] },
-
-    { "type": "h2", "text": "3.4 Select Payment Method" },
-    { "type": "numbered", "items": [
-      "Choose one: Cash, Mobile Money or Bank Deposit.",
-      "If Mobile Money: enter the transaction reference number.",
-      "If Bank Deposit: enter the deposit slip number."
-    ] },
-
-    { "type": "h2", "text": "3.5 Complete the Sale" },
-    { "type": "numbered", "items": [
-      "Tap Save Sale.",
-      "The system instantly calculates 18% VAT and shows the Total.",
-      "A physical receipt prints automatically on the attached printer.",
-      "Hand the receipt to the customer.",
-      "A successful save records all sale lines and reduces stock. Check the payment total for the selected business date. If stock is insufficient, correct the quantities before trying again."
-    ] },
-
-    { "type": "h2", "text": "3.6 Void a Sale (If Mistake)" },
-    { "type": "numbered", "items": [
-      "From the Home Dashboard click View Sales.",
-      "Find the incorrect sale by Receipt ID.",
-      "Use Void for an entry error on an open date when no money was received and no goods were released. Enter the reason.",
-      "The original receipt stays in the history. If money was returned or the sale date is already closed, record a linked adjustment on an open date. For a full refund, confirm the original payment was returned through the same channel and record which goods came back into stock."
-    ] },
-
-    { "type": "h1", "text": "4. END-OF-DAY RECONCILIATION WORKFLOW (EVENING)" },
-    { "type": "para", "text": "Run this once per day before the Business Owner arrives. It shows recorded payment activity by channel, reconciles physical cash and produces the Daily Summary Report." },
-
-    { "type": "h2", "text": "4.1 Open Reconciliation" },
-    { "type": "numbered", "items": [
-      "From the Home Dashboard click End of Day Reconciliation.",
-      "Select the open business date. The screen shows recorded activity for Cash, Mobile Money and Bank Deposit."
-    ] },
-
-    { "type": "h2", "text": "4.2 Review Payment Activity and Count Cash" },
-    { "type": "numbered", "items": [
-      "Review the recorded total for each payment method. Enter the opening cash float if one was carried. Expected cash includes the opening float and net cash activity, less logged cash expenses.",
-      "For Cash: count the physical cash in the drawer.",
-      "Enter the Actual Cash Counted.",
-      "The system computes Variance = Actual minus Expected."
-    ] },
-
-    { "type": "h2", "text": "4.3 Log Operational Expenses" },
-    { "type": "numbered", "items": [
-      "Click Add Expense.",
-      "Enter description (e.g. Loader lunch, Transport fare, Boda-boda).",
-      "Enter amount paid from the Cash drawer.",
-      "Click Save. Expected cash and the variance are recalculated for the selected date."
-    ] },
-
-    { "type": "h2", "text": "4.4 Enter Variance Explanation" },
-    { "type": "numbered", "items": [
-      "If Variance is not zero, the system requires a text explanation.",
-      "Type the reason (e.g. Unrecorded petty cash, Counting error).",
-      "You can leave the explanation blank if the variance is zero."
-    ] },
-
-    { "type": "h2", "text": "4.5 Close the Day" },
-    { "type": "numbered", "items": [
-      "Review the Daily Summary Report preview.",
-      "Click Close Day.",
-      "The system saves the final report and closes the selected business date. Use the saved report if you need to review it again.",
-      "An encrypted cloud backup runs automatically.",
-      "The report is ready for the Business Owner's morning review."
-    ] },
-
-    { "type": "h1", "text": "5. DAILY SUMMARY REPORT" },
-    { "type": "para", "text": "The report has two sections:" },
-    { "type": "bullets", "items": [
-      "Operational Metrics: Total Trucks Dispatched, Total Blocks Sold, Total Workers Present.",
-      "Financial Summary: Net Payment Activity by Channel, Opening Cash, Operational Expenses, Expected Cash, Actual Cash, Variance, Notes."
-    ] },
-    { "type": "para", "text": "The Business Owner reviews this each morning." },
-
-    { "type": "h1", "text": "6. WORKER ATTENDANCE (OPTIONAL DAILY)" },
-    { "type": "numbered", "items": [
-      "From Home Dashboard click Attendance.",
-      "Tap the green check icon next to each worker name to mark Present.",
-      "Tap again to unmark if mistake.",
-      "Click Save. The list feeds the Daily Summary Report and payroll."
-    ] },
-
-    { "type": "h1", "text": "7. TROUBLESHOOTING" },
-    { "type": "table", "header": ["Issue", "Action"], "rows": [
-      ["Printer not printing", "Check power, paper roll and USB cable. Restart printer."],
-      ["System won't open", "Restart laptop. Ensure DCMS shortcut points to correct folder."],
-      ["VAT looks wrong", "VAT rate is 18% from System Settings. Do not edit manually."],
-      ["Cloud backup failed", "Check internet. Backup retries automatically when online."],
-      ["Forgot password", "Contact Group K for reset. No self-reset for security."]
-    ] },
-
-    { "type": "h1", "text": "8. CONTACT SUPPORT" },
-    { "type": "para", "text": "For technical issues contact Group K, SWE2102, MUST. Repository: https://github.com/mugmarp/requirements-engineering-project-exercise" }
+    {
+      "type": "h1",
+      "text": "1. INTRODUCTION"
+    },
+    {
+      "type": "h2",
+      "text": "1.1 Purpose"
+    },
+    {
+      "type": "para",
+      "text": "This manual describes the current hosted DCMS web prototype. It covers sales, receipts, workers, attendance, cash reconciliation, reporting and bank statement review."
+    },
+    {
+      "type": "h2",
+      "text": "1.2 Audience and Access"
+    },
+    {
+      "type": "para",
+      "text": "Select Sales Manager for daily operations. Select CEO for the Business Owner report and oversight account. CEO access is read only. Workers and customers do not have application accounts."
+    },
+    {
+      "type": "h2",
+      "text": "1.3 Availability and Planned Features"
+    },
+    {
+      "type": "para",
+      "text": "Open https://dcms.tirallab.page in a web browser with internet access. Records are stored on the server and persist across sign-out and application restart. This release is not the planned standalone offline application. Automatic nightly cloud backup, sale voids and refunds, direct EFRIS submission and a desktop installer are not available in this release."
+    },
+    {
+      "type": "h1",
+      "text": "2. GETTING STARTED"
+    },
+    {
+      "type": "h2",
+      "text": "2.1 Open the Site and Sign In"
+    },
+    {
+      "type": "numbered",
+      "items": [
+        "Open https://dcms.tirallab.page.",
+        "Choose Sales Manager or CEO from the Account dropdown.",
+        "Enter the configured password and select Sign in. Both presentation accounts currently use the password demo.",
+        "The Operations Dashboard opens. Use its period filter to review today, recent activity or all history."
+      ]
+    },
+    {
+      "type": "para",
+      "text": "Sessions expire after eight hours. Select Sign out in the page toolbar when finished. After repeated failed attempts, wait one minute before retrying."
+    },
+    {
+      "type": "h2",
+      "text": "2.2 Navigation and Business Dates"
+    },
+    {
+      "type": "numbered",
+      "items": [
+        "Use the sidebar to open Dashboard, Daily records, Workers, Taxes, Banking, Daily Sales, Reconciliation, Receipts or Attendance. The CEO sees Sales records instead of the sale entry workflow.",
+        "Use the page Back link or breadcrumb to return to the previous context or Dashboard. Unsaved operational entries prompt a review before leaving.",
+        "As Sales Manager, select New sale or a daily workflow. If the date has not been opened, choose the business date and select Open date or Start today. Existing and closed dates remain in Daily records.",
+        "Check the working date and its Open or Closed status before recording activity. Use Change working date or Change date when necessary."
+      ]
+    },
+    {
+      "type": "h1",
+      "text": "3. DAILY SALES AND RECEIPTS"
+    },
+    {
+      "type": "h2",
+      "text": "3.1 Record a Sale"
+    },
+    {
+      "type": "numbered",
+      "items": [
+        "As Sales Manager, select New sale from Dashboard or Daily Sales in the sidebar. Select an open business date.",
+        "Enter the customer name and choose a product and positive quantity. Add a line for each additional product. Product prices come from the saved catalogue.",
+        "Review subtotal, VAT and total. The VAT rate is the configured rate for that business date.",
+        "Choose Cash, Mobile Money or Bank Deposit. A payment reference is optional in the current form. For Bank Deposit, choose the receiving account when the account list is configured.",
+        "Enter the amount received. It must equal the total. Use Use total due only after checking that full payment was received.",
+        "Select Post sale and open receipt, review the confirmation and continue. Insufficient stock or mismatched payment is rejected without partially recording the sale."
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "3.2 Print or Reprint a Receipt"
+    },
+    {
+      "type": "numbered",
+      "items": [
+        "After a successful sale, the saved receipt opens.",
+        "Select Print receipt to open the browser print dialogue. Choose the printer, check the paper settings and confirm printing. Printing does not start automatically when the sale is saved.",
+        "If printing fails, reopen the receipt through Receipts or Daily records and select Print receipt again. Do not post a second sale to obtain another copy."
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "3.3 Entry Errors and Corrections"
+    },
+    {
+      "type": "para",
+      "text": "Sale voids, refunds and sale adjustments are not implemented in this release. Do not delete or overwrite the original receipt. Retain its identifier and report the issue to the project maintainer. Bank allocation reversal is a separate feature and does not cancel a sale."
+    },
+    {
+      "type": "h2",
+      "text": "3.4 Report a Stock Discrepancy"
+    },
+    {
+      "type": "para",
+      "text": "If a physical count differs from the recorded quantity, record the product, unit, counted quantity, recorded quantity and relevant receipts. Ask the maintainer to review opening stock, production, dispatch, damage and returns. Do not create a false sale or overwrite records to force a match. The current web prototype deducts sales stock but has no complete stock-adjustment or production ledger. The site visit did not verify a stock-counting procedure."
+    },
+    {
+      "type": "h1",
+      "text": "4. WORKERS AND ATTENDANCE"
+    },
+    {
+      "type": "h2",
+      "text": "4.1 Add or Review a Worker"
+    },
+    {
+      "type": "numbered",
+      "items": [
+        "Open Workers. As Sales Manager, select Add worker.",
+        "Enter a unique worker code, worker name, start date and gross daily rate in UGX.",
+        "Select Register worker, review the confirmation and continue. Registration does not mark attendance or pay wages.",
+        "Open a worker record to view rate history and attendance changes. Sales Manager can schedule a future rate or last working date subject to existing attendance checks."
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "4.2 Record Attendance"
+    },
+    {
+      "type": "numbered",
+      "items": [
+        "Open Attendance and select the business date.",
+        "For each worker, choose Present or Absent. Review any correction and enter a reason when requested.",
+        "Each action saves the selected status. Duplicate attendance for the same worker and date is prevented.",
+        "Review the present count and wage eligibility. Eligibility is not proof of payment and does not calculate PAYE or other payroll deductions.",
+        "Before closing a date, review any unmarked workers. The close form requires acknowledgement when workers remain unmarked."
+      ]
+    },
+    {
+      "type": "h1",
+      "text": "5. CASH RECONCILIATION"
+    },
+    {
+      "type": "h2",
+      "text": "5.1 Prepare the Cash Position"
+    },
+    {
+      "type": "numbered",
+      "items": [
+        "As Sales Manager, open Reconciliation and check the business date.",
+        "Review Cash, Mobile Money and Bank Deposit activity. The non-cash figures are recorded payment totals, not verified external balances.",
+        "If opening cash was carried into the date, expand Set opening cash, enter the amount and select Save float.",
+        "Under Cash expenses, enter each description and amount and select Record expense. Review the confirmation. Record expenses before reviewing the final cash count.",
+        "Expected cash equals opening cash plus cash sales minus the recorded cash expenses."
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "5.2 Count Cash and Close"
+    },
+    {
+      "type": "numbered",
+      "items": [
+        "Count the physical cash and enter Cash counted (UGX).",
+        "Review the variance, calculated as counted cash minus expected cash. Enter an explanation for every deficit or surplus. A balanced count may have a blank explanation.",
+        "Review unmarked workers and acknowledge them if required.",
+        "Select Close date and save report, review the confirmation and continue. If activity changed during review, refresh and check the updated totals before trying again.",
+        "The saved report opens. The date is closed and further locked daily entries are rejected. Reopening or retrying a completed close displays the same saved report."
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "5.3 Worked Example"
+    },
+    {
+      "type": "para",
+      "text": "With zero opening cash, cash sales of UGX 500,000 and cash expenses of UGX 50,000, expected cash is UGX 450,000. A physical count of UGX 445,000 gives a variance of minus UGX 5,000. The Sales Manager must explain the deficit before closing. These are synthetic example figures."
+    },
+    {
+      "type": "h1",
+      "text": "6. OWNER REPORTS, TAXES AND BANKING"
+    },
+    {
+      "type": "h2",
+      "text": "6.1 CEO Review"
+    },
+    {
+      "type": "numbered",
+      "items": [
+        "Sign in as CEO. Review Dashboard and choose the reporting period.",
+        "Open Daily records and select a date to review its receipts, attendance or reconciliation.",
+        "A closed-date report shows recorded channel totals, opening cash, cash expenses, expected cash, counted cash, variance, explanation and the saved attendance summary. An open date has no final cash count yet.",
+        "Use Print report or the available export controls when needed. The CEO cannot post sales, register workers, change attendance, import statements or close dates."
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "6.2 Sales VAT Summary"
+    },
+    {
+      "type": "para",
+      "text": "Open Taxes and select the tax period. Review recorded sales and output VAT, then use Export CSV or Print summary. This report does not calculate input VAT, final tax payable or payroll taxes and does not submit an EFRIS document or tax return. Review with the appropriate business records before filing."
+    },
+    {
+      "type": "h2",
+      "text": "6.3 Bank Statement Review"
+    },
+    {
+      "type": "numbered",
+      "items": [
+        "As Sales Manager, open Banking. Add a labelled UGX bank account using the bank name and only its last four account digits. Do not enter banking passwords, PINs or OTPs.",
+        "Choose the account. Use Import statement CSV to preview rows with the required columns id,date,reference,description,credit,debit. Confirm only after checking the preview.",
+        "Allocate an imported credit to an existing Bank Deposit receipt and review the amount and reference.",
+        "If an allocation was wrong, enter a reversal reason and use Reverse allocation. The history is retained. Matching and reversal do not create another sale or rewrite a saved cash report."
+      ]
+    },
+    {
+      "type": "para",
+      "text": "Banking is statement import and allocation, not a live bank feed, money transfer facility or verified bank balance. CEO can review the records but cannot change them."
+    },
+    {
+      "type": "h1",
+      "text": "7. TROUBLESHOOTING"
+    },
+    {
+      "type": "table",
+      "header": [
+        "Issue",
+        "Action"
+      ],
+      "rows": [
+        [
+          "Site will not open",
+          "Check the internet connection and the exact HTTPS address. Ask the maintainer to check dcms and Caddy services if the problem persists."
+        ],
+        [
+          "Login fails",
+          "Check the selected account and configured password. After repeated attempts, wait one minute. Contact the maintainer for account changes."
+        ],
+        [
+          "Form expired",
+          "Reload the page to obtain a fresh form, check existing records and retry."
+        ],
+        [
+          "Insufficient stock or wrong payment",
+          "Correct quantities or payment before resubmitting. A rejected sale does not partially deduct stock."
+        ],
+        [
+          "Receipt did not print",
+          "Reopen the saved receipt, select Print receipt and check the browser printer settings, connection and paper."
+        ],
+        [
+          "Date is closed",
+          "Review its saved report. Select an open date for new activity."
+        ],
+        [
+          "Totals changed before closing",
+          "Refresh the preview, review the latest activity and enter the count again."
+        ],
+        [
+          "VAT looks wrong",
+          "Check the sale date and stored VAT rate. Report the receipt identifier to the maintainer. There is no tax-rate settings page in this release."
+        ]
+      ]
+    },
+    {
+      "type": "h1",
+      "text": "8. SUPPORT AND RECOVERY"
+    },
+    {
+      "type": "para",
+      "text": "Contact the project maintainer with the page, business date, receipt identifier and error message. Account changes and consistent database backups require maintainer access. The deployment guide documents server paths and manual backup procedures. The web prototype does not currently perform the planned automatic encrypted nightly cloud backup."
+    }
   ]
 }

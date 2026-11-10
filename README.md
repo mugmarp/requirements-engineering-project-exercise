@@ -159,7 +159,7 @@ To rebuild Master Document (Phases 2-5):
 python3 build/scripts/build_docx.py build/specs/spec_master.json project_deliverables/Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx
 ```
 
-To rebuild the presentation deck, use Node.js with `@oai/artifact-tool` available to the builder. The third argument supplies the screenshot for slide 7. The optional fourth and fifth outputs regenerate Markdown and the document-outline JSON from the canonical slide JSON.
+To rebuild the presentation deck, use Node.js with `@oai/artifact-tool` available to the builder. The third argument supplies the screenshot for slide 7. The eight-slide deck includes stakeholder classification and two user stories, with no members slide. The optional fourth and fifth outputs regenerate Markdown and the document-outline JSON from the canonical slide JSON.
 ```bash
 node build/scripts/build_pptx.mjs build/specs/spec_presentation_pptx.json project_deliverables/PhaseFinal_Grand-Project-Presentation.pptx project_deliverables/PhaseFinal_Close-of-Day.png project_deliverables/PhaseFinal_Grand-Project-Presentation.md build/specs/spec_presentation.json
 ```
@@ -213,3 +213,11 @@ Statement CSV columns must be exactly `id,date,reference,description,credit,debi
 VAT settings now have effective dates. For example, an administrator can schedule a rate using `set-vat PERCENT --effective-from YYYY-MM-DD`. The effective date must follow existing sales. Changing a rate never recalculates a posted receipt. The stored invoice-level rounding policy remains a prototype convention to verify during fiscal integration.
 
 The sample-data indicator comes from dataset metadata. Worker names, customer names, expenses and calendar reasons no longer repeat “Demo”. Historical generation skips today's shift events that have not yet occurred. Earlier presentation databases are preserved; use a new filename to regenerate samples. Imported sample bank rows are illustrative and do not establish a real bank balance.
+
+## User stories and stakeholder classification
+
+The master specification, Section 5, contains two derived stories, US-01 for paid sales and US-02 for daily reconciliation, grouped under EPIC-01 and EPIC-02. Each includes acceptance criteria, existing requirement links and verification references. These are group-authored requirements examples, not additional stakeholder interviews.
+
+Phase 1 separates primary and secondary stakeholder classification from the power and interest assessment. The presentation follows Group K's elicitation prompt and retains eight slides, one large prototype screenshot and individual Q&A preparation in the notes. The user manual describes the current hosted release, its account dropdown and the separate future standalone scope.
+
+Presentation delivery guidance and tutor Q&A are in [PRESENTATION_SPEAKER_GUIDE.md](PRESENTATION_SPEAKER_GUIDE.md). Proposed inventory observations are documented as follow-up work, not completed site findings. See [DEPLOYMENT.md](DEPLOYMENT.md) for stopping and resuming the hosted site while preserving its data.

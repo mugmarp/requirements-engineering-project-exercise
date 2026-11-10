@@ -49,3 +49,21 @@ sudo journalctl -u dcms -u caddy -n 40 --no-pager
 The application applies schema initialization/migrations on startup without reseeding. Before an update, create a consistent SQLite backup with Python's `sqlite3.Connection.backup()` API rather than copying an actively written database file. Store backups outside the code checkout.
 
 Caddy proxies `dcms.tirallab.page` to `127.0.0.1:8080`; the app is not bound to a public interface. Verify the public TLS certificate, HTTP-to-HTTPS redirect, login, both account roles, and saved reports after an update. Run the regression suite locally with `.venv/bin/python -m unittest discover -s tests -v`.
+
+## Stop and resume the site
+
+To stop the application and prevent it returning on reboot:
+
+```bash
+sudo systemctl disable --now dcms
+```
+
+If Caddy serves only this project, it can also be stopped with `sudo systemctl disable --now caddy`. Do not stop a shared proxy. Preserve `/var/lib/dcms`, the code, account file, environment and TLS certificate storage. Swap configuration does not need to change.
+
+To resume this dedicated deployment:
+
+```bash
+sudo systemctl enable --now dcms caddy
+```
+
+Stopping the app does not shut down or deallocate the VM. Verify the application is inactive and the public URL no longer serves DCMS.

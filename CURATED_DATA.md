@@ -73,6 +73,8 @@ Everything lives in `/home/vm/MUST/REQUIREMENTS/`
 
 **[GAP] The Secretary is a named stakeholder with zero elicited data.** This is the largest single hole in the stakeholder map.
 
+**Current analytical classification (10 November 2026).** Primary means direct participation or direct effect. Sales Manager, Business Owner, Site Workers and Customers are primary stakeholders. URA is secondary through external oversight. This is a group classification, not another interview finding. The Secretary role remains unverified. Primary stakeholder is separate from primary system operator. Worker and customer interest was not elicited and must not be presented as a measured low-interest finding.
+
 ---
 
 ## 4. What you actually observed on the ground
@@ -296,3 +298,6 @@ Academic Year 2026/2027, Semester 1:
 - Semester 1 lectures begin: Aug 17, 2026
 - Semester length: 17 weeks (15 teaching + 2 exam weeks)
 - Must follows semester system since 2006
+## Inventory observation clarification - 10 November 2026
+
+Proposed inventory observation. Follow one product type through an opening physical count, new production, customer loading, returns and damage. Use the same unit in physical counts, receipts and records. Expected closing stock equals opening stock plus production and returns, minus dispatches, damage and other recorded removals. Compare with a closing physical count and reconcile books with computer records. This observation was not completed during the visit. Bulk truck loading was observed, but the counting method and a physical stock reconciliation were not verified.

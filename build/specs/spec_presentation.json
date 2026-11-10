@@ -32,11 +32,11 @@
     },
     {
       "type": "para",
-      "text": "Speaker 1 | 30 seconds. Introduce Deniz as a construction materials business producing blocks, pavers and kerbs."
+      "text": "Speaker 1 | 30 seconds. Introduce the client, the project and Group K."
     },
     {
       "type": "para",
-      "text": "Timing: 14 minutes of presentation content and 1 minute for handoffs, followed by approximately 5 minutes of questions. Speaking slots are rehearsal assignments, not claims of individual contribution. Assign names according to members' actual work."
+      "text": "Timing. Fourteen minutes of content and one minute for handoffs, followed by about five minutes of questions. Each of the ten members should speak briefly and prepare to explain their actual contribution. Speaking slots are rehearsal assignments, not contribution claims."
     },
     {
       "type": "para",
@@ -47,75 +47,7 @@
     },
     {
       "type": "h1",
-      "text": "Slide 2: Group Members"
-    },
-    {
-      "type": "table",
-      "header": [
-        "Name",
-        "Registration Number"
-      ],
-      "rows": [
-        [
-          "JOAS TAREMWA",
-          "2025/BSE/171/PS"
-        ],
-        [
-          "ASUMA KADDE KEVIN",
-          "2025/BSE/045/PS"
-        ],
-        [
-          "SSEBUGWAWO HARRISON",
-          "2025/BSE/161/PS"
-        ],
-        [
-          "TIBAMANYA DAVIS",
-          "2025/BSE/172/PS"
-        ],
-        [
-          "EDOU SIMON PETER",
-          "2025/BSE/066/PS"
-        ],
-        [
-          "MUGENDAWALA MARK PAUL",
-          "2025/BSE/108/PS"
-        ],
-        [
-          "DAMBYA RACHAEL",
-          "2025/BSE/065/PS"
-        ],
-        [
-          "OFAMBA JAMES",
-          "2025/BSE/143/PS"
-        ],
-        [
-          "OSUTA AMEN JOEL",
-          "2025/BSE/152/PS"
-        ],
-        [
-          "MUSONIRWA IBRAHIM",
-          "2025/BSE/218/PS"
-        ]
-      ]
-    },
-    {
-      "type": "h2",
-      "text": "Speaker notes"
-    },
-    {
-      "type": "para",
-      "text": "Speaker 1 | 30 seconds. Introduce the ten-member group, then continue to the client problem."
-    },
-    {
-      "type": "para",
-      "text": "Source: The original Group K roster, retained identically in main and PPT."
-    },
-    {
-      "type": "pagebreak"
-    },
-    {
-      "type": "h1",
-      "text": "Slide 3: Project overview"
+      "text": "Slide 2: Project overview"
     },
     {
       "type": "para",
@@ -171,7 +103,7 @@
     },
     {
       "type": "para",
-      "text": "Speaker 2 | 2 minutes. Explain the concentration of work in the Sales Manager role and the manual reconciliation problem. Records exist on the computer and in physical books and receipts; the ability to reconstruct digital records from paper was not established."
+      "text": "Speaker 2 | 1.5 minutes. Explain the concentration of work in the Sales Manager role and the manual reconciliation problem. Records exist on the computer and in physical books and receipts; the ability to reconstruct digital records from paper was not established."
     },
     {
       "type": "para",
@@ -180,6 +112,78 @@
     {
       "type": "para",
       "text": "Sources: CURATED_DATA.md, operational facts and locked dual-phase design; Phase 1 source, business context and problem statement."
+    },
+    {
+      "type": "pagebreak"
+    },
+    {
+      "type": "h1",
+      "text": "Slide 3: Primary and secondary stakeholders"
+    },
+    {
+      "type": "table",
+      "header": [
+        "Stakeholder",
+        "Classification",
+        "Role or direct impact"
+      ],
+      "rows": [
+        [
+          "Sales Manager",
+          "Primary",
+          "Daily sales, attendance and cash reconciliation"
+        ],
+        [
+          "Business Owner",
+          "Primary",
+          "Operational and financial oversight"
+        ],
+        [
+          "Site Workers",
+          "Primary",
+          "Attendance and daily wage eligibility"
+        ],
+        [
+          "Customers / Builders",
+          "Primary",
+          "Purchases, payments and receipts"
+        ],
+        [
+          "URA",
+          "Secondary",
+          "External tax and fiscal requirements"
+        ]
+      ],
+      "column_widths": [
+        304,
+        200,
+        640
+      ],
+      "row_height": 68
+    },
+    {
+      "type": "para",
+      "text": "Primary stakeholders participate directly or are directly affected. Secondary stakeholders provide external oversight or support."
+    },
+    {
+      "type": "h2",
+      "text": "Speaker notes"
+    },
+    {
+      "type": "para",
+      "text": "Speaker 3 | 1.5 minutes. State the classification rule before explaining the table. Primary and secondary are not rankings of importance and are independent of whether someone was interviewed."
+    },
+    {
+      "type": "para",
+      "text": "The Sales Manager is the main system operator. The Owner is a primary stakeholder and report user, labelled CEO in the prototype. Workers and customers are affected parties without application accounts."
+    },
+    {
+      "type": "para",
+      "text": "Keep the detailed power and interest assessment in Phase 1. Worker and customer interest was not elicited. The Secretary was named earlier but not met, so classification and duties remain unverified."
+    },
+    {
+      "type": "para",
+      "text": "Source. Phase 1, Sections 4.1 and 4.2. Stakeholder classification is group analysis based on direct participation or effect, not an additional field finding."
     },
     {
       "type": "pagebreak"
@@ -242,11 +246,11 @@
     },
     {
       "type": "para",
-      "text": "Speaker 3 | 1 minute. Describe whom the group reached and explain what direct observation established: daytime laptop use and receipt printing during truck loading."
+      "text": "Speaker 4 | 1 minute. Explain direct observation and what it established about receipt printing during truck loading."
     },
     {
       "type": "para",
-      "text": "Speaker 4 | 1 minute. Explain what the interview added: payment channels, the no-credit rule, online tax filing and the cash-shortage problem. Explain the limits of one visit and unavailable stakeholders."
+      "text": "Speaker 5 | 1.5 minutes. Explain the semi-structured interview and the limits of one visit. Name one finding, one challenge and the unresolved receipt and tax details."
     },
     {
       "type": "para",
@@ -255,6 +259,14 @@
     {
       "type": "para",
       "text": "Sources: CURATED_DATA.md; Phase 1 source, stakeholder analysis, elicitation methods and documented limitations."
+    },
+    {
+      "type": "para",
+      "text": "Interview Q&A. Topics covered include the normal working day, payment methods, upfront payment, records, cash shortages, attendance and online tax filing. Suitable question wordings include: Walk us through a normal day; what payment methods are accepted; can customers take products before payment; how are cash differences investigated; how is attendance determined? These are reconstructed topic prompts, not claimed verbatim interview notes."
+    },
+    {
+      "type": "para",
+      "text": "Proposed inventory observation. Follow one product type through an opening physical count, new production, customer loading, returns and damage. Use the same unit in physical counts, receipts and records. Expected closing stock equals opening stock plus production and returns, minus dispatches, damage and other recorded removals. Compare with a closing physical count and reconcile books with computer records. This observation was not completed during the visit. Bulk truck loading was observed, but the counting method and a physical stock reconciliation were not verified."
     },
     {
       "type": "pagebreak"
@@ -307,7 +319,7 @@
           "bold": true
         },
         {
-          "text": "The standalone application shall record sales, update stock and print receipts without internet access. Saved transactions shall remain available after restarting the application."
+          "text": "Standalone target: with internet off, save a sale, update stock and print a receipt. After restart, the sale and stock must remain correct."
         }
       ]
     },
@@ -317,11 +329,7 @@
     },
     {
       "type": "para",
-      "text": "Speaker 5 | 1.5 minutes. Connect the functional requirements to immediate receipting and explaining cash differences. Receipt printing follows a successful transaction; a print failure must allow reprinting without posting another sale."
-    },
-    {
-      "type": "para",
-      "text": "Speaker 6 | 1 minute. Explain the offline requirement as a requirement for the future standalone application, not a capability already established by the hosted web prototype."
+      "text": "Speaker 6 | 1.5 minutes. Link each requirement to user needs. Explain the observable offline pass/fail condition as a future standalone target, not a capability established by the hosted web prototype."
     },
     {
       "type": "para",
@@ -336,58 +344,31 @@
     },
     {
       "type": "h1",
-      "text": "Slide 6: Project example and reflection"
+      "text": "Slide 6: Two user stories"
     },
     {
-      "type": "table",
-      "header": [
-        "Stakeholder",
-        "Power",
-        "Interest",
-        "Engagement"
-      ],
-      "rows": [
-        [
-          "Business Owner",
-          "High",
-          "High",
-          "Not interviewed"
-        ],
-        [
-          "Sales Manager",
-          "High",
-          "High",
-          "Interviewed"
-        ],
-        [
-          "Site Workers",
-          "Low",
-          "Low",
-          "Not interviewed"
-        ],
-        [
-          "URA",
-          "High",
-          "Low",
-          "External regulator"
-        ]
-      ]
+      "type": "h2",
+      "text": "US-01 Record a fully paid sale"
     },
     {
       "type": "para",
-      "runs": [
-        {
-          "text": "Lesson from elicitation. ",
-          "bold": true
-        },
-        {
-          "text": "Observation corrected our initial focus on end-of-day processing. Receipts were printed during customer collections, so the system needed daytime sales as well as evening cash reconciliation."
-        }
-      ]
+      "text": "As a Sales Manager, I want to record a fully paid sale and issue a receipt, so that each collection has a payment record and stock stays accurate."
     },
     {
       "type": "para",
-      "text": "The timing was observed. Receipt fields and tax calculations still required validation."
+      "text": "Accept when payment is complete, insufficient stock rejects the whole sale, and retrying the same submission creates no duplicate."
+    },
+    {
+      "type": "h2",
+      "text": "US-02 Reconcile and close the date"
+    },
+    {
+      "type": "para",
+      "text": "As a Sales Manager, I want to compare counted cash with expected cash and explain any difference, so that the Owner can review the financial position for the day."
+    },
+    {
+      "type": "para",
+      "text": "Accept when differences require a reason, closing saves and locks the date, and a repeated close returns the saved report."
     },
     {
       "type": "h2",
@@ -395,19 +376,27 @@
     },
     {
       "type": "para",
-      "text": "Speaker 7 | 2 minutes. Explain the stakeholder assessment and then the observation that changed the project scope. The initial end-of-day focus did not cover the full working day."
+      "text": "Speaker 7 | 1 minute. Explain US-01 under EPIC-01, Daily sales and receipting. It connects the observed customer collection workflow to an atomic paid sale and printable receipt."
     },
     {
       "type": "para",
-      "text": "Power and interest are the group's analytical classifications from Phase 1, not measurements or statements verified in interviews with all stakeholders. In particular, do not claim workers personally expressed low interest. Interview access and the regulator's role are recorded separately."
+      "text": "Speaker 8 | 1 minute. Explain US-02 under EPIC-02, Daily cash reconciliation. Expected cash is opening cash plus cash sales minus cash expenses. Variance is counted cash minus expected cash."
     },
     {
       "type": "para",
-      "text": "Lesson: combining observation with the interview helped distinguish the initially reported deficit problem from the wider sales workflow. Observation showed when receipting occurred; it did not establish the receipt fields, automatic stock handling or tax calculations."
+      "text": "The master specification, Section 5, contains full acceptance criteria, existing requirement links and named verification cases. Physical printer output and stakeholder acceptance remain unverified."
     },
     {
       "type": "para",
-      "text": "Sources: Phase 1 stakeholder power/interest table; CURATED_DATA.md, daytime receipting and dual-phase design."
+      "text": "An epic groups a larger capability. A user story describes an outcome. Acceptance criteria define observable completion. Tasks are implementation work, and a backlog is the prioritised collection. These are derived stories, not stakeholder quotations."
+    },
+    {
+      "type": "para",
+      "text": "The presentation guide assigns Group K Elicitation. Stories are supporting project examples. The dedicated Agile user-story prompt belongs to Group B, so do not replace the elicitation discussion with an Agile lecture."
+    },
+    {
+      "type": "para",
+      "text": "Sources. Master specification, Section 5, US-01 and US-02. Presentation guide, Group K and Group B prompts."
     },
     {
       "type": "pagebreak"
@@ -426,11 +415,7 @@
     },
     {
       "type": "para",
-      "text": "Speaker 8 | 1.5 minutes. The screenshot is from the current web prototype, using the saved sample report for 9 November 2026. Point to the business date and separate Cash, Mobile Money and Bank Deposit activity."
-    },
-    {
-      "type": "para",
-      "text": "Speaker 9 | 1.5 minutes. Cash sales of UGX 500,000 less cash expenses of UGX 50,000 and zero opening cash give UGX 450,000 expected. Physical cash is UGX 445,000, giving a signed variance of minus UGX 5,000. Explain the required reason and the date lock."
+      "text": "Speaker 9 | 2 minutes. Show the saved sample report for 9 November 2026. Zero opening cash plus UGX 500,000 cash sales minus UGX 50,000 cash expenses gives UGX 450,000 expected. The UGX 445,000 count produces a UGX 5,000 deficit and requires a reason."
     },
     {
       "type": "para",
@@ -445,21 +430,25 @@
       "text": "Technical Q&A: the SQLite web implementation posts sales and stock atomically in application services. The proposed SWE1205 database design separately describes Sales_Items triggers, stored procedures and linked sale adjustments. Those design artifacts are not all implemented web features. Bank statement allocations do not create sales or rewrite saved cash closes."
     },
     {
+      "type": "para",
+      "text": "Presenter detail. Recorded Mobile Money and Bank Deposit activity is not physical cash. Wage eligibility is not proof of payment and must not be subtracted again unless an actual payout is recorded as an expense. The variance explanation records the manager account of the discrepancy, not independent proof of its cause. A saved close is not an Owner approval."
+    },
+    {
       "type": "pagebreak"
     },
     {
       "type": "h1",
-      "text": "Slide 8: Conclusion and remaining work"
+      "text": "Slide 8: Reflection and remaining work"
     },
     {
       "type": "para",
       "runs": [
         {
-          "text": "System scope. ",
+          "text": "Lesson from elicitation. ",
           "bold": true
         },
         {
-          "text": "Paid sales and receipt printing are handled during the day. Cash expenses, physical cash counts and the final report are handled at close."
+          "text": "Daytime receipt printing corrected our end-of-day focus. The system needed immediate sales recording as well as evening reconciliation."
         }
       ]
     },
@@ -471,7 +460,7 @@
           "bold": true
         },
         {
-          "text": "Sales, receipts, stock deduction, attendance, reconciliation, sales VAT summaries and bank statement matching."
+          "text": "Paid sales, printable receipts, stock, attendance, cash reconciliation, VAT summaries and statement matching. Sales Manager and CEO account access."
         }
       ]
     },
@@ -479,11 +468,11 @@
       "type": "para",
       "runs": [
         {
-          "text": "Remaining verification. ",
+          "text": "Remaining work. ",
           "bold": true
         },
         {
-          "text": "Build and test the standalone application without internet. Verify physical printing, actual receipt fields, tax treatment and worker requirements with the business."
+          "text": "Build the standalone offline application. Verify physical printing, receipt fields and tax treatment. Stakeholder acceptance and automatic nightly backup remain outstanding."
         }
       ]
     },
@@ -493,19 +482,23 @@
     },
     {
       "type": "para",
-      "text": "Speaker 10 | 1.5 minutes. Distinguish the working web prototype from the unbuilt standalone application and the remaining stakeholder validation. Do not propose immediate production deployment on the office laptop."
+      "text": "Speaker 10 | 2.5 minutes. Explain the lesson: observation and the interview together revealed both phases of the working day. Receipt timing was observed, but receipt fields, existing stock logic and detailed tax calculations were not established."
     },
     {
       "type": "para",
-      "text": "Tax scope: the web report summarises recorded sales VAT. Input VAT, fiscal corrections, EFRIS submission and tax payable are not implemented. Bank scope: imported statement matching and reversals, not a live bank feed or complete bank balance reconciliation."
+      "text": "Current release. Hosted web application at https://dcms.tirallab.page. Sales Manager performs operations. CEO is the Owner report account with read-only access. Role authentication does not establish per-change operator attribution or database-level roles."
     },
     {
       "type": "para",
-      "text": "Q&A | Approximately 5 minutes. Each member should describe their actual contribution and explain one requirement, elicitation finding or limitation. No contribution assignments have been invented."
+      "text": "Remaining work. Standalone installation and offline acceptance, target physical printer testing, automated encrypted cloud backup and stakeholder acceptance. Sales VAT summaries are not input VAT, final tax payable or EFRIS submission. Banking is statement allocation, not a live bank feed."
     },
     {
       "type": "para",
-      "text": "Sources: IMPLEMENTATION_STATUS.md and IMPLEMENTATION_PLAN.md; master specification verification cases; presentation guide."
+      "text": "Q&A. Approximately five minutes. Each member should explain their actual contribution and one decision, requirement or course concept. No personal contribution has been invented."
+    },
+    {
+      "type": "para",
+      "text": "Sources. Phase 1 findings, master specification delivery stages and Section 5, implementation status, deployment guide and SWE2102 presentation guide."
     }
   ]
 }

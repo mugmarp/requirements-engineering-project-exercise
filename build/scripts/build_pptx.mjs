@@ -49,7 +49,7 @@ for (const [index, item] of spec.slides.entries()) {
   if (roster) {
     const values = [roster.header, ...roster.rows];
     const isRoster = roster.header.length === 2;
-    const rowHeight = isRoster ? 45 : 44;
+    const rowHeight = roster.row_height ?? (isRoster ? 45 : 44);
     const table = slide.tables.add({
       rows: values.length,
       columns: roster.header.length,
@@ -57,7 +57,7 @@ for (const [index, item] of spec.slides.entries()) {
       top: 132,
       width: isRoster ? 1040 : 1144,
       height: rowHeight * values.length,
-      columnWidths: isRoster ? [650, 390] : [310, 160, 160, 514],
+      columnWidths: roster.column_widths ?? (isRoster ? [650, 390] : [310, 160, 160, 514]),
       values,
     });
     for (const [row, cells] of values.entries()) {
@@ -75,12 +75,24 @@ for (const [index, item] of spec.slides.entries()) {
       }
     }
     table.borders.assign({ fill: "#D6D6D6", width: 1, style: "solid" });
-    if (!isRoster) {
+    if (!isRoster && item.content.some(block => block.type === "section")) {
       const lesson = item.content.find(block => block.type === "section");
       const reflection = item.content.find(block => block.type === "para");
       text(slide, "lesson-heading", lesson.heading, 68, 378, 1144, 35, 27, { bold: true });
       text(slide, "lesson-body", lesson.text, 68, 421, 1100, 112, 24, { verticalAlignment: "top", wrap: "square" });
       text(slide, "reflection-limit", reflection.text, 68, 548, 1100, 70, 24, { verticalAlignment: "top", wrap: "square" });
+    }
+    if (roster.header.length === 3) {
+      const definition = item.content.find(block => block.type === "para");
+      if (definition) text(slide, "stakeholder-definition", definition.text, 68,
+        132 + rowHeight * values.length + 24, 1120, 80, 24, { verticalAlignment: "top", wrap: "square" });
+    }
+  } else if (item.content.some(block => block.type === "story")) {
+    for (const [i, story] of item.content.entries()) {
+      const y = 135 + i * 250;
+      text(slide, `story-${i + 1}-heading`, story.heading, 68, y, 1144, 36, 27, { bold: true });
+      text(slide, `story-${i + 1}-body`, story.text, 68, y + 49, 1100, 78, 24, { verticalAlignment: "top", wrap: "square" });
+      text(slide, `story-${i + 1}-acceptance`, story.acceptance, 68, y + 141, 1100, 72, 24, { verticalAlignment: "top", wrap: "square" });
     }
   } else if (screenshot) {
     if (screenshotPath) {
@@ -145,6 +157,9 @@ for (const [index, slide] of spec.slides.entries()) {
     if (block.type === "table") {
       markdown.push(`| ${block.header.join(" | ")} |`, `|${block.header.map(() => "---").join("|")}|`, ...block.rows.map(row => `| ${row.join(" | ")} |`), "");
       documentSpec.blocks.push(block);
+    } else if (block.type === "story") {
+      markdown.push(`**${block.heading}**`, "", block.text, "", block.acceptance, "");
+      documentSpec.blocks.push({ type: "h2", text: block.heading }, { type: "para", text: block.text }, { type: "para", text: block.acceptance });
     } else if (block.type === "section") {
       markdown.push(`**${block.heading}**`, "", block.text, "");
       documentSpec.blocks.push({ type: "para", runs: [{ text: block.heading + ". ", bold: true }, { text: block.text }] });

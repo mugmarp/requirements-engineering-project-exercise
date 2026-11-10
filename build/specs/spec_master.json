@@ -48,6 +48,54 @@
       ]
     },
     {
+      "type": "h2",
+      "text": "1.4 Delivery Stages and Current Prototype"
+    },
+    {
+      "type": "para",
+      "text": "The requirements describe the target DCMS. Delivery is staged. The current release is a hosted web prototype at https://dcms.tirallab.page with persistent server-side SQLite storage. It requires internet access from client devices. The later standalone application is intended to support local operation without continuous internet access. The hosted prototype does not establish completion of the standalone offline requirement."
+    },
+    {
+      "type": "table",
+      "header": [
+        "Capability",
+        "Current web prototype",
+        "Target or remaining work"
+      ],
+      "rows": [
+        [
+          "Sales and reconciliation",
+          "Paid sales, stock deduction, printable receipts and saved daily cash reports.",
+          "Validate business acceptance and the target physical printer."
+        ],
+        [
+          "Account access",
+          "Sales Manager can record operations. CEO has read-only reports and records.",
+          "Database roles and restricted Owner-only financial views remain proposed design."
+        ],
+        [
+          "Offline operation",
+          "Hosted client access needs internet.",
+          "REQ-NFR-PER-01 applies to the future standalone application."
+        ],
+        [
+          "Backup and recovery",
+          "A manual server database backup was created before authentication deployment.",
+          "Automated encrypted nightly cloud backup and retry are not implemented."
+        ],
+        [
+          "Financial corrections and audit",
+          "Bank allocation reversals and attendance change reasons are available.",
+          "Sale voids, refunds and immutable per-operator financial audit remain unimplemented."
+        ],
+        [
+          "Tax reporting",
+          "Monthly sales VAT summary and CSV export.",
+          "Input VAT, tax payable and EFRIS submission are not implemented."
+        ]
+      ]
+    },
+    {
       "type": "h1",
       "text": "2. OVERALL DESCRIPTION"
     },
@@ -114,6 +162,10 @@
           "text": "Purchase blocks and pavers. Pay upfront. Transport their own goods by truck. Require quick receipt generation to minimize loading delays."
         }
       ]
+    },
+    {
+      "type": "para",
+      "text": "Stakeholder classification. Sales Manager, Business Owner, Site Workers and Customers are primary stakeholders because they participate directly or are directly affected. URA is a secondary stakeholder with external regulatory authority. The Owner is labelled CEO in the web account selector. Stakeholder classification does not imply an application account for workers or customers. The Secretary role remains unverified."
     },
     {
       "type": "h2",
@@ -415,11 +467,147 @@
     },
     {
       "type": "h1",
+      "text": "5. USER STORIES AND ACCEPTANCE CRITERIA"
+    },
+    {
+      "type": "para",
+      "text": "These stories are derived from the documented requirements and the approved dual-phase design. They are group-authored formulations, not quotations or additional interviews. They complement the numbered SRS requirements and do not replace them."
+    },
+    {
+      "type": "h2",
+      "text": "5.1 Epics and Backlog Structure"
+    },
+    {
+      "type": "para",
+      "text": "An epic groups a broad business capability that requires several stories. A story describes an outcome for a user. Acceptance criteria define observable conditions for accepting that story. Tasks describe implementation work. A backlog is the prioritised collection of stories, fixes and technical tasks."
+    },
+    {
+      "type": "table",
+      "header": [
+        "Epic",
+        "Business capability",
+        "Story and priority"
+      ],
+      "rows": [
+        [
+          "EPIC-01",
+          "Daily sales and receipting",
+          "US-01. Core daytime workflow."
+        ],
+        [
+          "EPIC-02",
+          "Daily cash reconciliation",
+          "US-02. Core evening workflow."
+        ]
+      ]
+    },
+    {
+      "type": "para",
+      "text": "These two epics organise the selected presentation examples. Attendance, reporting, access control, banking and tax work retain their existing scope. Shared role accounts identify access rights but per-change operator identity is not stored in the current business history tables."
+    },
+    {
+      "type": "h2",
+      "text": "5.2 US-01 Record a Fully Paid Sale"
+    },
+    {
+      "type": "para",
+      "text": "Epic EPIC-01. As a Sales Manager, I want to record a fully paid sale and issue a receipt, so that each customer collection has a payment record and the remaining stock stays accurate."
+    },
+    {
+      "type": "para",
+      "text": "Priority. Core workflow. Preconditions. The Sales Manager is authorised and the selected business date is open. At least one active product is available."
+    },
+    {
+      "type": "numbered",
+      "items": [
+        "Given an open business date, when the manager selects active products and positive whole quantities, the system calculates each line, subtotal, recorded VAT rate and final total.",
+        "The manager selects Cash, Mobile Money or Bank Deposit. The amount received must equal the final total. An incomplete or mismatched payment is rejected. The current web form permits an optional payment reference and requires a receiving bank account when configured for Bank Deposit.",
+        "If any requested quantity exceeds available stock, reject the whole sale. No receipt, sale line or stock deduction from that attempt may remain.",
+        "On success, save the sale, all lines and all stock changes in the same transaction. Generate one receipt identifier and make the saved receipt available for browser printing.",
+        "Retrying the identical submission with the same request key returns the original sale. It must not create another receipt or deduct stock a second time. Reusing that key for changed details is rejected.",
+        "A printer failure must not create a second sale. Reopen the saved receipt and retry printing. Physical output on the target printer remains to be verified."
+      ]
+    },
+    {
+      "type": "para",
+      "text": "Requirement links. REQ-FUN-SAL-01, REQ-FUN-SAL-02, REQ-FUN-SAL-04 and REQ-FUN-SAL-05. The no-credit business rule is defined in the scope. Related adjustment requirements under REQ-FUN-SAL-03 remain separate from this story."
+    },
+    {
+      "type": "h2",
+      "text": "5.3 US-02 Reconcile and Close a Business Date"
+    },
+    {
+      "type": "para",
+      "text": "Epic EPIC-02. As a Sales Manager, I want to compare counted cash with expected cash and explain any difference, so that the Business Owner can review the financial position for the day."
+    },
+    {
+      "type": "para",
+      "text": "Priority. Core workflow. Preconditions. The Sales Manager is authorised and recorded activity is associated with the selected business date."
+    },
+    {
+      "type": "numbered",
+      "items": [
+        "Display recorded sales totals separately for Cash, Mobile Money and Bank Deposit. These are recorded payment activity, not independently verified bank or mobile-money balances.",
+        "Calculate expected cash as opening cash plus cash sales minus recorded cash expenses for that business date. Record individual cash expenses before reviewing the final count.",
+        "Accept a nonnegative physical cash count. Calculate variance as actual cash minus expected cash. A negative result is a deficit and a positive result is a surplus.",
+        "For every nonzero variance, reject closing if the explanation is missing or blank. A zero variance may be closed without an explanation.",
+        "Before closing, review the latest totals. If another operation changed the date after the preview, reject the stale request and require a refreshed review. Acknowledge any unmarked workers before closing.",
+        "Save one final report and mark the business date closed atomically. Reject new sales, expenses and other locked daily operations on that date.",
+        "A second close request returns the existing saved report without changing its amounts or explanation. The report remains available after an application restart.",
+        "For the worked example, zero opening cash plus UGX 500,000 cash sales minus UGX 50,000 expenses gives UGX 450,000 expected. A count of UGX 445,000 gives a variance of minus UGX 5,000 and requires an explanation."
+      ]
+    },
+    {
+      "type": "para",
+      "text": "Requirement links. REQ-FUN-REC-01, REQ-FUN-REC-02, REQ-FUN-REC-03, REQ-FUN-REC-04 and REQ-FUN-REC-05. Role access also relates to REQ-NFR-SEC-01."
+    },
+    {
+      "type": "h2",
+      "text": "5.4 Story Verification and Evidence"
+    },
+    {
+      "type": "table",
+      "header": [
+        "Story",
+        "Automated verification",
+        "Remaining acceptance work"
+      ],
+      "rows": [
+        [
+          "US-01",
+          "Atomic save and retry, insufficient payment and stock rejection, concurrent oversell protection and saved receipt reopening.",
+          "Target physical printer output and stakeholder acceptance."
+        ],
+        [
+          "US-02",
+          "Mandatory variance reason, stale preview rejection, concurrent posting versus close, snapshot retry and report persistence.",
+          "Stakeholder review of final report and business use."
+        ]
+      ]
+    },
+    {
+      "type": "para",
+      "text": "Verification references. The current automated cases are in tests/test_prototype.py, including test_atomic_stock_receipt_and_retry, test_two_concurrent_sales_cannot_oversell, test_web_flow_and_reopen_with_new_app, test_close_stale_preview_and_nonzero_reason, test_post_racing_close_cannot_change_saved_totals and test_attendance_eligibility_and_close_snapshot. Account enforcement is checked in tests/test_auth.py. Passing these cases is implementation verification, not evidence that the stakeholders accepted the stories."
+    },
+    {
+      "type": "h2",
+      "text": "5.5 Measurable Offline Acceptance Condition"
+    },
+    {
+      "type": "para",
+      "text": "For REQ-NFR-PER-01, disconnect internet before opening the future installed standalone application. Record one fully paid sale, verify the exact stock deduction and print its receipt on the target physical printer. Restart the application and reopen the same receipt. Pass only if every step succeeds without internet and the saved sale, receipt identifier and resulting stock remain unchanged. This test has not passed for an installed standalone release because that release has not been built."
+    },
+    {
+      "type": "h1",
       "text": "PART 2: REQUIREMENTS TRACEABILITY MATRIX"
     },
     {
       "type": "para",
-      "text": "The following matrix links each business problem observed during elicitation to the specific requirement that solves it and the database artifact that implements it."
+      "text": "Story links supplement the requirement-level matrix below. US-01 links to REQ-FUN-SAL-01, REQ-FUN-SAL-02, REQ-FUN-SAL-04 and REQ-FUN-SAL-05. US-02 links to REQ-FUN-REC-01 through REQ-FUN-REC-05. Both rely on authorised access under REQ-NFR-SEC-01. See Section 5 for acceptance criteria and verification evidence."
+    },
+    {
+      "type": "para",
+      "text": "The following matrix links business problems to requirement identifiers and the proposed database artifacts for SWE1205. These artifacts are design targets and are not all implemented in the hosted SQLite web release. Current delivery status is summarised in Section 1.4."
     },
     {
       "type": "table",
@@ -566,6 +754,10 @@
         "URA Compliance Check: Verify the URA Summary Report output format against a blank URA VAT form (obtained from the site or standard template). Confirm all required fields are present and VAT calculation matches the 18 percent standard.",
         "Gap Closure Verification: For each documented gap (Workers, Receipt Fields), verify that the stated assumption (for example, standard URA fiscal fields for receipts) is acceptable to the primary stakeholder (Sales Manager) during the walkthrough."
       ]
+    },
+    {
+      "type": "para",
+      "text": "Proposed inventory observation. Follow one product type through an opening physical count, new production, customer loading, returns and damage. Use the same unit in physical counts, receipts and records. Expected closing stock equals opening stock plus production and returns, minus dispatches, damage and other recorded removals. Compare with a closing physical count and reconcile books with computer records. This observation was not completed during the visit. Bulk truck loading was observed, but the counting method and a physical stock reconciliation were not verified. The current prototype deducts sold stock but does not implement a complete production, damage, returns or stock-adjustment ledger. A discrepancy must not be resolved by silently overwriting the product balance."
     },
     {
       "type": "h2",

@@ -10,354 +10,179 @@
   "blocks": [
     {
       "type": "h1",
-      "text": "PROJECT DELIVERABLES GUIDE"
+      "text": "1. PURPOSE AND DELIVERY STATUS"
     },
     {
       "type": "para",
-      "text": "This guide maps the original 10-document roadmap to the actual deliverables produced in this repository. Documents 3 through 8 from the original roadmap have been consolidated into a single Master Document per the updated roadmap."
+      "text": "This guide locates the DCMS requirements deliverables and records how the presentation follows the SWE2102 guide. Document preparation, implementation verification and stakeholder acceptance are separate activities. A completed document does not mean every target feature is implemented or accepted by the business."
     },
     {
       "type": "h1",
-      "text": "DELIVERABLE STATUS SUMMARY"
+      "text": "2. DELIVERABLE MAP"
     },
     {
       "type": "table",
       "header": [
-        "#",
-        "Original Roadmap Document",
-        "Our Deliverable",
-        "Phase",
-        "Status",
-        "File"
+        "Deliverable",
+        "Content and section",
+        "Current status"
       ],
       "rows": [
         [
-          "1",
-          "Stakeholder Register & Power/Interest Matrix",
-          "Phase 1: Elicitation & Stakeholder Analysis (Section 2.1)",
-          "1",
-          "Complete",
-          "project_deliverables/Phase1_Elicitation-and-Stakeholder-Analysis.docx"
+          "Phase 1 report",
+          "Business context, problem statement, primary and secondary stakeholders in Section 4.1, power and interest in Section 4.2, methods and limitations.",
+          "Revised evidence and stakeholder analysis."
         ],
         [
-          "2",
-          "Elicitation Report & Field Visit Log",
-          "Phase 1: Elicitation & Stakeholder Analysis (Sections 3-5)",
-          "1",
-          "Complete",
-          "project_deliverables/Phase1_Elicitation-and-Stakeholder-Analysis.docx"
+          "Master document",
+          "Part 1 SRS, including delivery stages in Section 1.4 and two user stories in Section 5. Parts 2 to 5 cover traceability, verification, management and proposed database design.",
+          "Target requirements and current implementation limits distinguished."
         ],
         [
-          "3",
-          "Software Requirements Specification (SRS)",
-          "Phase 2-5: Master Document Part 1 (SRS)",
-          "2-3",
-          "Complete",
-          "project_deliverables/Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx"
+          "Presentation",
+          "Eight slides covering overview, stakeholders, elicitation, requirements, two stories, prototype screenshot and reflection.",
+          "Members slide removed. Speaker slots and Q&A preparation retained in notes."
         ],
         [
-          "4",
-          "Requirements Traceability Matrix (RTM)",
-          "Phase 2-5: Master Document Part 2 (RTM)",
-          "2-3",
-          "Complete",
-          "project_deliverables/Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx"
+          "User manual",
+          "Hosted login, Sales Manager and CEO roles, navigation, sales, browser printing, workers, attendance, reconciliation and reports.",
+          "Updated for the current hosted web application."
         ],
         [
-          "5",
-          "Validation & Verification (V&V) Plan",
-          "Phase 2-5: Master Document Part 3 (V&V)",
-          "4",
-          "Complete",
-          "project_deliverables/Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx"
-        ],
-        [
-          "6",
-          "Requirements Management Plan",
-          "Phase 2-5: Master Document Part 4 (Management)",
-          "5",
-          "Complete",
-          "project_deliverables/Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx"
-        ],
-        [
-          "7",
-          "Conceptual Data Model (ER Diagram) & Data Dictionary",
-          "Phase 2-5: Master Document Part 5 Section 1 (DB Design)",
-          "DB",
-          "Complete",
-          "project_deliverables/Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx"
-        ],
-        [
-          "8",
-          "Physical Database Design Document (SQL Logic)",
-          "Phase 2-5: Master Document Part 5 Sections 2-4 (DB Design)",
-          "DB",
-          "Complete",
-          "project_deliverables/Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx"
-        ],
-        [
-          "9",
-          "Grand Project Presentation Deck",
-          "Phase Final: Grand Project Presentation Deck",
-          "Final",
-          "Complete",
-          "project_deliverables/PhaseFinal_Grand-Project-Presentation.pptx"
-        ],
-        [
-          "10",
-          "User Manual / Standard Operating Procedure (SOP)",
-          "Not yet created",
-          "Final",
-          "Pending",
-          ""
+          "Deliverables guide",
+          "This document.",
+          "Updated document and presentation map."
         ]
       ]
     },
     {
       "type": "h1",
-      "text": "PHASE MAPPING"
-    },
-    {
-      "type": "table",
-      "header": [
-        "Course Phase",
-        "RE Phase",
-        "Deliverables",
-        "Files"
-      ],
-      "rows": [
-        [
-          "Week 2 (Sep 15)",
-          "Phase 1: Elicitation & Stakeholder Analysis",
-          "Stakeholder Register, Power/Interest Matrix, Elicitation Report, Field Visit Log, Challenges & Synthesis",
-          "Phase1_Elicitation-and-Stakeholder-Analysis.docx"
-        ],
-        [
-          "Weeks 3-4",
-          "Phase 2 & 3: Analysis & Specification",
-          "SRS (IEEE 830), Functional & Non-Functional Requirements, Use Cases, RTM",
-          "Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx (Parts 1-2)"
-        ],
-        [
-          "Weeks 5-6",
-          "Phase 4 & 5: Validation & Management",
-          "V&V Plan, Requirements Management Plan, Change Control, Version Control",
-          "Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx (Parts 3-4)"
-        ],
-        [
-          "SWE1205",
-          "Database & System Design",
-          "ER Diagram, Data Dictionary, Stored Procedures, Triggers, Views",
-          "Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx (Part 5)"
-        ],
-        [
-          "End of Semester",
-          "Phase Final: Grand Presentation",
-          "Presentation Deck, User Manual / SOP",
-          "PhaseFinal_Grand-Project-Presentation.pptx + Doc 10 (pending)"
-        ],
-        [
-          "Ongoing",
-          "Reference",
-          "Project Deliverables Guide",
-          "Phase2-5_Project-Deliverables-Guide.docx"
-        ]
-      ]
-    },
-    {
-      "type": "h1",
-      "text": "CONSOLIDATION NOTE"
+      "text": "3. FILE LOCATIONS"
     },
     {
       "type": "para",
-      "text": "Per the corrected roadmap, Documents 3 through 8 from the original roadmap have been consolidated into a single Master Document to avoid fragmentation and ensure strict traceability between requirements, traceability matrix, validation, management and database design. This master document is the single source of truth for Phases 2 through 5 and the SWE1205 database deliverable."
-    },
-    {
-      "type": "h1",
-      "text": "ARCHITECTURE"
-    },
-    {
-      "type": "para",
-      "text": "The system follows a Dual Phase architecture established from ground observations:"
+      "text": "Generated files are in project_deliverables. Their editable specifications are in build/specs."
     },
     {
       "type": "bullets",
       "items": [
-        "Phase 1 (Day): Real Time Point of Sale - processes individual sales, calculates VAT, updates inventory, prints physical receipts for customers as trucks load.",
-        "Phase 2 (Evening): End of Day Reconciliation Engine - balances multi channel payment drawers (Cash, Mobile Money, Bank Deposit), logs operational expenses, computes cash variances (deficit/surplus), generates daily summary report for the Business Owner."
+        "Phase 1. Phase1_Elicitation-and-Stakeholder-Analysis.docx. Source spec_doc01.json, maintained through build/scripts/make_spec_doc01.py.",
+        "Master. Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx. Source spec_master.json.",
+        "Presentation. PhaseFinal_Grand-Project-Presentation.pptx and PhaseFinal_Grand-Project-Presentation.md. Canonical source spec_presentation_pptx.json. The build also regenerates spec_presentation.json.",
+        "Manual. User-Manual-SOP.docx. Source spec_sop.json.",
+        "Guide. Phase2-5_Project-Deliverables-Guide.docx. Source spec_guide.json."
       ]
     },
     {
       "type": "h1",
-      "text": "KEY CORRECTIONS FROM ORIGINAL ROADMAP"
-    },
-    {
-      "type": "table",
-      "header": [
-        "Original Assumption",
-        "Corrected Reality",
-        "Source"
-      ],
-      "rows": [
-        [
-          "End of Day batch only system",
-          "Dual Phase: Real Time POS by day + Evening Reconciliation",
-          "Turns 86-91"
-        ],
-        [
-          "Credit/Debtors module needed",
-          "Excluded: strict no credit policy",
-          "Turn 41, 97"
-        ],
-        [
-          "Real time remote dashboard for Owner",
-          "Excluded: Owner visits daily; async dashboard only",
-          "Turns 41, 87, 91"
-        ],
-        [
-          "Sept 15 presentation deadline",
-          "Removed: date passed; Grand Presentation is end of semester",
-          "Turn 25, 95"
-        ],
-        [
-          "Concept Note as source",
-          "Discarded: ground truth overrides",
-          "Turn 41, 84"
-        ],
-        [
-          "Phase 1 includes system design",
-          "Corrected: Phase 1 is As Is only; design in SRS",
-          "Turn 93"
-        ]
-      ]
-    },
-    {
-      "type": "h1",
-      "text": "FILES IN REPOSITORY"
-    },
-    {
-      "type": "table",
-      "header": [
-        "File",
-        "Description"
-      ],
-      "rows": [
-        [
-          "Phase1_Elicitation-and-Stakeholder-Analysis.docx",
-          "Phase 1: Elicitation & Stakeholder Analysis"
-        ],
-        [
-          "Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx",
-          "Phases 2-5: SRS + RTM + V&V + Management + DB Design"
-        ],
-        [
-          "Phase2-5_Project-Deliverables-Guide.docx",
-          "Project Deliverables Guide (this document)"
-        ],
-        [
-          "PhaseFinal_Grand-Project-Presentation.pptx",
-          "Phase Final: Grand Project Presentation Deck (PPTX)"
-        ],
-        [
-          "PhaseFinal_Grand-Project-Presentation-Backup.docx",
-          "Phase Final: Grand Project Presentation Deck (DOCX backup)"
-        ],
-        [
-          "CONTEXT.md",
-          "Full fact base with dual phase design"
-        ],
-        [
-          "specs/spec_doc01.json",
-          "Phase 1 source spec"
-        ],
-        [
-          "specs/spec_master.json",
-          "Master document source spec (Phases 2-5 + DB)"
-        ],
-        [
-          "specs/spec_guide.json",
-          "This guide source spec"
-        ],
-        [
-          "specs/spec_presentation_pptx.json",
-          "Presentation deck source spec (PPTX)"
-        ],
-        [
-          "scripts/build_docx.py",
-          "DOCX builder (Times New Roman 12pt, 1.15 spacing)"
-        ],
-        [
-          "scripts/build_pptx.py",
-          "PPTX builder (Arial 18pt, 1.15 spacing)"
-        ],
-        [
-          "scripts/make_spec_doc01.py",
-          "Spec generator with explicit filler cuts"
-        ],
-        [
-          "README.md",
-          "Project overview"
-        ],
-        [
-          "context/Group-ALLOCATIONS_1_requirements_engineering.pdf",
-          "Course allocation sheet"
-        ]
-      ]
-    },
-    {
-      "type": "h1",
-      "text": "REMAINING WORK"
-    },
-    {
-      "type": "table",
-      "header": [
-        "Document",
-        "Description",
-        "Priority"
-      ],
-      "rows": [
-        [
-          "10. User Manual / SOP",
-          "Visual, icon driven guide for Sales Manager covering daily sales entry and end of day reconciliation",
-          "High"
-        ]
-      ]
-    },
-    {
-      "type": "h1",
-      "text": "FORMAT STANDARD"
+      "text": "4. PRESENTATION GUIDE ALIGNMENT"
     },
     {
       "type": "para",
-      "text": "All documents follow a fixed format standard enforced by scripts/build_docx.py and scripts/build_pptx.py:"
+      "text": "The official SWE2102 presentation guide dated 10 November 2026 allocates Elicitation to Group K. Its prompt asks for stakeholders, the chosen elicitation method and one challenge. User stories support the project example and do not replace the allocated topic."
     },
     {
-      "type": "h2",
-      "text": "Word documents (.docx)"
+      "type": "table",
+      "header": [
+        "Guide expectation",
+        "Presentation location",
+        "Preparation or limit"
+      ],
+      "rows": [
+        [
+          "Project, problem, users and scope",
+          "Slide 2",
+          "Keep the distinction between site observations and proposed system behaviour."
+        ],
+        [
+          "Stakeholders, method and one finding",
+          "Slides 3 and 4",
+          "Define the classification rule and explain daytime receipting."
+        ],
+        [
+          "Allocated topic, Elicitation",
+          "Slides 3 and 4",
+          "Direct observation, Sales Manager interview and limited verification access."
+        ],
+        [
+          "Functional requirements and a measurable NFR",
+          "Slide 5",
+          "Offline acceptance is a future standalone target."
+        ],
+        [
+          "Project example and reflection",
+          "Slides 6 to 8",
+          "Two derived stories, one large saved-report screenshot and the dual-phase lesson."
+        ],
+        [
+          "Six to eight slides, fifteen minutes plus about five minutes of questions",
+          "Eight slides and speaker notes",
+          "Fourteen minutes of content and one minute for handoffs. Rehearsal still required."
+        ],
+        [
+          "Each member speaks and explains their contribution",
+          "Speaker slots across all eight slides",
+          "Assign slots to members based on actual work and prepare individual answers."
+        ]
+      ]
+    },
+    {
+      "type": "h1",
+      "text": "5. STORIES AND TRACEABILITY"
+    },
+    {
+      "type": "table",
+      "header": [
+        "Epic and story",
+        "Acceptance focus",
+        "Reference"
+      ],
+      "rows": [
+        [
+          "EPIC-01. US-01 Record a fully paid sale",
+          "Full matching payment, available stock, atomic save, printable receipt and safe submission retry.",
+          "Master Part 1, Sections 5.1 and 5.2."
+        ],
+        [
+          "EPIC-02. US-02 Reconcile and close a business date",
+          "Expected cash, physical count, mandatory variance reason, saved report, date lock and repeated-close safety.",
+          "Master Part 1, Sections 5.1 and 5.3."
+        ]
+      ]
+    },
+    {
+      "type": "para",
+      "text": "Existing requirement identifiers remain the formal traceability references. The stories are group-authored formulations derived from those requirements, not additional stakeholder testimony. Verification references and outstanding acceptance work are in Sections 5.4 and 5.5 of the master document."
+    },
+    {
+      "type": "h1",
+      "text": "6. CURRENT RELEASE AND REMAINING WORK"
+    },
+    {
+      "type": "para",
+      "text": "The hosted web application is configured at https://dcms.tirallab.page. It requires internet access and stores its database on the server. Sales Manager records operations and CEO reviews records without write access. See the manual for exact workflows. Site availability depends on the app and proxy services being running. Stop and resume procedures are documented in DEPLOYMENT.md."
     },
     {
       "type": "bullets",
       "items": [
-        "Font: Times New Roman, 12 pt, black",
-        "Line spacing: 1.15 (multiple)",
-        "Bold: Headings, table headers, lead in phrases only",
-        "Punctuation: Plain ASCII only (no semicolons, no quotes, no hyphens, no em dashes)",
-        "Page: A4, 25.4 mm margins"
+        "Future delivery. Build and verify the standalone installed application, including operation without internet.",
+        "Unimplemented target features. Automated encrypted nightly cloud backup, sale voids and refunds, full fiscal integration and immutable per-operator financial audit.",
+        "Acceptance work. Verify target physical printing, receipt fields, detailed tax treatment and business review of the requirements and reports.",
+        "Presentation readiness. Rehearse within fifteen minutes and prepare individual contribution and Q&A answers.",
+        "Proposed inventory observation. Physical counts and production, loading, damage and returns should be checked if further access becomes possible. These checks were not performed during the original visit."
       ]
     },
     {
-      "type": "h2",
-      "text": "PowerPoint presentations (.pptx)"
+      "type": "h1",
+      "text": "7. FORMAT AND REGENERATION"
     },
     {
-      "type": "bullets",
-      "items": [
-        "Font: Arial, 18 pt body, 20 pt subtitle, 32 pt title",
-        "Background: White (FFFFFF)",
-        "Colour: Black (000000)",
-        "Bold: Headings, table headers, lead in phrases only",
-        "Punctuation: Plain ASCII, no quotes, no semicolons, no hyphens, no em dashes"
-      ]
+      "type": "para",
+      "text": "Word documents use Times New Roman at 12 pt with 1.15 line spacing, A4 pages and 25.4 mm margins. Slides retain the white background and Arial style. Requirement, story and epic identifiers, URLs and file names retain their literal punctuation."
+    },
+    {
+      "type": "para",
+      "text": "Regeneration commands and the existing build scripts are documented in README.md. Render and inspect the deliverables after changes."
     }
   ]
 }

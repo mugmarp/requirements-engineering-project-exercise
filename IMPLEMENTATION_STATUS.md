@@ -135,3 +135,7 @@ Before a production release, confirm the business's actual tax position and fisc
 ## Hosted deployment and account access — 10 November 2026
 
 Prepared Ubuntu hosting with Waitress, systemd and Caddy, using persistent SQLite storage and a single application process. Added session login with an account dropdown, Sales Manager operations access and CEO read-only oversight. Both requested sample passwords are `demo`; server account hashes and runtime secrets remain outside Git. Editing controls are omitted for CEO, and all operational POST requests are also rejected server-side. Added account tests covering CSRF, logout, secure cookies, role restrictions, throttling and redirect validation. See `DEPLOYMENT.md` for server paths and update commands. Per-operation actor attribution is still separate work.
+
+## Documentation and presentation alignment - 10 November 2026
+
+Updated the eight-slide deck, removed the member roster, separated stakeholder classification from power and interest, and added two derived user stories under two epics with acceptance criteria and existing requirement/test links. Updated Phase 1, the master SRS, the user manual and the deliverables guide using the established generators. The manual distinguishes hosted behaviour from planned standalone functionality. Added presentation/interview guidance and proposed inventory observations, explicitly distinguishing them from work actually performed. Added deployment stop/resume instructions. Generated files were rendered for visual review.
