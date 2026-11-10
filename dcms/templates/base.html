@@ -18,8 +18,8 @@
   <script src="{{ url_for('static', filename='app.js') }}" defer></script>
 <script src="{{ url_for('static', filename='navigation.js') }}" defer></script>
 </head>
-<body data-navigation-url="{{ navigation_url }}" data-page-title="{{ self.title() }}" data-business-date="{{ day|default('') }}">
-{% set links = [('dashboard', 'Dashboard', url_for('home'), 'home'), ('records', 'Daily records', url_for('daily_records'), 'history'), ('workers', 'Workers', url_for('workers'), 'attendance'), ('taxes', 'Taxes', url_for('taxes'), 'close'), ('banking', 'Banking', url_for('bank_home'), 'close'), ('sales', 'Daily Sales', url_for('start_workflow', workflow='sales', day=nav_day), 'sales'), ('close', 'Reconciliation', url_for('start_workflow', workflow='close', day=nav_day), 'close'), ('history', 'Receipts', url_for('start_workflow', workflow='receipts', day=nav_day), 'history'), ('attendance', 'Attendance', url_for('start_workflow', workflow='attendance', day=nav_day), 'attendance')] %}
+<body class="{{ 'read-only' if not can_manage else '' }}" data-navigation-url="{{ navigation_url }}" data-page-title="{{ self.title() }}" data-business-date="{{ day|default('') }}">
+{% set links = [('dashboard', 'Dashboard', url_for('home'), 'home'), ('records', 'Daily records', url_for('daily_records'), 'history'), ('workers', 'Workers', url_for('workers'), 'attendance'), ('taxes', 'Taxes', url_for('taxes'), 'close'), ('banking', 'Banking', url_for('bank_home'), 'close'), ('sales', 'Daily Sales' if can_manage else 'Sales records', url_for('start_workflow', workflow='sales' if can_manage else 'receipts', day=nav_day), 'sales'), ('close', 'Reconciliation', url_for('start_workflow', workflow='close', day=nav_day), 'close'), ('history', 'Receipts', url_for('start_workflow', workflow='receipts', day=nav_day), 'history'), ('attendance', 'Attendance', url_for('start_workflow', workflow='attendance', day=nav_day), 'attendance')] %}
 <aside class="app-rail screen-only" aria-label="Application shortcuts">
   <a class="brand-mark" href="{{ url_for('home') }}" aria-label="Deniz Construction home">D</a>
   {% for key, label, href, glyph in links %}<a class="rail-link {{ 'selected' if active == key }}" href="{{ href }}" title="{{ label }}" aria-label="{{ label }}">{{ icon(glyph) }}</a>{% endfor %}
@@ -44,6 +44,7 @@
 <div class="app-main">
   <header class="page-toolbar screen-only">
     <div class="toolbar-title"><button type="button" class="icon-button" id="sidebar-toggle" aria-controls="app-sidebar" aria-expanded="true" aria-label="Toggle navigation">{{ icon('menu') }}</button><h1>{{ self.title() }}</h1>{% if day %}<span class="status {{ day_status }}">{{ day_status|capitalize }}</span>{% endif %}</div>
+    {% if auth_enabled and account %}<div class="account-menu"><span>{{ account.name }}{% if not can_manage %} · Read only{% endif %}</span><form method="post" action="{{ url_for('logout') }}" class="logout-form"><input type="hidden" name="csrf" value="{{ csrf_token }}"><button type="submit" class="secondary">Sign out</button></form></div>{% endif %}
     {% block toolbar_actions %}{% endblock %}
   </header>
   <main class="shell" id="main-content">

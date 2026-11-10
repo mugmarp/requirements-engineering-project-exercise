@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}Receipts{% endblock %}
-{% block toolbar_actions %}{% if day_status == 'open' %}<a class="button" href="{{ url_for('sales', day=day) }}">New sale</a>{% endif %}{% endblock %}
+{% block toolbar_actions %}{% if day_status == 'open' %}{% if can_manage %}<a class="button" href="{{ url_for('sales', day=day) }}">New sale</a>{% endif %}{% endif %}{% endblock %}
 {% block content %}
 <div class="page-heading"><p class="muted">Business date {{ day }} · View or reprint posted receipts.</p></div>
 <section class="panel list-panel"><div class="list-toolbar"><h2>Posted receipts <span class="count">{{ sales|length }}</span></h2><label class="search-field"><span class="sr-only">Filter receipts</span><input type="search" data-filter="receipts-table" placeholder="Receipt, customer or channel"></label></div>

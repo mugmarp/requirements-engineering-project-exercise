@@ -16,14 +16,14 @@
   <button type="button" class="secondary remove-line" aria-label="Remove product line">Remove</button>
 </div>
 {% endmacro %}
-{% block toolbar_actions %}<button type="submit" form="sale-form">Post sale</button>{% endblock %}
+{% block toolbar_actions %}{% if can_manage %}<button type="submit" form="sale-form">Post sale</button>{% endif %}{% endblock %}
 {% block content %}
 <div class="page-heading">
   <div><p class="eyebrow">Business date {{ day }}</p><p>Record a paid sale and issue a receipt.</p></div>
   <a class="button secondary" href="{{ url_for('daily_records', next='sales') }}">Change date</a>
 </div>
 {% if error %}<p class="notice" role="alert">{{ error }}</p>{% endif %}
-<form class="sales-layout" method="post" id="sale-form" data-dirty-guard data-review="sale" data-unsaved="{{ 'true' if error else 'false' }}" data-vat="{{ rate }}">
+{% if can_manage %}<form class="sales-layout" method="post" id="sale-form" data-dirty-guard data-review="sale" data-unsaved="{{ 'true' if error else 'false' }}" data-vat="{{ rate }}">
   <input type="hidden" name="csrf" value="{{ csrf_token }}">
   <input type="hidden" name="request_key" value="{{ request_key }}">
   <div class="panel">
@@ -55,5 +55,5 @@
     <button class="secondary" type="button" id="use-total">Use total due</button>
     <div class="actions form-actions"><a class="button secondary" href="{{ url_for('home') }}" data-back>Cancel</a><button type="submit">Post sale and open receipt</button></div>
   </div>
-</form>
+</form>{% endif %}
 {% endblock %}

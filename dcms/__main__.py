@@ -57,8 +57,8 @@ def main():
             from waitress import serve
 
             password = os.environ.get("DCMS_DEMO_PASSWORD")
-            if args.host not in ("127.0.0.1", "::1", "localhost") and not password:
-                parser.error("Set DCMS_DEMO_PASSWORD to expose the demo beyond loopback.")
+            if args.host not in ("127.0.0.1", "::1", "localhost") and not password and not os.environ.get("DCMS_USERS_FILE"):
+                parser.error("Set DCMS_USERS_FILE or DCMS_DEMO_PASSWORD to expose the app beyond loopback.")
             initialize(args.database)
             serve(
                 create_app(args.database, password=password, secure=args.secure_cookies),

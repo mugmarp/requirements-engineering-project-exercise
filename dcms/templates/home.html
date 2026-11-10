@@ -2,15 +2,15 @@
 {% block title %}Daily records{% endblock %}
 {% block content %}
 <div class="page-heading"><p class="muted">{% if request.args.get('next') %}Choose or open a date for {{ {'sales':'Daily Sales','attendance':'Attendance','close':'Reconciliation','receipts':'Receipts'}[target] }}.{% else %}Open a business date to record daily activity or review a saved report.{% endif %}</p></div>
-<section class="panel date-entry"><h2>Open business date</h2>
-<form class="inline-form" method="post" action="{{ url_for('create_day') }}">
+{% if can_manage %}<section class="panel date-entry"><h2>Open business date</h2>
+{% if can_manage %}<form class="inline-form" method="post" action="{{ url_for('create_day') }}">
 <input type="hidden" name="csrf" value="{{ csrf_token }}"><input type="hidden" name="next" value="{{ target }}">
 <label>Business date<input type="date" name="business_date" required value="{{ today }}"></label><button type="submit">Open date</button>
-</form></section>
+</form>{% endif %}</section>{% endif %}
 <section class="panel list-panel">
 <div class="list-toolbar"><h2>Daily records <span class="count">{{ days|length }}</span></h2><label class="search-field"><span class="sr-only">Filter business dates</span><input type="search" data-filter="days-table" placeholder="Filter by date or status"></label></div>
 <div class="table-scroll"><table class="data-table" id="days-table"><thead><tr><th>Business date</th><th>Status</th><th>Daily operations</th><th></th></tr></thead><tbody>
-{% for row in days %}<tr data-record><td class="record-title"><a href="{{ url_for('start_workflow', workflow=target, day=row.business_date) }}">{{ row.business_date }}</a></td><td><span class="status {{ row.status }}">{{ row.status|capitalize }}</span></td><td><div class="table-links">{% if row.status == 'open' %}<a href="{{ url_for('sales', day=row.business_date) }}">Daily Sales</a>{% endif %}<a href="{{ url_for('attendance', day=row.business_date) }}">Attendance</a><a href="{{ url_for('receipt_history', day=row.business_date) }}">Receipts</a></div></td><td class="align-right"><a class="button secondary" href="{{ url_for('reconciliation', day=row.business_date) }}">{{ 'View report' if row.status == 'closed' else 'Close of Day' }}</a></td></tr>
+{% for row in days %}<tr data-record><td class="record-title"><a href="{{ url_for('start_workflow', workflow=target, day=row.business_date) }}">{{ row.business_date }}</a></td><td><span class="status {{ row.status }}">{{ row.status|capitalize }}</span></td><td><div class="table-links">{% if row.status == 'open' and can_manage %}<a href="{{ url_for('sales', day=row.business_date) }}">Daily Sales</a>{% endif %}<a href="{{ url_for('attendance', day=row.business_date) }}">Attendance</a><a href="{{ url_for('receipt_history', day=row.business_date) }}">Receipts</a></div></td><td class="align-right"><a class="button secondary" href="{{ url_for('reconciliation', day=row.business_date) }}">{{ 'View report' if row.status == 'closed' else 'Close of Day' }}</a></td></tr>
 {% else %}<tr><td colspan="4" class="empty-state">No business dates yet. Open a date to start.</td></tr>{% endfor %}
 </tbody></table></div><p class="filter-empty muted" hidden>No matching business dates.</p></section>
 {% if non_operating %}<details class="panel"><summary>Non-operating dates ({{ non_operating|length }})</summary><p class="muted">Explicit closures are kept separate from missing records.</p><div class="table-scroll"><table class="data-table"><thead><tr><th>Date</th><th>Reason</th></tr></thead><tbody>{% for row in non_operating %}<tr><td>{{ row.business_date }}</td><td>{{ row.reason }}</td></tr>{% endfor %}</tbody></table></div></details>{% endif %}

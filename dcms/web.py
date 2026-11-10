@@ -18,7 +18,7 @@ DEFAULT_DB = Path(__file__).resolve().parents[1] / "instance" / "dcms.sqlite3"
 KAMPALA = ZoneInfo("Africa/Kampala")
 
 
-def create_app(database=DEFAULT_DB, *, password=None, secure=False):
+def create_app(database=DEFAULT_DB, *, password=None, secure=False, users=None):
     app = Flask(__name__)
     app.config.update(
         SECRET_KEY=os.environ.get("DCMS_SECRET_KEY") or secrets.token_hex(32),
@@ -27,6 +27,9 @@ def create_app(database=DEFAULT_DB, *, password=None, secure=False):
         SESSION_COOKIE_SECURE=secure,
         MAX_CONTENT_LENGTH=262_144,
     )
+
+    from .auth import configure
+    configure(app, users)
 
     def db():
         if "db" not in g:
@@ -41,14 +44,14 @@ def create_app(database=DEFAULT_DB, *, password=None, secure=False):
 
     @app.before_request
     def protect():
-        if password:
+        if password and not app.config["DCMS_USERS"]:
             credentials = request.authorization
             if (
                 not credentials or credentials.type != "basic" or credentials.username != "demo"
                 or not hmac.compare_digest((credentials.password or "").encode(), password.encode())
             ):
-                return Response("Sign in to open the DCMS demo.", 401, {
-                    "WWW-Authenticate": 'Basic realm="DCMS demo"',
+                return Response("Sign in to Deniz Construction.", 401, {
+                    "WWW-Authenticate": 'Basic realm="Deniz Construction"',
                 })
         if request.method == "POST":
             expected = session.get("csrf_token")
@@ -121,6 +124,8 @@ def create_app(database=DEFAULT_DB, *, password=None, secure=False):
 
     @app.errorhandler(400)
     @app.errorhandler(404)
+    @app.errorhandler(401)
+    @app.errorhandler(403)
     def request_error(error):
         return render_template('error.html', message=error.description), error.code
 

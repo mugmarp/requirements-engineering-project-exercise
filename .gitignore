@@ -45,3 +45,7 @@ NewiNFO/
 
 # DCMS local data and Python environment
 instance/
+
+# Server account hashes and private keys
+dcms-users.json
+*.pem

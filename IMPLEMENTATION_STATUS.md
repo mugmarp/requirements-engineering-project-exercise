@@ -131,3 +131,7 @@ Sources checked on 10 November 2026:
 - [ERPNext bank reconciliation](https://docs.frappe.io/erpnext/bank-reconciliation)
 
 Before a production release, confirm the business's actual tax position and fiscal integration requirements, add authenticated permissions and actor audit records, and validate fiscal rounding, input VAT and adjustment handling. These remain separate acceptance gates; the new screens do not establish production tax compliance.
+
+## Hosted deployment and account access — 10 November 2026
+
+Prepared Ubuntu hosting with Waitress, systemd and Caddy, using persistent SQLite storage and a single application process. Added session login with an account dropdown, Sales Manager operations access and CEO read-only oversight. Both requested sample passwords are `demo`; server account hashes and runtime secrets remain outside Git. Editing controls are omitted for CEO, and all operational POST requests are also rejected server-side. Added account tests covering CSRF, logout, secure cookies, role restrictions, throttling and redirect validation. See `DEPLOYMENT.md` for server paths and update commands. Per-operation actor attribution is still separate work.

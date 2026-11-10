@@ -4,7 +4,7 @@
 <div class="page-heading screen-only">
   <div><p class="eyebrow">Business date {{ day }}</p><span class="status closed">Paid</span><p>The receipt is ready to print or reprint.</p></div>
   <div class="actions">
-    {% if day_status == 'open' %}<a class="button secondary" href="{{ url_for('sales', day=day) }}">New sale</a>{% endif %}
+    {% if day_status == 'open' %}{% if can_manage %}<a class="button secondary" href="{{ url_for('sales', day=day) }}">New sale</a>{% endif %}{% endif %}
     <a class="button secondary" href="{{ url_for('receipt_history', day=day) }}">All receipts</a>
     <button type="button" data-print>Print receipt</button>
   </div>

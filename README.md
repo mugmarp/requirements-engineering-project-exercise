@@ -63,7 +63,7 @@ The **Attendance** tab lets the Sales Manager add workers with unique codes and 
 
 Run the checks with `.venv/bin/python -m unittest discover -s tests -v`. To change the sample VAT rate, use `.venv/bin/python -m dcms --database instance/demo.sqlite3 set-vat 18`. Changes apply to future sales.
 
-For hosting, put the database on persistent local storage for a single app instance. Set `DCMS_DB_PATH`, `DCMS_DEMO_PASSWORD` and a stable `DCMS_SECRET_KEY` through the host's environment. Use HTTPS, enable `--secure-cookies` and sign in as `demo`. Use sample data in the hosted prototype. The standalone offline desktop app is a separate release described in the [implementation plan](IMPLEMENTATION_PLAN.md).
+For hosting, put the database on persistent local storage for a single app instance. Set `DCMS_DB_PATH`, `DCMS_USERS_FILE` and a stable `DCMS_SECRET_KEY` through the host's environment. Use HTTPS and `--secure-cookies`. The login dropdown offers Sales Manager (`sales_manager`, daily operations) and CEO (`ceo`, read-only reports). Both requested sample passwords are `demo`. See [deployment and account setup](DEPLOYMENT.md). The older `DCMS_DEMO_PASSWORD` HTTP Basic mode remains available when no account file is configured. Use sample data in the hosted prototype. The standalone offline desktop app is a separate release described in the [implementation plan](IMPLEMENTATION_PLAN.md).
 
 ## Repository Layout
 
