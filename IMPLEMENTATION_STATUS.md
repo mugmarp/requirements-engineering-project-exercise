@@ -143,3 +143,7 @@ Updated the eight-slide deck, removed the member roster, separated stakeholder c
 ## Requested hosted shutdown - 10 November 2026
 
 After pushing the documentation changes, stopped and disabled dcms and its dedicated Caddy service over SSH. Verified both inactive/disabled, no HTTP, HTTPS or app listener, and public HTTPS connection failure. Preserved code, accounts and database. SQLite integrity passed and counts remained 752 sales, 1,001 sale lines and 129 business dates. The VM remains running and swap was unchanged. Resume only when requested, using DEPLOYMENT.md.
+
+## Screenshot gallery and reactivation - 10 November 2026
+
+Reactivated dcms and its dedicated Caddy proxy at the user request. Captured twelve unedited browser screenshots from the hosted application, including login, dashboard overview and analytics, daily records, saved reconciliation, workers, sales VAT, banking, attendance, a saved receipt, the new-sale form and CEO read-only reporting. Both accounts were signed out after capture. No operational forms were submitted. Added the full gallery and capture context in screenshots/README.md, with two 300-pixel-wide linked previews in the repository README. The site is left running.

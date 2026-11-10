@@ -40,6 +40,14 @@ The system being specified is a Dual Phase Operations Management System.
 - **Phase 1 (Day):** Real Time Point of Sale — processes individual sales, calculates VAT, updates inventory, prints physical receipts for customers as trucks load.
 - **Phase 2 (Evening):** End of Day Reconciliation Engine — balances multi channel payment drawers (Cash, Mobile Money, Bank Deposit), logs operational expenses, computes cash variances (deficit/surplus), generates daily summary report for the Business Owner.
 
+## Application screenshots
+
+Two compact previews from the hosted application. Select an image to open it at full size, or browse the [complete screenshot gallery](screenshots/README.md). All displayed records are synthetic.
+
+| Dashboard analytics | Daily reconciliation |
+|---|---|
+| <a href="screenshots/03-dashboard-analytics.png"><img src="screenshots/03-dashboard-analytics.png" alt="Sales trend and payment-channel charts across five months" width="300"></a> | <a href="screenshots/05-reconciliation.png"><img src="screenshots/05-reconciliation.png" alt="Saved daily report showing expected cash, counted cash and a UGX 5,000 deficit" width="300"></a> |
+
 ## Run the web prototype
 
 The application opens on **Operations Dashboard**. Use the sidebar for Daily records, Daily Sales, Reconciliation, Receipts and Attendance. A selected working date stays with the daily workflows. The dashboard's period filter controls historical reporting independently of today's actions.
@@ -55,7 +63,7 @@ python3 -m venv .venv
 
 Open [the local dashboard](http://127.0.0.1:8081). The generator defaults to the current Kampala date and starts five calendar months earlier. Use `init --history --end-date 2026-11-10` to reproduce the presentation dataset. Initialization requires a fresh database path and preserves existing databases. After initialization, run only the `serve` command to reopen the same dataset.
 
-The 10 November dataset includes 756 receipts, 251 cash expenses, 10 fictional workers, 1,290 attendance entries, 128 saved reconciliations and 25 explicitly non-operating dates. It documents opening stock instead of inventing replenishment history. Customer identities, working patterns, rates and volumes are synthetic. Today remains open. The prior date, **9 November 2026**, contains the saved UGX 5,000 deficit example. Today’s Attendance, New sale and Reconcile today actions always target today, even while reviewing older records. **All history** shows the full five months.
+The hosted snapshot captured on 10 November contains 752 receipts, 250 cash expenses, 10 fictional workers, 1,290 attendance entries, 128 saved reconciliations and 25 explicitly non-operating dates. These are the records shown in the screenshot gallery. It documents opening stock instead of inventing replenishment history. Customer identities, working patterns, rates and volumes are synthetic. Today remains open. The prior date, **9 November 2026**, contains the saved UGX 5,000 deficit example. Today’s Attendance, New sale and Reconcile today actions always target today, even while reviewing older records. **All history** shows the full five months.
 
 For the original small worked example, use `init --demo` with a different fresh database path. That fixture retains the 10 November reconciliation inputs and 11 November open date used in the original tests and presentation rehearsal.
 
@@ -76,6 +84,7 @@ PhaseFinal_Grand-Project-Presentation.pptx             Phase Final: presentation
 build/                                                 Build pipeline (specs + scripts)
 project_deliverables/                                  Generated deliverables
 reference_data/                                        Raw input documents + chat export
+screenshots/                                           Application captures and gallery index
 ```
 
 ## Document Set

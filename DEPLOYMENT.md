@@ -4,7 +4,7 @@ The deployment uses one Waitress process managed by systemd, SQLite on persisten
 
 ## Current service status - 10 November 2026
 
-Stopped at the user request after the documentation push. Both dcms and Caddy are inactive and disabled, so they will not automatically start on reboot. Public HTTPS no longer connects. The VM remains running. Code, credentials, TLS storage and the database were preserved. SQLite integrity passed after shutdown, with 752 sales, 1,001 sale lines and 129 business dates unchanged. Use the resume commands below when the user requests the site again.
+Reactivated at the user request for the screenshot gallery. Both dcms and Caddy are active and enabled. The hosted site is running at https://dcms.tirallab.page. Existing data, accounts, configuration and TLS storage were reused. The earlier requested shutdown is recorded in IMPLEMENTATION_STATUS.md. Stop and resume procedures remain below. Swap settings were not changed.
 
 ## Server layout
 
