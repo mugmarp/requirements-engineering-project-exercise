@@ -139,3 +139,7 @@ Prepared Ubuntu hosting with Waitress, systemd and Caddy, using persistent SQLit
 ## Documentation and presentation alignment - 10 November 2026
 
 Updated the eight-slide deck, removed the member roster, separated stakeholder classification from power and interest, and added two derived user stories under two epics with acceptance criteria and existing requirement/test links. Updated Phase 1, the master SRS, the user manual and the deliverables guide using the established generators. The manual distinguishes hosted behaviour from planned standalone functionality. Added presentation/interview guidance and proposed inventory observations, explicitly distinguishing them from work actually performed. Added deployment stop/resume instructions. Generated files were rendered for visual review.
+
+## Requested hosted shutdown - 10 November 2026
+
+After pushing the documentation changes, stopped and disabled dcms and its dedicated Caddy service over SSH. Verified both inactive/disabled, no HTTP, HTTPS or app listener, and public HTTPS connection failure. Preserved code, accounts and database. SQLite integrity passed and counts remained 752 sales, 1,001 sale lines and 129 business dates. The VM remains running and swap was unchanged. Resume only when requested, using DEPLOYMENT.md.

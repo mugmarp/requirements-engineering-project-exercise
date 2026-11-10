@@ -2,6 +2,10 @@
 
 The deployment uses one Waitress process managed by systemd, SQLite on persistent local disk, and Caddy for HTTPS. It does not need Docker, PM2, Node.js or an additional database server.
 
+## Current service status - 10 November 2026
+
+Stopped at the user request after the documentation push. Both dcms and Caddy are inactive and disabled, so they will not automatically start on reboot. Public HTTPS no longer connects. The VM remains running. Code, credentials, TLS storage and the database were preserved. SQLite integrity passed after shutdown, with 752 sales, 1,001 sale lines and 129 business dates unchanged. Use the resume commands below when the user requests the site again.
+
 ## Server layout
 
 - Host: `mark@51.107.71.47` (Ubuntu 24.04).
