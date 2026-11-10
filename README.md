@@ -159,9 +159,9 @@ To rebuild Master Document (Phases 2-5):
 python3 build/scripts/build_docx.py build/specs/spec_master.json project_deliverables/Phase2-5_SRS-Traceability-VV-Management-DB-Design.docx
 ```
 
-To rebuild the presentation deck, use Node.js with `@oai/artifact-tool` available to the builder. The third argument supplies the screenshot for slide 7.
+To rebuild the presentation deck, use Node.js with `@oai/artifact-tool` available to the builder. The third argument supplies the screenshot for slide 7. The optional fourth and fifth outputs regenerate Markdown and the document-outline JSON from the canonical slide JSON.
 ```bash
-node build/scripts/build_pptx.mjs build/specs/spec_presentation_pptx.json project_deliverables/PhaseFinal_Grand-Project-Presentation.pptx project_deliverables/PhaseFinal_Close-of-Day.png
+node build/scripts/build_pptx.mjs build/specs/spec_presentation_pptx.json project_deliverables/PhaseFinal_Grand-Project-Presentation.pptx project_deliverables/PhaseFinal_Close-of-Day.png project_deliverables/PhaseFinal_Grand-Project-Presentation.md build/specs/spec_presentation.json
 ```
 
 To rebuild Project Deliverables Guide:

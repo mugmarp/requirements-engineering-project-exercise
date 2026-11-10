@@ -3,98 +3,509 @@
   "meta": [
     "Course: SWE2102 Requirements Engineering",
     "Group: K",
-    "Client Site: Deniz Construction Limited, Ishanyu Bushenyi Road, Mbarara",
-    "Project: Deniz Construction Management System (DCMS)"
+    "Presentation date: 10 November 2026"
   ],
   "blocks": [
-    { "type": "h1", "text": "Slide 1: Title Slide" },
-    { "type": "para", "text": "Deniz Construction Management System" },
-    { "type": "para", "text": "Requirements Engineering and Database Design" },
-    { "type": "para", "text": "Group K" },
-    { "type": "para", "text": "SWE2102 Requirements Engineering" },
-    { "type": "para", "text": "Mbarara University of Science and Technology" },
-
-    { "type": "h1", "text": "Slide 2: Group Members" },
-    { "type": "para", "text": "Project Team" },
-    { "type": "table", "header": ["Name", "Registration Number"],
+    {
+      "type": "h1",
+      "text": "Slide 1: Deniz Construction Management System"
+    },
+    {
+      "type": "para",
+      "text": "Deniz Construction Limited, Mbarara"
+    },
+    {
+      "type": "para",
+      "text": "Group K | SWE2102 Requirements Engineering"
+    },
+    {
+      "type": "para",
+      "text": "Mbarara University of Science and Technology"
+    },
+    {
+      "type": "para",
+      "text": "10 November 2026"
+    },
+    {
+      "type": "h2",
+      "text": "Speaker notes"
+    },
+    {
+      "type": "para",
+      "text": "Speaker 1 | 30 seconds. Introduce Deniz as a construction materials business producing blocks, pavers and kerbs."
+    },
+    {
+      "type": "para",
+      "text": "Timing: 14 minutes of presentation content and 1 minute for handoffs, followed by approximately 5 minutes of questions. Speaking slots are rehearsal assignments, not claims of individual contribution. Assign names according to members' actual work."
+    },
+    {
+      "type": "para",
+      "text": "Source: Groups Presentation Guide for SWE2102, 10 November 2026."
+    },
+    {
+      "type": "pagebreak"
+    },
+    {
+      "type": "h1",
+      "text": "Slide 2: Group Members"
+    },
+    {
+      "type": "table",
+      "header": [
+        "Name",
+        "Registration Number"
+      ],
       "rows": [
-        ["JOAS TAREMWA", "2025/BSE/171/PS"],
-        ["ASUMA KADDE KEVIN", "2025/BSE/045/PS"],
-        ["SSEBUGWAWO HARRISON", "2025/BSE/161/PS"],
-        ["TIBAMANYA DAVIS", "2025/BSE/172/PS"],
-        ["EDOU SIMON PETER", "2025/BSE/066/PS"],
-        ["MUGENDAWALA MARK PAUL", "2025/BSE/108/PS"],
-        ["DAMBYA RACHAEL", "2025/BSE/065/PS"],
-        ["OFAMBA JAMES", "2025/BSE/143/PS"],
-        ["OSUTA AMEN JOEL", "2025/BSE/152/PS"],
-        ["MUSONIRWA IBRAHIM", "2025/BSE/218/PS"]
-      ] },
-
-    { "type": "h1", "text": "Slide 3: The Real Problem" },
-    { "type": "para", "runs": [ { "text": "Operational Bottlenecking and Cash Vulnerability", "bold": true } ] },
-    { "type": "bullets", "items": [
-      "The Super Manager Bottleneck: One person acts as supervisor, cashier, payroll distributor, and record keeper.",
-      "Unexplained Cash Deficits: Manual computation of cash shortages at the end of the day without a tool to log operational expenses.",
-      "Informal Labor Practices: Daily cash payouts based on memory, with no formal attendance tracking.",
-      "Data Vulnerability: All records reside on a single local laptop with no cloud backup."
-    ] },
-
-    { "type": "h1", "text": "Slide 4: Elicitation Techniques and Field Realities" },
-    { "type": "para", "runs": [ { "text": "What We Actually Observed", "bold": true } ] },
-    { "type": "bullets", "items": [
-      "Direct Observation: The laptop was powered on and actively used during the day. A printer is on site, and physical receipts were being printed for customers as trucks loaded.",
-      "Semi Structured Interview: Conducted with the Sales Manager to understand payment channels (Cash, Mobile Money, Bank), tax filing processes, and primary pain points regarding cash insecurity.",
-      "Environmental Scan: Customers transport their own goods. Trucks load in bulk. Site has CCTV cameras, indicating baseline security awareness."
-    ] },
-
-    { "type": "h1", "text": "Slide 5: Challenges in Elicitation" },
-    { "type": "para", "runs": [ { "text": "Documented Limitations", "bold": true } ] },
-    { "type": "bullets", "items": [
-      "The Gatekeeper Effect: The Sales Manager was hesitant to share deep financial workflows, such as exact tax calculations and cash storage protocols.",
-      "Inaccessibility: The Business Owner, Site Workers, and Secretary could not be approached directly. These are unresolvable gaps.",
-      "No Follow up Feasibility: The Sales Manager was unwilling to provide further information, and a return visit to the site is not possible. The project scope is locked."
-    ] },
-
-    { "type": "h1", "text": "Slide 6: Strategic Business Synthesis" },
-    { "type": "para", "runs": [ { "text": "How We Bridged the Information Gaps", "bold": true } ] },
-    { "type": "bullets", "items": [
-      "Deficit Root Cause: In cash heavy local SMEs, end of day shortages are rarely theft. They are almost always unrecorded petty cash expenses. The system must allow logging of these expenses to balance the till.",
-      "Dual Phase Workflow: Because physical receipts are printed during the day, the system cannot be evening only. It must support real time transaction processing, followed by a dedicated evening reconciliation module.",
-      "Remote Access Reality: Since the owner visits daily, a live remote dashboard is unnecessary. Cloud technology is strictly for automated nightly disaster recovery and asynchronous historical review."
-    ] },
-
-    { "type": "h1", "text": "Slide 7: The Proposed Solution" },
-    { "type": "para", "runs": [ { "text": "Dual Phase Operations Management System", "bold": true } ] },
-    { "type": "bullets", "items": [
-      "Phase 1: Real Time Point of Sale. During the day, the system processes individual sales, calculates VAT, updates inventory, and prints physical receipts.",
-      "Phase 2: End of Day Reconciliation. In the evening, the system allows the Sales Manager to balance multi channel payment drawers, log operational expenses, compute cash variances, and generate a final daily summary report for the Business Owner.",
-      "Excluded Features: Credit and debtors modules are excluded, as the business operates on a strict no credit policy."
-    ] },
-
-    { "type": "h1", "text": "Slide 8: Database Architecture for SWE1205" },
-    { "type": "para", "runs": [ { "text": "Advanced SQL Implementation", "bold": true } ] },
-    { "type": "bullets", "items": [
-      "Normalization: Database normalized to 3NF to eliminate redundancy across Workers, Attendance, Products, Sales, and Operational Expenses.",
-      "Stored Procedures: CalculateVAT fetches the rate from a System Settings table and applies it to the subtotal.",
-      "Triggers: TRG Sales Insert automatically reduces Current Stock in the Products table upon sale insertion.",
-      "Role Based Access Control: Views like View Owner Profitability are strictly restricted to the Business Owner role."
-    ] },
-
-    { "type": "h1", "text": "Slide 9: Requirements Traceability" },
-    { "type": "para", "runs": [ { "text": "Linking Problems to Code", "bold": true } ] },
-    { "type": "table", "header": ["Ground Problem", "Requirement ID", "Requirement Description", "Database Implementation"],
+        [
+          "JOAS TAREMWA",
+          "2025/BSE/171/PS"
+        ],
+        [
+          "ASUMA KADDE KEVIN",
+          "2025/BSE/045/PS"
+        ],
+        [
+          "SSEBUGWAWO HARRISON",
+          "2025/BSE/161/PS"
+        ],
+        [
+          "TIBAMANYA DAVIS",
+          "2025/BSE/172/PS"
+        ],
+        [
+          "EDOU SIMON PETER",
+          "2025/BSE/066/PS"
+        ],
+        [
+          "MUGENDAWALA MARK PAUL",
+          "2025/BSE/108/PS"
+        ],
+        [
+          "DAMBYA RACHAEL",
+          "2025/BSE/065/PS"
+        ],
+        [
+          "OFAMBA JAMES",
+          "2025/BSE/143/PS"
+        ],
+        [
+          "OSUTA AMEN JOEL",
+          "2025/BSE/152/PS"
+        ],
+        [
+          "MUSONIRWA IBRAHIM",
+          "2025/BSE/218/PS"
+        ]
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Speaker notes"
+    },
+    {
+      "type": "para",
+      "text": "Speaker 1 | 30 seconds. Introduce the ten-member group, then continue to the client problem."
+    },
+    {
+      "type": "para",
+      "text": "Source: The original Group K roster, retained identically in main and PPT."
+    },
+    {
+      "type": "pagebreak"
+    },
+    {
+      "type": "h1",
+      "text": "Slide 3: Project overview"
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "Client and products. ",
+          "bold": true
+        },
+        {
+          "text": "Deniz Construction Limited, Mbarara, produces and sells concrete blocks, pavers and kerbs."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "Operational problems. ",
+          "bold": true
+        },
+        {
+          "text": "One Sales Manager handles supervision, sales, wages, records and taxes. Cash shortages are worked out manually, attendance relies on memory, and digital records lack cloud backup."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "Users and affected stakeholders. ",
+          "bold": true
+        },
+        {
+          "text": "The Sales Manager operates the system. The Owner reviews daily reports. Workers' attendance is recorded by the manager."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "Scope. ",
+          "bold": true
+        },
+        {
+          "text": "Day: record paid sales, update stock and print receipts. Evening: log cash expenses, compare counted cash with expected cash and save the daily report."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Speaker notes"
+    },
+    {
+      "type": "para",
+      "text": "Speaker 2 | 2 minutes. Explain the concentration of work in the Sales Manager role and the manual reconciliation problem. Records exist on the computer and in physical books and receipts; the ability to reconstruct digital records from paper was not established."
+    },
+    {
+      "type": "para",
+      "text": "The scope is a proposed response to those findings. Observing receipts does not establish the existing software's stock or tax calculation logic. Workers are attendance subjects, not confirmed self-service users."
+    },
+    {
+      "type": "para",
+      "text": "Sources: CURATED_DATA.md, operational facts and locked dual-phase design; Phase 1 source, business context and problem statement."
+    },
+    {
+      "type": "pagebreak"
+    },
+    {
+      "type": "h1",
+      "text": "Slide 4: Elicitation: methods and limitations"
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "Stakeholder access. ",
+          "bold": true
+        },
+        {
+          "text": "The Sales Manager was interviewed. The Owner and workers were not interviewed. Customers are affected and URA sets external requirements."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "Direct observation. ",
+          "bold": true
+        },
+        {
+          "text": "Laptop use and receipts printed during truck loading showed that receipting occurs during the day."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "Semi-structured interview. ",
+          "bold": true
+        },
+        {
+          "text": "The Sales Manager described upfront Cash, Mobile Money and Bank Deposit payments, online tax filing and end-of-day cash shortages."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "Challenge. ",
+          "bold": true
+        },
+        {
+          "text": "Only one visit was possible. Existing receipt fields and detailed tax calculations could not be verified. Those gaps were recorded."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Speaker notes"
+    },
+    {
+      "type": "para",
+      "text": "Speaker 3 | 1 minute. Describe whom the group reached and explain what direct observation established: daytime laptop use and receipt printing during truck loading."
+    },
+    {
+      "type": "para",
+      "text": "Speaker 4 | 1 minute. Explain what the interview added: payment channels, the no-credit rule, online tax filing and the cash-shortage problem. Explain the limits of one visit and unavailable stakeholders."
+    },
+    {
+      "type": "para",
+      "text": "The challenge is incomplete access and verification. Do not infer deliberate withholding or label the Sales Manager defensive. The Owner's preferred first metric and the workers' own account of attendance remain unverified."
+    },
+    {
+      "type": "para",
+      "text": "Sources: CURATED_DATA.md; Phase 1 source, stakeholder analysis, elicitation methods and documented limitations."
+    },
+    {
+      "type": "pagebreak"
+    },
+    {
+      "type": "h1",
+      "text": "Slide 5: Key requirements"
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "Sale entry and receipts (REQ-FUN-SAL-01/04). ",
+          "bold": true
+        },
+        {
+          "text": "Post a fully paid sale to an open business date. Save the sale and stock changes together, then make its receipt available for printing."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "Cash expenses (REQ-FUN-REC-02). ",
+          "bold": true
+        },
+        {
+          "text": "Record each cash expense against its business date so cash paid out is included in expected-cash calculations."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "Cash reconciliation (REQ-FUN-REC-04/05). ",
+          "bold": true
+        },
+        {
+          "text": "Compare physical cash with expected cash. Require an explanation for a difference and save one final report for the date."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "Offline operation (REQ-NFR-PER-01). ",
+          "bold": true
+        },
+        {
+          "text": "The standalone application shall record sales, update stock and print receipts without internet access. Saved transactions shall remain available after restarting the application."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Speaker notes"
+    },
+    {
+      "type": "para",
+      "text": "Speaker 5 | 1.5 minutes. Connect the functional requirements to immediate receipting and explaining cash differences. Receipt printing follows a successful transaction; a print failure must allow reprinting without posting another sale."
+    },
+    {
+      "type": "para",
+      "text": "Speaker 6 | 1 minute. Explain the offline requirement as a requirement for the future standalone application, not a capability already established by the hosted web prototype."
+    },
+    {
+      "type": "para",
+      "text": "Planned acceptance test: disconnect internet before opening the installed standalone app; post a paid sale; verify stock deduction; print on the target physical printer; restart the app and reopen the saved receipt. Pass only if all steps succeed without an internet connection. This is an observable pass/fail condition, not an invented response-time target."
+    },
+    {
+      "type": "para",
+      "text": "Source: Master specification, REQ-FUN-SAL-01/04, REQ-FUN-REC-02/04/05 and REQ-NFR-PER-01. The restart check makes persistence explicit in the presentation's acceptance criterion."
+    },
+    {
+      "type": "pagebreak"
+    },
+    {
+      "type": "h1",
+      "text": "Slide 6: Project example and reflection"
+    },
+    {
+      "type": "table",
+      "header": [
+        "Stakeholder",
+        "Power",
+        "Interest",
+        "Engagement"
+      ],
       "rows": [
-        ["Unexplained cash deficits", "REQ-FUN-EXP-01", "Operational Expense module", "Table: Operational_Expenses, Trigger: TRG Expense Insert"],
-        ["Informal labor tracking and ghost worker risk", "REQ-FUN-ATT-02", "Reject duplicate attendance entries", "Table: Attendance (Composite Unique Key)"],
-        ["Manual URA tax transcription errors", "REQ-FUN-TAX-01", "URA Summary Generation", "Stored Procedure: GenerateURA Summary"]
-      ] },
-
-    { "type": "h1", "text": "Slide 10: Conclusion and Next Steps" },
-    { "type": "para", "runs": [ { "text": "Project Delivery and Future Enhancements", "bold": true } ] },
-    { "type": "bullets", "items": [
-      "Conclusion: The DCMS architecture is directly driven by the operational bottlenecks observed at Deniz Construction Limited. Every functional requirement maps to a specific database entity, trigger, or stored procedure.",
-      "Next Steps: Deployment of the system on the existing office laptop, accompanied by a simplified User Manual for the Sales Manager.",
-      "Future Enhancements: Features such as a formal Secretary role or advanced logistics tracking are logged in a Future Enhancements Backlog for post academic implementation."
-    ] }
+        [
+          "Business Owner",
+          "High",
+          "High",
+          "Not interviewed"
+        ],
+        [
+          "Sales Manager",
+          "High",
+          "High",
+          "Interviewed"
+        ],
+        [
+          "Site Workers",
+          "Low",
+          "Low",
+          "Not interviewed"
+        ],
+        [
+          "URA",
+          "High",
+          "Low",
+          "External regulator"
+        ]
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "Lesson from elicitation. ",
+          "bold": true
+        },
+        {
+          "text": "Observation corrected our initial focus on end-of-day processing. Receipts were printed during customer collections, so the system needed daytime sales as well as evening cash reconciliation."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "text": "The timing was observed. Receipt fields and tax calculations still required validation."
+    },
+    {
+      "type": "h2",
+      "text": "Speaker notes"
+    },
+    {
+      "type": "para",
+      "text": "Speaker 7 | 2 minutes. Explain the stakeholder assessment and then the observation that changed the project scope. The initial end-of-day focus did not cover the full working day."
+    },
+    {
+      "type": "para",
+      "text": "Power and interest are the group's analytical classifications from Phase 1, not measurements or statements verified in interviews with all stakeholders. In particular, do not claim workers personally expressed low interest. Interview access and the regulator's role are recorded separately."
+    },
+    {
+      "type": "para",
+      "text": "Lesson: combining observation with the interview helped distinguish the initially reported deficit problem from the wider sales workflow. Observation showed when receipting occurred; it did not establish the receipt fields, automatic stock handling or tax calculations."
+    },
+    {
+      "type": "para",
+      "text": "Sources: Phase 1 stakeholder power/interest table; CURATED_DATA.md, daytime receipting and dual-phase design."
+    },
+    {
+      "type": "pagebreak"
+    },
+    {
+      "type": "h1",
+      "text": "Slide 7: Close of Day prototype"
+    },
+    {
+      "type": "para",
+      "text": "Screenshot: PhaseFinal_Close-of-Day.png. Sample figures: UGX 450,000 expected | UGX 445,000 counted | UGX 5,000 deficit"
+    },
+    {
+      "type": "h2",
+      "text": "Speaker notes"
+    },
+    {
+      "type": "para",
+      "text": "Speaker 8 | 1.5 minutes. The screenshot is from the current web prototype, using the saved sample report for 9 November 2026. Point to the business date and separate Cash, Mobile Money and Bank Deposit activity."
+    },
+    {
+      "type": "para",
+      "text": "Speaker 9 | 1.5 minutes. Cash sales of UGX 500,000 less cash expenses of UGX 50,000 and zero opening cash give UGX 450,000 expected. Physical cash is UGX 445,000, giving a signed variance of minus UGX 5,000. Explain the required reason and the date lock."
+    },
+    {
+      "type": "para",
+      "text": "The sample moved to 9 November so 10 November remains open for demonstration. The saved report must reopen unchanged; a second close returns the same snapshot. A different business date retains its own activity."
+    },
+    {
+      "type": "para",
+      "text": "Source: current DCMS sample database, instance/operations-20261110.sqlite3, business date 2026-11-09. All screenshot figures are synthetic."
+    },
+    {
+      "type": "para",
+      "text": "Technical Q&A: the SQLite web implementation posts sales and stock atomically in application services. The proposed SWE1205 database design separately describes Sales_Items triggers, stored procedures and linked sale adjustments. Those design artifacts are not all implemented web features. Bank statement allocations do not create sales or rewrite saved cash closes."
+    },
+    {
+      "type": "pagebreak"
+    },
+    {
+      "type": "h1",
+      "text": "Slide 8: Conclusion and remaining work"
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "System scope. ",
+          "bold": true
+        },
+        {
+          "text": "Paid sales and receipt printing are handled during the day. Cash expenses, physical cash counts and the final report are handled at close."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "Working web prototype. ",
+          "bold": true
+        },
+        {
+          "text": "Sales, receipts, stock deduction, attendance, reconciliation, sales VAT summaries and bank statement matching."
+        }
+      ]
+    },
+    {
+      "type": "para",
+      "runs": [
+        {
+          "text": "Remaining verification. ",
+          "bold": true
+        },
+        {
+          "text": "Build and test the standalone application without internet. Verify physical printing, actual receipt fields, tax treatment and worker requirements with the business."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Speaker notes"
+    },
+    {
+      "type": "para",
+      "text": "Speaker 10 | 1.5 minutes. Distinguish the working web prototype from the unbuilt standalone application and the remaining stakeholder validation. Do not propose immediate production deployment on the office laptop."
+    },
+    {
+      "type": "para",
+      "text": "Tax scope: the web report summarises recorded sales VAT. Input VAT, fiscal corrections, EFRIS submission and tax payable are not implemented. Bank scope: imported statement matching and reversals, not a live bank feed or complete bank balance reconciliation."
+    },
+    {
+      "type": "para",
+      "text": "Q&A | Approximately 5 minutes. Each member should describe their actual contribution and explain one requirement, elicitation finding or limitation. No contribution assignments have been invented."
+    },
+    {
+      "type": "para",
+      "text": "Sources: IMPLEMENTATION_STATUS.md and IMPLEMENTATION_PLAN.md; master specification verification cases; presentation guide."
+    }
   ]
 }
